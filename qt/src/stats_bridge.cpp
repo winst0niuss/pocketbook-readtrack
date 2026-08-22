@@ -1,7 +1,6 @@
 #include "stats_bridge.h"
 
 #include <QDate>
-#include <QElapsedTimer>
 #include <QDateTime>
 #include <QDir>
 #include <QFile>
@@ -12,7 +11,6 @@
 #include <QVector>
 
 #include "epub_cover.h"
-#include "update_log.h"
 
 extern "C" {
 #include "daemon.h"
@@ -20,29 +18,6 @@ extern "C" {
 #include "tracker.h"
 }
 
-/* The tabs call into this bridge from Component.onCompleted, so the work lands
- * inside the QML load and counts toward the time before anything is on screen.
- * Each call opens explorer-3, runs several queries, and may unzip an EPUB
- * looking for a cover — worth timing rather than assuming. Only slow calls are
- * logged; the log is read on the About screen and should not fill with noise. */
-namespace {
-class Timed {
-public:
-    explicit Timed(const char *what) : what_(what) { timer_.start(); }
-    ~Timed()
-    {
-        const qint64 ms = timer_.elapsed();
-        if (ms >= 100)
-            updateLog(QStringLiteral("bridge: %1 took %2 ms")
-                          .arg(QLatin1String(what_))
-                          .arg(ms));
-    }
-
-private:
-    const char *what_;
-    QElapsedTimer timer_;
-};
-} // namespace
 
 StatsBridge::StatsBridge(QObject *parent) : QObject(parent)
 {
@@ -72,7 +47,6 @@ StatsBridge::~StatsBridge()
  * position_ts does not advance while the reader is closed. */
 void StatsBridge::catchUp()
 {
-    Timed timed("catchUp");
     tracker t;
     if (tracker_init(&t, stats_db_path(), explorer_db_path()) != 0)
         return;
@@ -169,7 +143,6 @@ QString coverUrlForKey(sqlite3 *expdb, const QString &key)
  * of hundreds, and every deleted book would fall through to a bare letter. */
 QString resolveCoverUrl(sqlite3 *expdb, const QString &title)
 {
-    Timed timed("resolveCoverUrl");
     if (!expdb || title.isEmpty())
         return QString();
     const char *sql =
@@ -333,7 +306,6 @@ QList<FinishedBook> finishedBooks(bool withCovers)
 
 QVariantMap StatsBridge::overall()
 {
-    Timed timed("overall");
     catchUp();
     overall_stats o;
     stats_overall(db_, &o);
@@ -396,7 +368,6 @@ QVariantMap StatsBridge::overall()
 
 QVariantMap StatsBridge::currentBook()
 {
-    Timed timed("currentBook");
     catchUp();
     QVariantMap m;
     pb_state s;
@@ -443,7 +414,6 @@ QVariantMap StatsBridge::currentBook()
 
 QVariantMap StatsBridge::month(int year, int mon)
 {
-    Timed timed("month");
     catchUp();
     QVariantMap m;
     const QDate first(year, mon, 1);
