@@ -69,4 +69,13 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/v')
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" PocketBookStatistics.zip --generate-notes
+        # A tag with -rc goes out as a pre-release: /releases/latest then keeps
+        # answering with the last final version, so only devices carrying the
+        # opt-in marker file are ever offered a candidate.
+        run: |
+          case "$GITHUB_REF_NAME" in
+            *-rc*) PRE=--prerelease ;;
+            *)     PRE= ;;
+          esac
+          gh release create "$GITHUB_REF_NAME" PocketBookStatistics.zip \
+            --generate-notes $PRE

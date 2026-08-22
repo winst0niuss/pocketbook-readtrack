@@ -25,6 +25,14 @@ namespace {
 
 constexpr const char *kApiUrl =
     "https://api.github.com/repos/winst0niuss/pocketbook-statistics/releases/latest";
+/* The full list, newest first, including pre-releases — which /latest omits by
+ * design. Only devices carrying the opt-in file below ever ask for it. */
+constexpr const char *kApiListUrl =
+    "https://api.github.com/repos/winst0niuss/pocketbook-statistics/releases?per_page=10";
+/* Touch this file on a device to put it on the pre-release channel. It is a
+ * marker, not a setting: nothing in the app creates it, so a reader that has
+ * not been opted in by hand can never be offered a release candidate. */
+constexpr const char *kPrereleaseFlag = STATS_DIR "/prerelease";
 constexpr const char *kAssetName = "PocketBookStatistics.zip";
 constexpr const char *kUpdateDir = STATS_DIR "/update";
 /* Anything smaller than this is a proxy error page, not our binary. */
@@ -146,8 +154,11 @@ void Updater::check()
     }
 
     updateLog(QStringLiteral("check: network is up"));
+    const bool prerelease = QFile::exists(QString::fromLatin1(kPrereleaseFlag));
+    if (prerelease)
+        updateLog(QStringLiteral("check: pre-release channel"));
     const QString jsonPath = updatePath("latest.json");
-    if (!download(QString::fromLatin1(kApiUrl), jsonPath))
+    if (!download(QString::fromLatin1(prerelease ? kApiListUrl : kApiUrl), jsonPath))
         return;
 
     QFile f(jsonPath);
@@ -159,11 +170,25 @@ void Updater::check()
     f.close();
     QFile::remove(jsonPath);
 
-    if (!doc.isObject()) {
+    /* /latest answers with one release; the list answers with an array, newest
+     * first — take its head, whether that is a draft-free pre-release or a
+     * final one. */
+    QJsonObject release;
+    if (doc.isObject()) {
+        release = doc.object();
+    } else if (doc.isArray() && !doc.array().isEmpty()) {
+        for (const QJsonValue &value : doc.array()) {
+            const QJsonObject candidate = value.toObject();
+            if (candidate.value(QStringLiteral("draft")).toBool())
+                continue;
+            release = candidate;
+            break;
+        }
+    }
+    if (release.isEmpty()) {
         fail(QStringLiteral("update.errResponse"));
         return;
     }
-    const QJsonObject release = doc.object();
     latestVersion_ = release.value(QStringLiteral("tag_name")).toString();
     updateLog(QStringLiteral("check: latest is ") + latestVersion_);
     if (latestVersion_.isEmpty()) {

@@ -78,7 +78,15 @@ static void test_version_compare(void)
     assert(version_compare("v0.6.0", "0.5.9") == 1);
     assert(version_compare("1.2", "1.2.0") == 0);      /* missing part is zero */
     assert(version_compare("0.10.0", "0.9.0") == 1);   /* numeric, not textual */
-    assert(version_compare("v0.6.0-rc1", "0.6.0") == 0); /* suffix ignored */
+    /* Release candidates order below their own release and among themselves,
+     * so a device on the pre-release channel is offered rc2 after rc1 and the
+     * final release after that. */
+    assert(version_compare("v1.4.0-rc1", "1.4.0") == -1);
+    assert(version_compare("1.4.0", "v1.4.0-rc9") == 1);
+    assert(version_compare("1.4.0-rc1", "1.4.0-rc2") == -1);
+    assert(version_compare("1.4.0-rc2", "1.4.0-rc2") == 0);
+    assert(version_compare("1.4.0-rc2", "1.3.9") == 1);
+    assert(version_compare("1.4.0-rc", "1.4.0-rc1") == 0); /* bare rc is the first */
     assert(version_compare("", "0.0.1") == -1);        /* garbage reads as 0.0.0 */
 }
 
