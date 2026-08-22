@@ -25,9 +25,47 @@ Window {
         onClose: Qt.quit()
     }
 
-    /* Navigation along the bottom edge, icon over label. Six equal zones: the
-     * icons are the same width, so equal cells here are honest, unlike the
-     * word-sized tabs this replaces. */
+    /* Info sits in the header, opposite the firmware's home button: it is a
+     * detour from the app rather than one of its screens, and the bottom bar
+     * is for the screens. Drawn over AppHeader, which leaves its right side
+     * empty, and matched to the home button beside it — same height share of
+     * the bar, full-strength ink, and a line as thin as the firmware's own
+     * icons rather than the heavier weight the bottom bar uses. */
+    Item {
+        id: infoButton
+
+        anchors.right: appHeader.right
+        anchors.rightMargin: GlobalValues.defaultViewSideMargin
+        anchors.verticalCenter: appHeader.verticalCenter
+        // A square the height of the header, so the touch target matches the
+        // firmware button's without the glyph growing with it.
+        width: appHeader.height
+        height: appHeader.height
+        z: 1
+
+        NavIcon {
+            anchors.centerIn: parent
+            width: Math.round(appHeader.height * 0.42)
+            height: width
+            kind: "info"
+            // A header icon is never "inactive": the firmware's home button is
+            // solid black whatever screen you are on.
+            opacity: 1.0
+            strokeRatio: 0.055
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            // Tapping it again goes back where you were, so the button is a
+            // toggle rather than a one-way door.
+            onClicked: nav.current = nav.current === nav.infoIndex
+                       ? nav.lastScreen : nav.infoIndex
+        }
+    }
+
+    /* Navigation along the bottom edge, icon over label — the screens only;
+     * info lives in the header. Equal cells are honest here: the icons are all
+     * the same width, unlike the word-sized tabs this replaced. */
     Item {
         id: nav
 
@@ -37,6 +75,9 @@ Window {
         height: Global.dp(70)
 
         property int current: 0
+        // Where the info button returns to.
+        property int lastScreen: 0
+        onCurrentChanged: if (current !== infoIndex) lastScreen = current
 
         readonly property var labels: [Tr.t("nav.overview"), Tr.t("nav.calendar")]
         readonly property var icons: ["home", "calendar"]
@@ -55,7 +96,7 @@ Window {
             anchors.topMargin: Global.dp(6)
 
             Repeater {
-                model: nav.labels.length + 1
+                model: nav.labels.length
 
                 Item {
                     id: navCell
@@ -63,9 +104,8 @@ Window {
                     required property int index
 
                     readonly property bool active: index === nav.current
-                    readonly property bool isInfo: index === nav.infoIndex
 
-                    width: nav.width / (nav.labels.length + 1)
+                    width: nav.width / nav.labels.length
                     height: nav.height
 
                     Column {
@@ -77,7 +117,7 @@ Window {
                             anchors.horizontalCenter: parent.horizontalCenter
                             width: Global.dp(32)
                             height: Global.dp(32)
-                            kind: navCell.isInfo ? "info" : nav.icons[navCell.index]
+                            kind: nav.icons[navCell.index]
                             active: navCell.active
                         }
 
@@ -88,8 +128,7 @@ Window {
                             styledFont: FontStyles.BodyXS
                             color: GlobalValues.defaultTextColor
                             opacity: navCell.active ? 1.0 : 0.6
-                            text: navCell.isInfo ? Tr.t("nav.about")
-                                                 : nav.labels[navCell.index]
+                            text: nav.labels[navCell.index]
                         }
                     }
 

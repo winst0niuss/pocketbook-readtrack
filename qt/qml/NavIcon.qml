@@ -13,6 +13,11 @@ Canvas {
     property bool active: false
     property color ink: GlobalValues.defaultTextColor
 
+    /* Stroke weight as a share of the icon's size. The bar draws the active
+     * icon heavier; the header overrides this with a thinner line so the info
+     * glyph matches the firmware's own home button beside it. */
+    property real strokeRatio: active ? 0.1 : 0.075
+
     /* Inactive icons are the text colour at reduced opacity rather than the
      * theme's disabled grey, which on e-ink is nearly white and made the whole
      * bar look switched off. Opacity keeps them legible in both themes. */
@@ -21,6 +26,8 @@ Canvas {
     antialiasing: true
     onKindChanged: requestPaint()
     onActiveChanged: requestPaint()
+    onStrokeRatioChanged: requestPaint()
+    onInkChanged: requestPaint()
 
     onPaint: {
         var ctx = getContext("2d");
@@ -35,7 +42,7 @@ Canvas {
         ctx.fillStyle = ink;
         // The active icon is drawn heavier as well as darker: on a mono screen
         // weight reads faster than shade.
-        ctx.lineWidth = Math.max(1.5, s * (active ? 0.1 : 0.075));
+        ctx.lineWidth = Math.max(1.5, s * strokeRatio);
         ctx.lineJoin = "round";
         ctx.lineCap = "round";
 
