@@ -9,6 +9,9 @@ there.
 |---|---|
 | <img src="docs/screenshots/overview.png" width="380" alt="Overview: the current book with cover and progress, three figures, and the library ring"> | <img src="docs/screenshots/calendar.png" width="380" alt="Calendar: a month grid with book covers on the days they were read"> |
 
+<sup>Shot on a PB629 with a filled-in history, so the calendar shows what a used
+month looks like rather than a first day of tracking.</sup>
+
 > Developed and tested on a **PocketBook Verse (PB629), firmware
 > U629.6.10.1461**. Other Allwinner **B288/B300** readers on Qt 6.8 firmware
 > should work the same way, but none has been tried — reports welcome.
@@ -78,8 +81,6 @@ update*. There is no background check and no other host is ever contacted.
    unpack it.
 2. Copy `PocketBookStatistics.app` to `applications/` on the reader over USB.
 3. Eject, open the app once, then reboot so the custom launcher icon appears.
-
-<img src="docs/screenshots/launcher.png" width="380" alt="The reader's home screen with a Statistics tile in the bottom row">
 
 The tile is labelled in the reader's language ("Statistics", "Статистика",
 "Statistik", …) — it says what it does, like the firmware's own tiles. First
