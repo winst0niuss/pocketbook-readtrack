@@ -23,8 +23,8 @@ var strings = {
     "overview.noBook": "Nobena knjiga še ni odprta",
     "overview.bookProgress": "Napredek knjige: {percent} %",
     "overview.allBooks": "VSE KNJIGE",
-    "overview.booksFinished": "Prebrane knjige",
-    "overview.totalHours": "Ur skupaj",
+    "overview.booksFinished": "prebrane knjige",
+    "overview.totalHours": "ur skupaj",
     "overview.pagesPerHour": "strani na uro",
 
 

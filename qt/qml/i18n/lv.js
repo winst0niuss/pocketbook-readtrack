@@ -20,8 +20,8 @@ var strings = {
     "overview.noBook": "Neviena grāmata vēl nav atvērta",
     "overview.bookProgress": "Grāmatas progress: {percent} %",
     "overview.allBooks": "VISAS GRĀMATAS",
-    "overview.booksFinished": "Izlasītās grāmatas",
-    "overview.totalHours": "Stundas kopā",
+    "overview.booksFinished": "izlasītās grāmatas",
+    "overview.totalHours": "stundas kopā",
     "overview.pagesPerHour": "lappuses stundā",
 
 

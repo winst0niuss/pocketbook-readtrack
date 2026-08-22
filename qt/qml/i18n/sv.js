@@ -16,8 +16,8 @@ var strings = {
     "overview.noBook": "Ingen bok öppnad ännu",
     "overview.bookProgress": "Bokens framsteg: {percent} %",
     "overview.allBooks": "ALLA BÖCKER",
-    "overview.booksFinished": "Utlästa böcker",
-    "overview.totalHours": "Timmar totalt",
+    "overview.booksFinished": "utlästa böcker",
+    "overview.totalHours": "timmar totalt",
     "overview.pagesPerHour": "sidor per timme",
 
 

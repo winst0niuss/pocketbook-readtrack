@@ -16,8 +16,8 @@ var strings = {
     "overview.noBook": "Még nincs megnyitott könyv",
     "overview.bookProgress": "Könyv haladás: {percent} %",
     "overview.allBooks": "MINDEN KÖNYV",
-    "overview.booksFinished": "Kiolvasott könyvek",
-    "overview.totalHours": "Óra összesen",
+    "overview.booksFinished": "kiolvasott könyvek",
+    "overview.totalHours": "óra összesen",
     "overview.pagesPerHour": "oldal óránként",
 
 

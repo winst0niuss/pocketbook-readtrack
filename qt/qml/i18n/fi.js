@@ -16,8 +16,8 @@ var strings = {
     "overview.noBook": "Yhtään kirjaa ei ole vielä avattu",
     "overview.bookProgress": "Kirjan edistyminen: {percent} %",
     "overview.allBooks": "KAIKKI KIRJAT",
-    "overview.booksFinished": "Loppuun luetut kirjat",
-    "overview.totalHours": "Tunteja yhteensä",
+    "overview.booksFinished": "loppuun luetut kirjat",
+    "overview.totalHours": "tunteja yhteensä",
     "overview.pagesPerHour": "sivua tunnissa",
 
 

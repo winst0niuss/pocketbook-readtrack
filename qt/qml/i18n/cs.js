@@ -20,8 +20,8 @@ var strings = {
     "overview.noBook": "Zatím nebyla otevřena kniha",
     "overview.bookProgress": "Postup knihy: {percent} %",
     "overview.allBooks": "VŠECHNY KNIHY",
-    "overview.booksFinished": "Dočtené knihy",
-    "overview.totalHours": "Hodin celkem",
+    "overview.booksFinished": "dočtené knihy",
+    "overview.totalHours": "hodin celkem",
     "overview.pagesPerHour": "stran za hodinu",
 
 

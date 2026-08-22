@@ -19,8 +19,8 @@ var strings = {
     "overview.today": "OGGI",
     "overview.minutesToday": "minuti letti",
     "overview.allBooks": "TUTTI I LIBRI",
-    "overview.booksFinished": "Libri finiti",
-    "overview.totalHours": "Ore in totale",
+    "overview.booksFinished": "libri finiti",
+    "overview.totalHours": "ore totali",
     "overview.pagesPerHour": "pagine all'ora",
 
 

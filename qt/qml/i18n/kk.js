@@ -16,8 +16,8 @@ var strings = {
     "overview.noBook": "Әзірге кітап ашылмаған",
     "overview.bookProgress": "Кітап барысы: {percent} %",
     "overview.allBooks": "БАРЛЫҚ КІТАПТАР",
-    "overview.booksFinished": "Оқып бітірген кітаптар",
-    "overview.totalHours": "Барлығы сағат",
+    "overview.booksFinished": "оқып бітірген кітаптар",
+    "overview.totalHours": "барлығы сағат",
     "overview.pagesPerHour": "сағатына бет",
 
 

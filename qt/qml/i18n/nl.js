@@ -16,8 +16,8 @@ var strings = {
     "overview.noBook": "Nog geen boek geopend",
     "overview.bookProgress": "Voortgang: {percent} %",
     "overview.allBooks": "ALLE BOEKEN",
-    "overview.booksFinished": "Boeken uitgelezen",
-    "overview.totalHours": "Uren totaal",
+    "overview.booksFinished": "boeken uitgelezen",
+    "overview.totalHours": "uren totaal",
     "overview.pagesPerHour": "pagina's per uur",
 
 

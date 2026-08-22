@@ -21,8 +21,8 @@ var strings = {
     "overview.noBook": "Dar neatverstos jokios knygos",
     "overview.bookProgress": "Knygos progresas: {percent} %",
     "overview.allBooks": "VISOS KNYGOS",
-    "overview.booksFinished": "Perskaitytos knygos",
-    "overview.totalHours": "Iš viso valandų",
+    "overview.booksFinished": "perskaitytos knygos",
+    "overview.totalHours": "iš viso valandų",
     "overview.pagesPerHour": "puslapių per valandą",
 
 

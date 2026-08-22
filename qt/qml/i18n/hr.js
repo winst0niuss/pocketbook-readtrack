@@ -21,8 +21,8 @@ var strings = {
     "overview.noBook": "Nijedna knjiga još nije otvorena",
     "overview.bookProgress": "Napredak knjige: {percent} %",
     "overview.allBooks": "SVE KNJIGE",
-    "overview.booksFinished": "Pročitane knjige",
-    "overview.totalHours": "Sati ukupno",
+    "overview.booksFinished": "pročitane knjige",
+    "overview.totalHours": "sati ukupno",
     "overview.pagesPerHour": "stranica na sat",
 
 

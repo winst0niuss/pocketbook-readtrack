@@ -24,8 +24,8 @@ var strings = {
     "overview.today": "DZISIAJ",
     "overview.minutesToday": "minut czytania",
     "overview.allBooks": "WSZYSTKIE KSIĄŻKI",
-    "overview.booksFinished": "Przeczytane książki",
-    "overview.totalHours": "Godzin łącznie",
+    "overview.booksFinished": "książek przeczytanych",
+    "overview.totalHours": "godzin łącznie",
     "overview.pagesPerHour": "stron na godzinę",
 
 

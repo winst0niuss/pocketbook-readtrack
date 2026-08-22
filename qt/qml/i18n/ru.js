@@ -25,8 +25,8 @@ var strings = {
     "overview.today": "СЕГОДНЯ",
     "overview.minutesToday": "минут чтения",
     "overview.allBooks": "ВСЕ КНИГИ",
-    "overview.booksFinished": "Книг прочитано",
-    "overview.totalHours": "Часов всего",
+    "overview.booksFinished": "книг прочитано",
+    "overview.totalHours": "часов всего",
     "overview.pagesPerHour": "страниц в час",
 
 

@@ -16,8 +16,8 @@ var strings = {
     "overview.noBook": "Hələ heç bir kitab açılmayıb",
     "overview.bookProgress": "Kitab irəliləyişi: {percent} %",
     "overview.allBooks": "BÜTÜN KİTABLAR",
-    "overview.booksFinished": "Bitirilmiş kitablar",
-    "overview.totalHours": "Ümumi saat",
+    "overview.booksFinished": "bitirilmiş kitablar",
+    "overview.totalHours": "ümumi saat",
     "overview.pagesPerHour": "saatda səhifə",
 
 

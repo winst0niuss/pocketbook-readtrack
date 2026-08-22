@@ -16,8 +16,8 @@ var strings = {
     "overview.noBook": "Ingen bog åbnet endnu",
     "overview.bookProgress": "Bogens fremgang: {percent} %",
     "overview.allBooks": "ALLE BØGER",
-    "overview.booksFinished": "Bøger læst færdig",
-    "overview.totalHours": "Timer i alt",
+    "overview.booksFinished": "bøger læst færdig",
+    "overview.totalHours": "timer i alt",
     "overview.pagesPerHour": "sider i timen",
 
 

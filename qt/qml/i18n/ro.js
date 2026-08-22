@@ -21,8 +21,8 @@ var strings = {
     "overview.noBook": "Nicio carte deschisă încă",
     "overview.bookProgress": "Progres carte: {percent} %",
     "overview.allBooks": "TOATE CĂRȚILE",
-    "overview.booksFinished": "Cărți terminate",
-    "overview.totalHours": "Ore în total",
+    "overview.booksFinished": "cărți terminate",
+    "overview.totalHours": "ore în total",
     "overview.pagesPerHour": "pagini pe oră",
 
 

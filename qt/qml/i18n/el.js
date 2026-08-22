@@ -16,8 +16,8 @@ var strings = {
     "overview.noBook": "Δεν έχει ανοιχτεί ακόμη βιβλίο",
     "overview.bookProgress": "Πρόοδος βιβλίου: {percent} %",
     "overview.allBooks": "ΟΛΑ ΤΑ ΒΙΒΛΙΑ",
-    "overview.booksFinished": "Ολοκληρωμένα βιβλία",
-    "overview.totalHours": "Ώρες συνολικά",
+    "overview.booksFinished": "ολοκληρωμένα βιβλία",
+    "overview.totalHours": "ώρες συνολικά",
     "overview.pagesPerHour": "σελίδες την ώρα",
 
 

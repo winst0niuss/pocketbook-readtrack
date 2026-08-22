@@ -20,8 +20,8 @@ var strings = {
     "overview.today": "TODAY",
     "overview.minutesToday": "minutes read",
     "overview.allBooks": "ALL BOOKS",
-    "overview.booksFinished": "Books finished",
-    "overview.totalHours": "Total hours",
+    "overview.booksFinished": "books finished",
+    "overview.totalHours": "total hours",
     "overview.pagesPerHour": "pages per hour",
 
 

@@ -24,8 +24,8 @@ var strings = {
     "overview.today": "СЬОГОДНІ",
     "overview.minutesToday": "хвилин читання",
     "overview.allBooks": "УСІ КНИГИ",
-    "overview.booksFinished": "Книг прочитано",
-    "overview.totalHours": "Годин усього",
+    "overview.booksFinished": "книг прочитано",
+    "overview.totalHours": "годин усього",
     "overview.pagesPerHour": "сторінок за годину",
 
 

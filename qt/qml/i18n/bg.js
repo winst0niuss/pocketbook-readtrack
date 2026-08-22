@@ -16,8 +16,8 @@ var strings = {
     "overview.noBook": "Още няма отворена книга",
     "overview.bookProgress": "Напредък: {percent} %",
     "overview.allBooks": "ВСИЧКИ КНИГИ",
-    "overview.booksFinished": "Дочетени книги",
-    "overview.totalHours": "Часа общо",
+    "overview.booksFinished": "дочетени книги",
+    "overview.totalHours": "часа общо",
     "overview.pagesPerHour": "страници на час",
 
 
