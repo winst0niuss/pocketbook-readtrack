@@ -1,0 +1,63 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  # Host-side tracker tests: fast, no Docker, no cross-compiler.
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install libsqlite3
+        run: sudo apt-get update && sudo apt-get install -y libsqlite3-dev
+      - run: make test
+
+  # Cross-compile in the SDK image and publish ReadTrack.zip.
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # gh release create
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch PocketBook SDK
+        run: make sdk
+
+      # rcc embeds the QML verbatim, so a syntax error would only surface on
+      # the device. qmllint cannot resolve the firmware's QML modules (they are
+      # armel), so its import and unqualified-access warnings are noise — only
+      # the exit code, which flags actual parse errors, is meaningful here.
+      - name: Check QML syntax
+        run: |
+          docker run --rm -v "$PWD:/src" -w /src \
+            ghcr.io/fstanis/pocketbook-sdk-qt6-builder \
+            bash -c '/usr/lib/qt6/bin/qmllint qt/qml/*.qml' > qmllint.log 2>&1 \
+            || { cat qmllint.log; exit 1; }
+          rm qmllint.log
+
+      - name: Build
+        run: make qt
+
+      - name: Package
+        run: |
+          cp build-qt/ReadTrack.app .
+          zip -9 ReadTrack.zip ReadTrack.app
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ReadTrack
+          path: ReadTrack.zip
+
+      - name: Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" ReadTrack.zip --generate-notes
