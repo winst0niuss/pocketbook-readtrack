@@ -27,19 +27,33 @@ Item {
     Component.onCompleted: refresh()
     onVisibleChanged: if (visible) refresh()
 
-    // Tapping a tab-sized target is the whole interaction here, so the button
-    // follows the firmware's list-item height instead of a text-sized box.
+    /* The screen's only interactive element, so it is worth drawing properly:
+     * the theme's own button height and corner radius rather than a hand-picked
+     * box, full column width so the three of them line up, and a fill that
+     * inverts on press — on e-ink an inversion is the one state change that is
+     * unmistakable at a glance.
+     *
+     * "primary" fills the button instead of outlining it, for the action the
+     * screen is actually offering (installing an update); the rest stay
+     * outlined so a page of solid black slabs does not shout. */
     component ActionButton: Rectangle {
         id: btn
 
         property alias text: label.text
+        property bool primary: false
+        readonly property bool filled: primary !== area.pressed
 
         signal clicked()
 
-        width: Global.dp(340)
-        height: GlobalValues.defaultListItemHeight
-        color: GlobalValues.defaultBackgroundColor
-        border.width: GlobalValues.dialogBorderWidth
+        width: parent.width
+        height: GlobalValues.defaultTextButtonHeight
+        radius: GlobalValues.defaultElementBorderRadius
+        color: btn.filled && btn.enabled ? GlobalValues.defaultTextColor
+                                         : GlobalValues.defaultBackgroundColor
+        border.width: btn.filled && btn.enabled
+                      ? 0
+                      : Math.max(1, Math.round(
+                            GlobalValues.defaultSolidSeparatorThickness))
         border.color: btn.enabled ? GlobalValues.defaultTextColor
                                   : GlobalValues.defaultDisabledTextColor
 
@@ -47,13 +61,20 @@ Item {
             id: label
 
             anchors.centerIn: parent
-            styledFont: FontStyles.BodyLBold
-            color: btn.enabled ? GlobalValues.defaultTextColor
-                               : GlobalValues.defaultDisabledTextColor
+            width: parent.width - 2 * Global.dp(16)
+            horizontalAlignment: Text.AlignHCenter
+            elide: Text.ElideRight
+            styledFont: btn.primary ? FontStyles.BodyLBold : FontStyles.BodyL
+            color: !btn.enabled ? GlobalValues.defaultDisabledTextColor
+                                : (btn.filled ? GlobalValues.defaultBackgroundColor
+                                              : GlobalValues.defaultTextColor)
         }
 
         MouseArea {
+            id: area
+
             anchors.fill: parent
+            enabled: btn.enabled
             onClicked: btn.clicked()
         }
     }
@@ -101,6 +122,7 @@ Item {
 
         ActionButton {
             visible: updater.state === "available"
+            primary: true
             text: Tr.t("about.install", { version: updater.latestVersion })
             enabled: !tab.busy
             onClicked: updater.install()
