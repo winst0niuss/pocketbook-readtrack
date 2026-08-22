@@ -26,6 +26,7 @@ var strings = {
     "overview.donutCaption": "книг на пристрої дочитано",
     "overview.booksFinished": "Книг прочитано",
     "overview.totalHours": "Годин усього",
+    "overview.totalHoursEst": "Годин усього, з книжками до встановлення",
     "overview.pagesPerHour": "сторінок за годину",
 
 
