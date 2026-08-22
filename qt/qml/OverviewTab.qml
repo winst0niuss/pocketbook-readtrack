@@ -36,8 +36,12 @@ Item {
         GlobalValues.defaultSolidSeparatorThickness))
     readonly property real donutSize: Global.dp(128)
     readonly property real captionWidth: Global.dp(120)
+    /* The stat cells run to the screen edge, not to the side margin: a figure
+     * centred inside the margin sits closer to its divider than to the edge of
+     * the display, which is what the eye measures. Only the ring keeps the
+     * margin, because it starts the row. */
     readonly property real statWidth: Math.max(Global.dp(60),
-        (width - 2 * sideMargin - donutSize - captionWidth
+        (width - sideMargin - donutSize - captionWidth
          - 5 * gap - 2 * hairline) / 2)
 
     Column {
@@ -173,11 +177,10 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.leftMargin: tab.sideMargin
-        anchors.rightMargin: tab.sideMargin
         spacing: Global.dp(14)
 
         Column {
-            width: parent.width
+            width: parent.width - tab.sideMargin
             spacing: Global.dp(6)
 
             StyledText {
