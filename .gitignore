@@ -8,3 +8,4 @@ build-qt/
 # macOS
 .DS_Store
 ._*
+todo.md
