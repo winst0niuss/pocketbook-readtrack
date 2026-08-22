@@ -82,6 +82,16 @@ One ARM ELF that is both the app and its background daemon; it links the device'
 - **Everything in the network path is resolved with `dlsym`, never linked.** `inkview.h` is the SDK's, `libinkview.so` is the device's, and a function present in the header but missing from the library is a lazily-bound symbol that kills the process on first call — with no console to say why. `resolve<Fn>()` in `inkview_bridge.cpp` turns that into a log line and a fallback.
 - **The update log is the only debugger this app has.** `update_log.cpp` opens, writes and closes per line so a crash cannot swallow the last one, and the About tab shows the tail whenever the previous run did not reach a resting state. Trace every step of a new device-side path this way — it is faster than another USB round trip.
 
+### Before pushing
+
+Read the diff back before committing it, as a reviewer would — not the intent, the lines. Every one of these shipped as a release and had to be fixed by the next one:
+
+- **Check the change against the invariants above.** Rows of estimated reading time were written at 1–5 hours each; `tracker_init` rewrites any recovered row over 90 minutes on every open, so 265 h became 172.8 h at the next launch.
+- **Ask whether the change can reach the device at all.** The shim script is copied to `system/bin` at install and nothing rewrote it afterwards, so two releases of fixes to it never left the repository. Then the refresh that fixed *that* keyed off `installed()`, which demands an entry per format — skipping exactly the hand-set-up device it was written for.
+- **Do the arithmetic instead of eyeballing the layout.** A spacer was added beside a Row that already applies `spacing`, and the figures row came out 21 px wider than the screen; the label lost its last letter. `Global.dp(1)` ≈ 1.32 px on a PB629 — the numbers are checkable before the build.
+- **Verify assumptions about the outside world.** GitHub returns `/releases` sorted by tag name as text, not by date, so the updater's "newest is first" put a device on rc9 in front of rc9.
+- **Run `make test`** (tracker asserts + `check_qml.py`), and `cc -c` any C file the host tests do not compile. CI is the only thing that compiles `qt/src/`, so a push is the first real check of C++ — which is a reason to re-read it, not to lean on the runner.
+
 ### Conventions
 
 - New source files must be added to `CMakeLists.txt`; new QML files to **both** `qt/qml/pocketbook-statistics.qrc` and the parent tab.
