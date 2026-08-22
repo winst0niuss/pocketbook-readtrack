@@ -27,7 +27,6 @@ var strings = {
     "overview.donutCaption": "книг на устройстве прочитано",
     "overview.booksFinished": "Книг прочитано",
     "overview.totalHours": "Часов всего",
-    "overview.totalHoursEst": "Часов всего, с книгами до установки",
     "overview.pagesPerHour": "страниц в час",
 
 

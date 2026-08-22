@@ -22,7 +22,6 @@ var strings = {
     "overview.donutCaption": "of the books on your device",
     "overview.booksFinished": "Books finished",
     "overview.totalHours": "Total hours",
-    "overview.totalHoursEst": "Total hours, incl. books finished before",
     "overview.pagesPerHour": "pages per hour",
 
 

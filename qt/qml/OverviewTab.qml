@@ -283,21 +283,9 @@ Item {
             }
 
             Repeater {
-                /* Hours read is measured only since the app was installed. The
-                 * books finished before that carry no time — but they do carry
-                 * page counts, and we know how fast this reader reads, so the
-                 * total is shown as an estimate ("≈") once there is anything to
-                 * estimate from. Without a measured speed it stays the plain
-                 * measured figure. */
                 model: [
                     { v: (tab.ov.booksFinished || 0) + "", l: Tr.t("overview.booksFinished") },
-                    { v: (tab.ov.estimatedSecs || 0) > 0
-                         ? "≈" + ((tab.ov.totalHours || 0)
-                                  + tab.ov.estimatedSecs / 3600).toFixed(0)
-                         : (tab.ov.totalHours || 0).toFixed(1),
-                      l: (tab.ov.estimatedSecs || 0) > 0
-                         ? Tr.t("overview.totalHoursEst")
-                         : Tr.t("overview.totalHours") }
+                    { v: (tab.ov.totalHours || 0).toFixed(1), l: Tr.t("overview.totalHours") }
                 ]
 
                 // Each cell carries its own divider on the left, as the row of

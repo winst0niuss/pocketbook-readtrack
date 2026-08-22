@@ -356,43 +356,11 @@ QVariantMap StatsBridge::overall()
         sqlite3_finalize(st);
         sqlite3_close(exp);
     }
-    const QList<FinishedBook> finished = finishedBooks(false);
-    m[QStringLiteral("booksFinished")] = finished.size();
+    m[QStringLiteral("booksFinished")] = finishedBooks(false).size();
     m[QStringLiteral("finishedFrac")] =
         libraryTotal > 0 ? double(libraryFinished) / libraryTotal : 0.0;
     m[QStringLiteral("progressFrac")] =
         libraryTotal > 0 ? libraryProgress / libraryTotal : 0.0;
-
-    /* Books finished before tracking began carry no reading time — the
-     * firmware dates the finish and nothing else. What it does keep is the page
-     * count, and we measure a reading speed, so the two together give an
-     * estimate of the hours behind those books: pages / (pages per minute).
-     *
-     * Three rules keep it from becoming fiction:
-     *   - only books finished *before* the marker, so nothing is counted twice
-     *     against the sessions we actually measured;
-     *   - only when a speed exists at all (it comes from measured sessions with
-     *     known pages; recovered rows are excluded from it);
-     *   - page counts of exactly 100 are dropped, because that is what the
-     *     firmware writes for reflowable books it reports in per cent.
-     * The result is published apart from totalHours and the UI marks it "≈".
-     * It is an estimate about the past, not a measurement. */
-    double estimatedSecs = 0.0;
-    if (o.pages_per_min > 0) {
-        const int64_t since = stats_tracking_since(db_);
-        const QDate trackedFrom = since > 0
-            ? QDateTime::fromSecsSinceEpoch(since).date() : QDate();
-        int pages = 0;
-        for (const FinishedBook &fb : finished) {
-            if (fb.pages <= 0 || fb.pages == 100)
-                continue;
-            if (trackedFrom.isValid() && fb.day >= trackedFrom)
-                continue;
-            pages += fb.pages;
-        }
-        estimatedSecs = pages / o.pages_per_min * 60.0;
-    }
-    m[QStringLiteral("estimatedSecs")] = estimatedSecs;
 
     return m;
 }
