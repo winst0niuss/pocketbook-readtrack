@@ -40,12 +40,9 @@ var strings = {
     "about.available": "Version {version} is available.",
     "about.downloading": "Downloading the update\u2026",
     "about.ready": "Update downloaded. {app} closes now and starts again on its own \u2014 if it doesn't, open it from the launcher.",
-    "about.privacy": "The update is fetched from GitHub over Wi-Fi, and only when you press the button. {app} goes online at no other time.",
 
     "about.shim": "Track from the moment a book opens",
     "about.shimHint": "Opening an EPUB, FB2 or PDF starts the tracker, then hands the book to the usual reader. Without it, open this app once after switching the reader on.",
-    "about.shimOn": "Turn on",
-    "about.shimOff": "Turn off",
     "about.log": "Last attempt:",
 
     "update.errNoNetwork": "No connection. Turn on Wi-Fi and try again.",

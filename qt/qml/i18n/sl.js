@@ -46,7 +46,6 @@ var strings = {
     "about.available": "Na voljo je različica {version}.",
     "about.downloading": "Prenašam posodobitev…",
     "about.ready": "Posodobitev je prenesena. {app} se bo zaprl in sam znova zagnal — če se ne, ga odprite iz menija aplikacij.",
-    "about.privacy": "Posodobitev se prenese z GitHuba prek Wi-Fi, in le ko pritisnete gumb. Sicer {app} ne gre v omrežje.",
     "about.log": "Zadnji poskus:",
 
     "update.errNoNetwork": "Ni povezave. Vklopite Wi-Fi in poskusite znova.",

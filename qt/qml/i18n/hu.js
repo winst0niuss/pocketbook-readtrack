@@ -39,7 +39,6 @@ var strings = {
     "about.available": "Elérhető a(z) {version} verzió.",
     "about.downloading": "Frissítés letöltése…",
     "about.ready": "A frissítés letöltve. A {app} bezárul, és magától újraindul — ha mégsem, nyisd meg az alkalmazások közül.",
-    "about.privacy": "A frissítés Wi-Fin keresztül a GitHubról jön, és csak akkor, ha megnyomod a gombot. Máskor a {app} nem megy fel a hálózatra.",
     "about.log": "Utolsó próbálkozás:",
 
     "update.errNoNetwork": "Nincs kapcsolat. Kapcsold be a Wi-Fit, és próbáld újra.",

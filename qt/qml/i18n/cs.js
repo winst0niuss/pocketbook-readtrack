@@ -43,7 +43,6 @@ var strings = {
     "about.available": "K dispozici je verze {version}.",
     "about.downloading": "Stahuji aktualizaci…",
     "about.ready": "Aktualizace stažena. {app} se zavře a sám spustí znovu — pokud ne, otevřete jej z nabídky aplikací.",
-    "about.privacy": "Aktualizace se stahuje z GitHubu přes Wi-Fi, a to jen po stisku tlačítka. Jindy se {app} k síti nepřipojuje.",
     "about.log": "Poslední pokus:",
 
     "update.errNoNetwork": "Bez připojení. Zapněte Wi-Fi a zkuste to znovu.",

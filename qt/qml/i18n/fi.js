@@ -39,7 +39,6 @@ var strings = {
     "about.available": "Versio {version} on saatavilla.",
     "about.downloading": "Ladataan päivitystä…",
     "about.ready": "Päivitys ladattu. {app} sulkeutuu ja käynnistyy itsestään uudelleen — jos ei, avaa se sovellusvalikosta.",
-    "about.privacy": "Päivitys haetaan GitHubista wifin kautta, vain kun painat painiketta. Muulloin {app} ei ota yhteyttä verkkoon.",
     "about.log": "Viimeisin yritys:",
 
     "update.errNoNetwork": "Ei yhteyttä. Kytke wifi päälle ja yritä uudelleen.",

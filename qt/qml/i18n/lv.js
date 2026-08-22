@@ -43,7 +43,6 @@ var strings = {
     "about.available": "Pieejama versija {version}.",
     "about.downloading": "Lejupielādēju atjauninājumu…",
     "about.ready": "Atjauninājums lejupielādēts. {app} aizvērsies un pats startēs no jauna — ja nē, atveriet to no lietotņu izvēlnes.",
-    "about.privacy": "Atjauninājums tiek ielādēts no GitHub caur Wi-Fi un tikai tad, kad nospiežat pogu. Citkārt {app} tīklā neiziet.",
     "about.log": "Pēdējais mēģinājums:",
 
     "update.errNoNetwork": "Nav savienojuma. Ieslēdziet Wi-Fi un mēģiniet vēlreiz.",

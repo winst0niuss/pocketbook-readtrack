@@ -44,7 +44,6 @@ var strings = {
     "about.available": "Versiunea {version} este disponibilă.",
     "about.downloading": "Descarc actualizarea…",
     "about.ready": "Actualizare descărcată. {app} se închide și pornește singur din nou — dacă nu, deschide-l din meniul de aplicații.",
-    "about.privacy": "Actualizarea este adusă de pe GitHub prin Wi-Fi, doar când apeși butonul. În rest, {app} nu se conectează la rețea.",
     "about.log": "Ultima încercare:",
 
     "update.errNoNetwork": "Fără conexiune. Pornește Wi-Fi și încearcă din nou.",

@@ -39,7 +39,6 @@ var strings = {
     "about.available": "{version} sürümü mevcut.",
     "about.downloading": "Güncelleme indiriliyor…",
     "about.ready": "Güncelleme indirildi. {app} kapanıp kendi kendine açılır — açılmazsa uygulamalar menüsünden başlatın.",
-    "about.privacy": "Güncelleme yalnızca düğmeye bastığınızda Wi-Fi üzerinden GitHub'dan indirilir. Başka zaman {app} ağa çıkmaz.",
     "about.log": "Son deneme:",
 
     "update.errNoNetwork": "Bağlantı yok. Wi-Fi'yi açıp yeniden deneyin.",

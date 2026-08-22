@@ -40,12 +40,9 @@ var strings = {
     "about.available": "Version {version} ist verfügbar.",
     "about.downloading": "Update wird geladen\u2026",
     "about.ready": "Update geladen. {app} schließt sich und startet von selbst neu \u2014 falls nicht, über das Menü öffnen.",
-    "about.privacy": "Das Update kommt per WLAN von GitHub, und nur auf Knopfdruck. Sonst geht {app} nie online.",
 
     "about.shim": "Zählen, sobald ein Buch geöffnet wird",
     "about.shimHint": "Ein EPUB, FB2 oder PDF zu öffnen startet die Zählung und übergibt das Buch dem gewohnten Reader. Ohne dies die App nach dem Einschalten einmal öffnen.",
-    "about.shimOn": "Einschalten",
-    "about.shimOff": "Ausschalten",
     "about.log": "Letzter Versuch:",
 
     "update.errNoNetwork": "Keine Verbindung. WLAN einschalten und erneut versuchen.",

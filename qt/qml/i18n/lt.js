@@ -44,7 +44,6 @@ var strings = {
     "about.available": "Galima versija {version}.",
     "about.downloading": "Atsiunčiu atnaujinimą…",
     "about.ready": "Atnaujinimas atsiųstas. {app} užsidarys ir pats pasileis iš naujo — jei ne, atverkite jį iš programų meniu.",
-    "about.privacy": "Atnaujinimas parsiunčiamas iš GitHub per Wi-Fi ir tik paspaudus mygtuką. Kitu metu {app} į tinklą neina.",
     "about.log": "Paskutinis bandymas:",
 
     "update.errNoNetwork": "Nėra ryšio. Įjunkite Wi-Fi ir bandykite dar kartą.",

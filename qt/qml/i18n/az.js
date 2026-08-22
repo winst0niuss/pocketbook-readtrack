@@ -39,7 +39,6 @@ var strings = {
     "about.available": "{version} versiyası mövcuddur.",
     "about.downloading": "Yeniləmə endirilir…",
     "about.ready": "Yeniləmə endirildi. {app} bağlanıb özü yenidən açılacaq — açılmasa, onu proqramlar menyusundan başladın.",
-    "about.privacy": "Yeniləmə yalnız düyməyə basdıqda Wi-Fi vasitəsilə GitHub-dan endirilir. Başqa vaxt {app} şəbəkəyə çıxmır.",
     "about.log": "Son cəhd:",
 
     "update.errNoNetwork": "Bağlantı yoxdur. Wi-Fi-ı açıb yenidən cəhd edin.",

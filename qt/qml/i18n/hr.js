@@ -44,7 +44,6 @@ var strings = {
     "about.available": "Dostupna je verzija {version}.",
     "about.downloading": "Preuzimam ažuriranje…",
     "about.ready": "Ažuriranje je preuzeto. {app} će se zatvoriti i sam ponovno pokrenuti — ako ne, otvorite ga iz izbornika aplikacija.",
-    "about.privacy": "Ažuriranje se preuzima s GitHuba preko Wi-Fija, i samo kad pritisnete gumb. Inače {app} ne izlazi na mrežu.",
     "about.log": "Posljednji pokušaj:",
 
     "update.errNoNetwork": "Nema veze. Uključite Wi-Fi i pokušajte ponovno.",

@@ -39,7 +39,6 @@ var strings = {
     "about.available": "Versie {version} is beschikbaar.",
     "about.downloading": "Update downloaden…",
     "about.ready": "Update gedownload. {app} sluit en start vanzelf opnieuw — zo niet, open het dan via het menu.",
-    "about.privacy": "De update komt via wifi van GitHub, en alleen als je op de knop drukt. Verder gaat {app} nooit online.",
     "about.log": "Laatste poging:",
 
     "update.errNoNetwork": "Geen verbinding. Zet wifi aan en probeer opnieuw.",

@@ -44,7 +44,6 @@ var strings = {
     "about.available": "Dostępna jest wersja {version}.",
     "about.downloading": "Pobieram aktualizację…",
     "about.ready": "Aktualizacja pobrana. {app} zamknie się i uruchomi ponownie sam — jeśli nie, otwórz go z menu aplikacji.",
-    "about.privacy": "Aktualizacja jest pobierana z GitHub przez Wi-Fi, wyłącznie po naciśnięciu przycisku. Poza tym {app} nie łączy się z siecią.",
     "about.log": "Ostatnia próba:",
 
     "update.errNoNetwork": "Brak połączenia. Włącz Wi-Fi i spróbuj ponownie.",

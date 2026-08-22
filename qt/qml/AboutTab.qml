@@ -73,6 +73,14 @@ Item {
         }
     }
 
+    // The small print: same shape four times over, so it is one component.
+    component Note: StyledText {
+        width: parent ? parent.width : 0
+        wrapMode: Text.Wrap
+        styledFont: FontStyles.BodyS
+        color: GlobalValues.defaultDisabledTextColor
+    }
+
     Column {
         anchors.top: parent.top
         anchors.left: parent.left
@@ -121,14 +129,12 @@ Item {
                 opacity: 0.7
             }
 
-            StyledText {
+            Note {
                 anchors.verticalCenter: parent.verticalCenter
                 width: parent.width - Global.dp(26)
-                styledFont: FontStyles.BodyS
-                color: GlobalValues.defaultTextColor
-                opacity: 0.7
-                text: "github.com/winst0niuss/pocketbook-statistics"
+                wrapMode: Text.NoWrap
                 elide: Text.ElideMiddle
+                text: "github.com/winst0niuss/pocketbook-statistics"
             }
         }
 
@@ -178,11 +184,7 @@ Item {
             }
         }
 
-        StyledText {
-            width: parent.width
-            wrapMode: Text.Wrap
-            styledFont: FontStyles.BodyS
-            color: GlobalValues.defaultDisabledTextColor
+        Note {
             visible: updater.state === "error" && updater.errorDetail !== ""
             text: updater.errorDetail
         }
@@ -229,38 +231,22 @@ Item {
                     text: Tr.t("about.shim")
                 }
 
-                StyledText {
-                    width: parent.width
-                    wrapMode: Text.Wrap
-                    styledFont: FontStyles.BodyS
-                    color: GlobalValues.defaultDisabledTextColor
+                Note {
                     text: Tr.t("about.shimHint")
                 }
             }
         }
 
-        StyledText {
-            width: parent.width
-            wrapMode: Text.Wrap
-            styledFont: FontStyles.BodyS
-            color: GlobalValues.defaultDisabledTextColor
-            text: Tr.t("about.privacy", { app: Tr.t("app.title") })
-        }
-
         // What the last attempt managed to do. Worth the screen space while
         // the update path is young: if the firmware takes the process down,
         // this is all that is left of the run.
-        StyledText {
-            width: parent.width
+        Note {
             visible: updater.diagnostics !== ""
-            wrapMode: Text.Wrap
             // The log is up to a dozen lines and this screen does not scroll:
             // capped, because the last lines are the interesting ones and the
             // rest must not push the page over the navigation bar.
             maximumLineCount: 5
             elide: Text.ElideRight
-            styledFont: FontStyles.BodyS
-            color: GlobalValues.defaultDisabledTextColor
             text: Tr.t("about.log") + "\n" + updater.diagnostics
         }
     }

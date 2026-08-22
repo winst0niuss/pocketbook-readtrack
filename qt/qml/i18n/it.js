@@ -39,7 +39,6 @@ var strings = {
     "about.available": "È disponibile la versione {version}.",
     "about.downloading": "Scarico l'aggiornamento…",
     "about.ready": "Aggiornamento scaricato. {app} si chiude e si riapre da solo — se non succede, aprilo dal menu delle applicazioni.",
-    "about.privacy": "L'aggiornamento viene scaricato da GitHub via Wi-Fi, e solo quando premi il pulsante. Per il resto {app} non si collega.",
     "about.log": "Ultimo tentativo:",
 
     "update.errNoNetwork": "Nessuna connessione. Attiva il Wi-Fi e riprova.",

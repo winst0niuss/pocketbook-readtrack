@@ -39,7 +39,6 @@ var strings = {
     "about.available": "Version {version} er tilgængelig.",
     "about.downloading": "Henter opdateringen…",
     "about.ready": "Opdateringen er hentet. {app} lukker og starter selv igen — hvis ikke, så åbn den fra menuen.",
-    "about.privacy": "Opdateringen hentes fra GitHub over wi-fi, og kun når du trykker på knappen. Ellers går {app} aldrig på nettet.",
     "about.log": "Seneste forsøg:",
 
     "update.errNoNetwork": "Ingen forbindelse. Slå wi-fi til, og prøv igen.",

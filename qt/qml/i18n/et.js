@@ -39,7 +39,6 @@ var strings = {
     "about.available": "Saadaval on versioon {version}.",
     "about.downloading": "Laadin uuendust…",
     "about.ready": "Uuendus alla laaditud. {app} sulgub ja käivitub ise uuesti — kui mitte, ava see rakenduste menüüst.",
-    "about.privacy": "Uuendus tuuakse GitHubist üle WiFi ja ainult siis, kui vajutad nuppu. Muul ajal {app} võrku ei lähe.",
     "about.log": "Viimane katse:",
 
     "update.errNoNetwork": "Ühendus puudub. Lülita WiFi sisse ja proovi uuesti.",
