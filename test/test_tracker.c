@@ -141,18 +141,34 @@ int main(void)
     assert(q1(t.stats, "SELECT pages_start FROM sessions WHERE start_time=9000") == 13);
     assert(q1(t.stats, "SELECT active_seconds FROM sessions WHERE start_time=9000") == 5);
 
+    /* Reopened where it was left: the firmware stamps opentime now but keeps
+     * the older position_ts, so the open — not that stale timestamp — starts
+     * the clock. Otherwise the row ends before it begins and the next page
+     * turn is measured from hours ago, landing as a capped ten minutes. */
+    tracker_close(&t);
+    assert(tracker_init(&t, ST_DB, EXP_DB) == 0);
+    set_state(exp, 30000, 25000, 50);       /* position_ts 5000 s before open */
+    assert(tracker_read_state(EXP_DB, &s) == 0);
+    assert(tracker_observe(&t, &s) == 1);
+    assert(q1(t.stats, "SELECT end_time FROM sessions WHERE start_time=30000") == 30000);
+    assert(q1(t.stats, "SELECT active_seconds FROM sessions WHERE start_time=30000") == 0);
+    set_state(exp, 30000, 30090, 52);       /* first page turn, 90 s in */
+    assert(tracker_read_state(EXP_DB, &s) == 0);
+    assert(tracker_observe(&t, &s) == 2);
+    assert(q1(t.stats, "SELECT active_seconds FROM sessions WHERE start_time=30000") == 90);
+
     /* Recovery: session created without a daemon, backfilled + dedupe */
     tracker_close(&t);
     set_state(exp, 20000, 20000 + 1200, 40);
     assert(tracker_init(&t, ST_DB, EXP_DB) == 0);
     assert(tracker_recover(&t) >= 1);
-    assert(q1(t.stats, "SELECT COUNT(*) FROM sessions") == 3);
+    assert(q1(t.stats, "SELECT COUNT(*) FROM sessions") == 4);
     assert(q1(t.stats, "SELECT active_seconds FROM sessions WHERE start_time=20000") == 1200);
     assert(q1(t.stats, "SELECT recovered FROM sessions WHERE start_time=20000") == 1);
     /* Recovered = estimate: no pages_start, so it cannot skew pages/minute */
     assert(q1(t.stats, "SELECT pages_start IS NULL FROM sessions WHERE start_time=20000") == 1);
     tracker_recover(&t); /* idempotent */
-    assert(q1(t.stats, "SELECT COUNT(*) FROM sessions") == 3);
+    assert(q1(t.stats, "SELECT COUNT(*) FROM sessions") == 4);
 
     /* Recovery cap against huge spans */
     set_state(exp, 50000, 50000 + 10 * 3600, 60);

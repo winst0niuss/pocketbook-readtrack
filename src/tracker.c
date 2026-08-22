@@ -332,8 +332,8 @@ int tracker_recover(tracker *t)
         pb_state s;
         fill_state(st, &s);
         int64_t span = s.position_ts - s.opentime;
-        if (span < 0)
-            span = 0;
+        if (span <= 0)
+            continue; /* reopened where it was left: nothing to reconstruct */
         if (span > RECOVERED_CAP_SECONDS)
             span = RECOVERED_CAP_SECONDS;
         insert_session(t, &s, s.opentime, span, 0, 1);
@@ -351,18 +351,34 @@ int tracker_observe(tracker *t, const pb_state *s)
         return 0;
 
     if (s->bookid != t->cur_book || s->opentime != t->cur_open) {
-        /* New session (or daemon start mid-session). */
-        int64_t active = s->position_ts - s->opentime;
-        if (active < 0)
-            active = 0;
+        /* New session (or daemon start mid-session).
+         *
+         * position_ts can predate opentime: the firmware stamps the open
+         * immediately but only moves the position on a page turn, so a book
+         * reopened where it was left carries the timestamp of the *previous*
+         * session. Two things then go wrong unless the open is treated as the
+         * start of the clock:
+         *
+         *   - the row would end before it began (start = opentime, end = an
+         *     older position_ts), which is how 16 zero-length rows with
+         *     end_time < start_time got into a real database;
+         *   - the first page turn would be measured from that stale timestamp,
+         *     so a gap of hours would land, capped, as a flat ten minutes of
+         *     reading. Two of those in one afternoon added 20 minutes to a day
+         *     with 15 minutes of actual reading. */
+        pb_state open = *s;
+        if (open.position_ts < open.opentime)
+            open.position_ts = open.opentime;
+
+        int64_t active = open.position_ts - open.opentime;
         if (active > IDLE_CAP_SECONDS)
             active = IDLE_CAP_SECONDS;
-        insert_session(t, s, s->opentime, active, 1, 0);
-        upsert_book(t, s);
-        t->cur_book = s->bookid;
-        t->cur_open = s->opentime;
-        t->cur_pos_ts = s->position_ts;
-        t->cur_row_start = s->opentime;
+        insert_session(t, &open, open.opentime, active, 1, 0);
+        upsert_book(t, &open);
+        t->cur_book = open.bookid;
+        t->cur_open = open.opentime;
+        t->cur_pos_ts = open.position_ts;
+        t->cur_row_start = open.opentime;
         return 1;
     }
 
