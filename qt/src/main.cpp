@@ -1,4 +1,5 @@
 #include <cstring>
+#include <unistd.h>
 
 extern "C" {
 #include "daemon.h"
@@ -6,6 +7,7 @@ extern "C" {
 
 #include <QByteArray>
 #include <QDateTime>
+#include <QFile>
 #include <QFont>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
@@ -46,6 +48,36 @@ static qint64 sinceStart()
     return QDateTime::currentMSecsSinceEpoch() - t0;
 }
 
+/* Milliseconds between the kernel creating this process and main() running:
+ * everything the loader does before us — mapping QtQuick/QtQml/QtGui off flash
+ * and relocating them. Field 22 of /proc/self/stat is the process start in
+ * clock ticks since boot, and /proc/uptime is now. */
+static qint64 msBeforeMain()
+{
+    QFile stat(QStringLiteral("/proc/self/stat"));
+    QFile up(QStringLiteral("/proc/uptime"));
+    if (!stat.open(QIODevice::ReadOnly) || !up.open(QIODevice::ReadOnly))
+        return -1;
+    /* The second field is the executable name in brackets and may contain
+     * spaces, so split after the closing one. */
+    const QString line = QString::fromLatin1(stat.readAll());
+    const int close = line.lastIndexOf(QLatin1Char(')'));
+    if (close < 0)
+        return -1;
+    const QStringList fields =
+        line.mid(close + 2).split(QLatin1Char(' '), Qt::SkipEmptyParts);
+    if (fields.size() < 20)
+        return -1;
+    bool ok = false;
+    const qlonglong ticks = fields.at(19).toLongLong(&ok); /* field 22 overall */
+    if (!ok)
+        return -1;
+    const double uptime =
+        QString::fromLatin1(up.readAll()).section(QLatin1Char(' '), 0, 0).toDouble();
+    const long hz = sysconf(_SC_CLK_TCK) > 0 ? sysconf(_SC_CLK_TCK) : 100;
+    return qint64(uptime * 1000.0) - qint64(ticks * 1000 / hz);
+}
+
 /* Startup is slow enough on this hardware to be worth measuring rather than
  * guessing about: the loader maps QtQuick/QtQml/QtGui before main() is even
  * entered, the QML is compiled on every launch, and the daemon pays that same
@@ -66,6 +98,8 @@ int main(int argc, char *argv[])
     }
 
     mark("main");
+    updateLog(QStringLiteral("boot: loader took %1 ms before main")
+                  .arg(msBeforeMain()));
     selectPlatformPlugin();
     QCoreApplication::setSetuidAllowed(true);
 
@@ -105,5 +139,19 @@ int main(int argc, char *argv[])
     mark("QML loaded");
     if (engine.rootObjects().isEmpty())
         return 1;
+
+    /* The scene existing is not the app being on screen: the software renderer
+     * still has to draw it and InkView to push it to the panel, and that
+     * happens inside exec(). Time the first frame that reaches the display —
+     * on e-ink it is the number the user actually waits for. */
+    if (auto *window = qobject_cast<QQuickWindow *>(engine.rootObjects().first())) {
+        QObject::connect(window, &QQuickWindow::frameSwapped, window, [] {
+            static bool once = false;
+            if (!once) {
+                once = true;
+                mark("first frame");
+            }
+        });
+    }
     return app.exec();
 }
