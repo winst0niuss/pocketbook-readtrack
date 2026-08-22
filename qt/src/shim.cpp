@@ -101,6 +101,9 @@ bool writeLines(const char *path, const QStringList &lines)
 
 Shim::Shim(QObject *parent) : QObject(parent) {}
 
+/* Every format, not any: a device that was set up by hand — or by a version
+ * that intercepted fewer formats — must read as "off", so pressing the button
+ * completes it instead of appearing to be done already. */
 bool Shim::installed() const
 {
     if (!QFileInfo::exists(QString::fromLatin1(kScriptPath)))
@@ -108,10 +111,10 @@ bool Shim::installed() const
     const QStringList lines = readLines(kUserExt);
     for (const QString &ext : formats()) {
         const QString entry = entryFor(lines, ext);
-        if (entry.contains(QString::fromLatin1(kScriptName)))
-            return true;
+        if (!entry.contains(QString::fromLatin1(kScriptName)))
+            return false;
     }
-    return false;
+    return true;
 }
 
 bool Shim::install()
