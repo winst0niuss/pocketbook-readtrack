@@ -148,6 +148,36 @@ Window {
         }
     }
 
+    /* Coming back from the reader is neither of the two moments a tab refreshes
+     * on — it is not created again, and it never stopped being "visible", it
+     * was just behind the book. So the figures stayed at whatever they were
+     * when the app was last looked at, and only switching tabs brought them
+     * up to date. Refresh when the app becomes active again, and once a minute
+     * while it is: reading the aggregates costs under 100 ms, and the screen
+     * only repaints if a number actually changed. */
+    function refreshCurrent() {
+        if (nav.current === 0)
+            overviewTab.refresh();
+        else if (nav.current === 1)
+            calendarTab.refresh();
+    }
+
+    Connections {
+        target: Qt.application
+
+        function onStateChanged() {
+            if (Qt.application.state === Qt.ApplicationActive)
+                root.refreshCurrent();
+        }
+    }
+
+    Timer {
+        interval: 60000
+        running: true
+        repeat: true
+        onTriggered: root.refreshCurrent()
+    }
+
     FocusScope {
         anchors.top: appHeader.bottom
         anchors.bottom: nav.top
@@ -164,11 +194,15 @@ Window {
         }
 
         OverviewTab {
+            id: overviewTab
+
             anchors.fill: parent
             visible: nav.current === 0
         }
 
         CalendarTab {
+            id: calendarTab
+
             anchors.fill: parent
             visible: nav.current === 1
         }
