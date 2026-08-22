@@ -42,7 +42,7 @@ Item {
      * margin, because it starts the row. */
     readonly property real statWidth: Math.max(Global.dp(60),
         (width - sideMargin - donutSize - captionWidth
-         - 5 * gap - 2 * hairline) / 2)
+         - 6 * gap - 2 * hairline) / 2)
 
     Column {
         id: head
@@ -200,7 +200,11 @@ Item {
 
         Row {
             width: parent.width
-            spacing: tab.gap
+            /* No spacing: a gap added between cells lands outside them, so the
+             * figure ends up nearer its left divider than its right one — 84 px
+             * against 103 px on a PB629. Each cell pads itself on both sides
+             * instead. */
+            spacing: 0
 
             // The ring and the sentence that explains it are one cell: the
             // caption says what the percentage counts, not what sits beside it.
@@ -283,6 +287,9 @@ Item {
                     text: Tr.t("overview.donutCaption")
                     wrapMode: Text.Wrap
                 }
+
+                // The padding the row no longer adds.
+                Item { width: tab.gap; height: 1 }
             }
 
             Repeater {
@@ -296,7 +303,7 @@ Item {
                 Item {
                     required property var modelData
 
-                    width: tab.hairline + tab.gap + tab.statWidth
+                    width: tab.hairline + tab.gap + tab.statWidth + tab.gap
                     height: tab.donutSize
 
                     Rectangle {
@@ -334,6 +341,12 @@ Item {
                             opacity: 0.7
                             text: modelData.l
                             wrapMode: Text.Wrap
+                            /* Always two lines tall, even when the words fit on
+                             * one: the cells are centred vertically, so a label
+                             * of a different height would drop its figure below
+                             * the one beside it. */
+                            height: lineCount === 1 ? implicitHeight * 2
+                                                    : implicitHeight
                         }
                     }
                 }
