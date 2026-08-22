@@ -39,13 +39,14 @@ Window {
 
             Repeater {
                 model: [Tr.t("nav.overview"), Tr.t("nav.streak"),
-                        Tr.t("nav.calendar"), Tr.t("nav.year")]
+                        Tr.t("nav.calendar"), Tr.t("nav.year"),
+                        Tr.t("nav.about")]
 
                 Item {
                     required property string modelData
                     required property int index
 
-                    width: tabBar.width / 4
+                    width: tabBar.width / 5
                     height: tabBar.height
 
                     StyledText {
@@ -117,6 +118,11 @@ Window {
         YearTab {
             anchors.fill: parent
             visible: tabBar.current === 3
+        }
+
+        AboutTab {
+            anchors.fill: parent
+            visible: tabBar.current === 4
         }
     }
 }

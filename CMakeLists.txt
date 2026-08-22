@@ -4,6 +4,11 @@ project(readtrack CXX C)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# The version the update check compares against the latest GitHub release tag.
+# A release tag must match this file — CI enforces that on tag builds.
+file(READ "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" READTRACK_VERSION)
+string(STRIP "${READTRACK_VERSION}" READTRACK_VERSION)
+
 add_subdirectory(third_party/pocketbook-sdk-qt6)
 
 pocketbook_add_app(ReadTrack
@@ -13,9 +18,12 @@ pocketbook_add_app(ReadTrack
     qt/src/stats_bridge.cpp
     qt/src/epub_cover.cpp
     qt/src/installer.cpp
+    qt/src/updater.cpp
+    qt/src/update_log.cpp
     src/tracker.c
     src/stats_db.c
     src/daemon.c
+    src/version.c
     qt/third_party/sqlite3.c
     qt/third_party/miniz.c
   QRC qt/qml/readtrack.qrc
@@ -23,5 +31,6 @@ pocketbook_add_app(ReadTrack
 
 target_include_directories(ReadTrack PRIVATE qt/third_party src qt/src)
 target_compile_definitions(ReadTrack PRIVATE
-  SQLITE_OMIT_LOAD_EXTENSION SQLITE_THREADSAFE=1)
+  SQLITE_OMIT_LOAD_EXTENSION SQLITE_THREADSAFE=1
+  READTRACK_VERSION="${READTRACK_VERSION}")
 target_link_libraries(ReadTrack PRIVATE m pthread dl)

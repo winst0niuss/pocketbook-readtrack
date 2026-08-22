@@ -21,7 +21,7 @@ sdk:
 test:
 	mkdir -p build
 	cc $(CFLAGS) -o build/test_tracker test/test_tracker.c \
-	  src/tracker.c src/stats_db.c -lsqlite3
+	  src/tracker.c src/stats_db.c src/version.c -lsqlite3
 	./build/test_tracker
 
 # ---- Build the app (single ELF, links the device's Qt at runtime) ----

@@ -28,6 +28,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # The in-app update check compares the release tag against the version
+      # compiled into the binary. If they disagree, an installed build keeps
+      # offering an update it already is.
+      - name: Check VERSION matches the tag
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          test "v$(cat VERSION)" = "$GITHUB_REF_NAME" \
+            || { echo "VERSION=$(cat VERSION) but tag is $GITHUB_REF_NAME"; exit 1; }
+
       - name: Fetch PocketBook SDK
         run: make sdk
 

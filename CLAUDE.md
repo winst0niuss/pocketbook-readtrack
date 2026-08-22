@@ -35,8 +35,9 @@ One ARM ELF that is both the app and its background daemon; it links the device'
 - `src/*.c` — plain C, no Qt. `tracker.c` (session derivation + schema + idempotent migration), `stats_db.c` (aggregation SQL, streak walk), `daemon.c` (pidfile, 30 s poll loop, `spawn_daemon`).
 - `qt/src/main.cpp` — `--daemon` is handled **before any Qt call** and runs the pure C loop; otherwise sets QPA `pocketbook2` + software rendering, registers the launcher icon, forks the daemon, loads `qrc:/main.qml`.
 - `qt/src/stats_bridge.cpp` — the only QML-visible object (`stats` context property); each `Q_INVOKABLE` opens/closes explorer-3 itself.
-- `qt/src/inkview_bridge.cpp` — the **only** TU allowed to include `inkview.h`; its macros collide with Qt.
-- `qt/qml/` — four tabs, no scrolling (e-ink), plus `PanelDialog.qml` and the `Tr` i18n singleton.
+- `qt/src/inkview_bridge.cpp` — the **only** TU allowed to include `inkview.h`; its macros collide with Qt. Also holds the two network calls (Wi-Fi up, download-to-file).
+- `qt/src/updater.cpp` — the `updater` context property: version check against the GitHub release, unpack, stage, hand over.
+- `qt/qml/` — five tabs, no scrolling (e-ink), plus `PanelDialog.qml` and the `Tr` i18n singleton.
 
 ### Invariants that are easy to break
 
@@ -46,6 +47,9 @@ One ARM ELF that is both the app and its background daemon; it links the device'
 - **Deduplicate by title, not `book_id`.** `books_impl` keeps stale rows and the same book exists as several file copies; the calendar/year/book-count queries group by normalized title (see `sameBook()` / `titleWords()` prefix matching).
 - **Nothing before `meta.tracking_since` may be shown as history.** The marker is stamped on first run; earlier sessions only exist because `tracker_recover()` reconstructed them from the firmware's last-open timestamps, and they are guesses, not measurement. Every session aggregate appends `AND_TRACKED` (`src/stats_db.h`), and the year heatmap renders those days as unknown via `trackedFrom` rather than as "not read". Firmware-sourced finish dates are exempt.
 - **"Finished" always comes from the firmware** (`books_settings.completed` / `completed_ts`), never from our own DB, so it matches the Library UI.
+- **`VERSION` is the single source of the version, and a release tag must match it.** It is read by CMake into `READTRACK_VERSION` and compared against the release's `tag_name` (`version_compare` in `src/version.c`, host-tested). A tag that disagrees with the file makes every installed build offer an update to the version it already runs — CI fails the tag build for exactly that reason. Bump `VERSION` in the commit that earns the release, not at tag time.
+- **A running binary cannot overwrite itself.** The updater unpacks to `ReadTrack.app.new` beside the installed file and leaves the swap to a generated `/bin/sh` script that waits for the app's PID to disappear, kills the daemon (it runs from the same ELF), `mv`s the file and starts the new one. Staging must stay on the same mount — `mv` is only atomic within one filesystem, and `/mnt/ext1` is not the same one as `/tmp`.
+- **The update path never blocks on the network without repainting first.** InkView must not be driven from a second thread, so `check()`/`install()` run on the GUI thread and call `publish()` (state + `processEvents`) before each blocking firmware call. User input stays excluded there so a second tap cannot re-enter them.
 - Covers: try EPUB extraction first (`epub_cover.cpp`, miniz), fall back to the firmware cover cache — the cache holds the wrong image for some Calibre/sideloaded books. Extracted covers are cached as PNG under `system/readtrack/covers/`.
 
 ### Device-side constraints
@@ -53,7 +57,14 @@ One ARM ELF that is both the app and its background daemon; it links the device'
 - Cross-compilation constraints (softfp ABI, exact Qt version match, `rcc --no-zstd`) come from the SDK — see the fstanis/pocketbook-sdk-qt6 notes before touching the toolchain or CMake.
 - **The launcher icons are 106x64 8-bit BMPs, and the width is the load-bearing half.** The launcher draws a tile as image-then-label at the bitmap's native size, so the canvas height decides where the label sits — a 128 px canvas drops the label below the row of labels beside it. Width is stranger: 106 renders, 48 makes the icon vanish entirely (the tile shows no image at all and the label slides up into the empty space), and why has never been established, so treat 106 as the only known-good value. Both sizes were confirmed on a PB710; `--canvas`/`--glyph` on `tools/make_icon.py` exist for re-probing them. The glyph itself lives on a 48-unit grid scaled onto the canvas, with the stroke width left unscaled so the line art stays as thin as the firmware's own icons (~50 px glyphs) instead of reading as heavier than its neighbours.
 - The app writes outside its own directory in exactly one place: `installer.cpp` adds a `U_readtrack` entry to `system/config/desktop/view.json` after backing it up. Keep that patch idempotent and failure-tolerant — the app must still start if the file is missing or read-only.
-- No network access anywhere. Everything stays on device.
+- **The network is used in exactly one place: the update check.** `updater.cpp` asks `api.github.com` for the latest release and downloads that release's `ReadTrack.zip`, and only when the user presses the button on the About tab — there is no background check and no other host is ever contacted. Reading data never leaves the device.
+- **The firmware's network API behaves differently from what `inkview.h` promises**, and all three lessons were paid for on a PB710:
+  - **The session API (`NewSession`/`DownloadTo`) does not transfer anything under Qt.** It returns `NET_OK` and writes a zero-byte file: the transfer is handed to the event loop InkView runs for its own applications, and ours is Qt's. Use the synchronous `QuickDownloadExt3`, which returns the whole body in one heap buffer.
+  - **`iv_sessioninfo` does not match the header on this firmware.** Reading `->response` yielded 1 and 0 where an HTTP status belonged and killed the process. Judge a download by what landed in the file; never read a session struct.
+  - **Redirects are followed for us.** A release asset URL bounces to a CDN host, and `QuickDownloadExt3` lands the final body — confirmed on a PB710 with the 599 KB zip. Nothing needs to chase a `Location` header (which is just as well: the session struct it would come from is unreadable).
+  - **`QueryNetwork()` is not a connection test.** `0x202` (`NET_WIFI|NET_WIFIREADY`) means the radio is up and answered a scan — a download in that state comes back empty. Always call `NetConnectSilent(NULL)`, which is a no-op when a connection exists.
+- **Everything in the network path is resolved with `dlsym`, never linked.** `inkview.h` is the SDK's, `libinkview.so` is the device's, and a function present in the header but missing from the library is a lazily-bound symbol that kills the process on first call — with no console to say why. `resolve<Fn>()` in `inkview_bridge.cpp` turns that into a log line and a fallback.
+- **The update log is the only debugger this app has.** `update_log.cpp` opens, writes and closes per line so a crash cannot swallow the last one, and the About tab shows the tail whenever the previous run did not reach a resting state. Trace every step of a new device-side path this way — it is faster than another USB round trip.
 
 ### Conventions
 

@@ -12,6 +12,7 @@ var strings = {
     "nav.streak": "Streak",
     "nav.calendar": "Calendar",
     "nav.year": "Year",
+    "nav.about": "About",
 
     "overview.progress": "Progress: {percent} %",
     "overview.read": "Read: {time}",
@@ -39,6 +40,26 @@ var strings = {
 
     "year.title": "Books finished in {year}",
     "year.monthTitle": "{month} {year}  ·  {n} {books}",
+
+    "about.version": "Version {version}",
+    "about.check": "Check for update",
+    "about.install": "Install {version}",
+    "about.checking": "Asking GitHub for the latest release\u2026",
+    "about.uptodate": "This is the latest release.",
+    "about.available": "Version {version} is available.",
+    "about.downloading": "Downloading the update\u2026",
+    "about.ready": "Update downloaded. ReadTrack closes now and starts again on its own \u2014 if it doesn't, open it from the launcher.",
+    "about.privacy": "The update is fetched from GitHub over Wi-Fi, and only when you press the button. ReadTrack goes online at no other time.",
+
+    "about.log": "Last attempt:",
+
+    "update.errNoNetwork": "No connection. Turn on Wi-Fi and try again.",
+    "update.errDownload": "Download failed.",
+    "update.errResponse": "GitHub sent an unexpected answer.",
+    "update.errNoAsset": "The latest release ships no installable build.",
+    "update.errUnsupported": "This firmware offers no way to download the update.",
+    "update.errCorrupt": "The downloaded file is damaged \u2014 nothing was changed.",
+    "update.errHandover": "The new version could not be swapped in. It is stored here:",
 
     "date.months": ["January", "February", "March", "April", "May", "June",
                     "July", "August", "September", "October", "November", "December"],

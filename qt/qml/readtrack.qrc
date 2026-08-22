@@ -11,6 +11,7 @@
         <file>StreakTab.qml</file>
         <file>CalendarTab.qml</file>
         <file>YearTab.qml</file>
+        <file>AboutTab.qml</file>
         <file>readtrack.bmp</file>
         <file>readtrack_f.bmp</file>
     </qresource>

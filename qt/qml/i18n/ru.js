@@ -17,6 +17,7 @@ var strings = {
     "nav.streak": "Серия",
     "nav.calendar": "Календарь",
     "nav.year": "Год",
+    "nav.about": "Версия",
 
     "overview.progress": "Прогресс: {percent} %",
     "overview.read": "Прочитано: {time}",
@@ -44,6 +45,26 @@ var strings = {
 
     "year.title": "Книг прочитано за {year}",
     "year.monthTitle": "{month} {year}  ·  {n} {books}",
+
+    "about.version": "Версия {version}",
+    "about.check": "Проверить обновление",
+    "about.install": "Установить {version}",
+    "about.checking": "Спрашиваю GitHub о последнем релизе\u2026",
+    "about.uptodate": "Установлена последняя версия.",
+    "about.available": "Доступна версия {version}.",
+    "about.downloading": "Загружаю обновление\u2026",
+    "about.ready": "Обновление загружено. ReadTrack закроется и запустится сам — если этого не произошло, откройте его из меню приложений.",
+    "about.privacy": "Обновление скачивается с GitHub по Wi-Fi и только по нажатию кнопки. В остальное время ReadTrack в сеть не выходит.",
+
+    "about.log": "Последняя попытка:",
+
+    "update.errNoNetwork": "Нет соединения. Включите Wi-Fi и повторите.",
+    "update.errDownload": "Не удалось загрузить.",
+    "update.errResponse": "GitHub ответил неожиданно.",
+    "update.errNoAsset": "В последнем релизе нет готовой сборки.",
+    "update.errUnsupported": "Прошивка не даёт способа загрузить обновление.",
+    "update.errCorrupt": "Загруженный файл повреждён — ничего не изменено.",
+    "update.errHandover": "Не удалось подменить приложение. Новая версия лежит здесь:",
 
     "date.months": ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль",
                     "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],

@@ -12,6 +12,7 @@ var strings = {
     "nav.streak": "Serie",
     "nav.calendar": "Kalender",
     "nav.year": "Jahr",
+    "nav.about": "Über",
 
     "overview.progress": "Fortschritt: {percent} %",
     "overview.read": "Gelesen: {time}",
@@ -39,6 +40,26 @@ var strings = {
 
     "year.title": "Bücher beendet in {year}",
     "year.monthTitle": "{month} {year}  ·  {n} {books}",
+
+    "about.version": "Version {version}",
+    "about.check": "Nach Update suchen",
+    "about.install": "{version} installieren",
+    "about.checking": "Frage GitHub nach dem neuesten Release\u2026",
+    "about.uptodate": "Dies ist das neueste Release.",
+    "about.available": "Version {version} ist verfügbar.",
+    "about.downloading": "Update wird geladen\u2026",
+    "about.ready": "Update geladen. ReadTrack schließt sich und startet von selbst neu \u2014 falls nicht, über das Menü öffnen.",
+    "about.privacy": "Das Update kommt per WLAN von GitHub, und nur auf Knopfdruck. Sonst geht ReadTrack nie online.",
+
+    "about.log": "Letzter Versuch:",
+
+    "update.errNoNetwork": "Keine Verbindung. WLAN einschalten und erneut versuchen.",
+    "update.errDownload": "Download fehlgeschlagen.",
+    "update.errResponse": "GitHub hat unerwartet geantwortet.",
+    "update.errNoAsset": "Das neueste Release enthält keinen installierbaren Build.",
+    "update.errUnsupported": "Diese Firmware bietet keinen Weg, das Update zu laden.",
+    "update.errCorrupt": "Die geladene Datei ist beschädigt \u2014 es wurde nichts geändert.",
+    "update.errHandover": "Die neue Version konnte nicht eingesetzt werden. Sie liegt hier:",
 
     "date.months": ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli",
                     "August", "September", "Oktober", "November", "Dezember"],

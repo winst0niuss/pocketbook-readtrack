@@ -1,6 +1,7 @@
 /* Host test: session derivation from explorer-3-like snapshots. */
 #include "../src/tracker.h"
 #include "../src/stats_db.h"
+#include "../src/version.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -64,6 +65,19 @@ static long q1(sqlite3 *db, const char *sql)
         v = (long)sqlite3_column_int64(st, 0);
     sqlite3_finalize(st);
     return v;
+}
+
+/* Update check: tag names from GitHub releases against our own VERSION. */
+static void test_version_compare(void)
+{
+    assert(version_compare("0.5.1", "0.5.1") == 0);
+    assert(version_compare("v0.5.1", "0.5.1") == 0);   /* the tag keeps its v */
+    assert(version_compare("0.5.1", "v0.5.2") == -1);
+    assert(version_compare("v0.6.0", "0.5.9") == 1);
+    assert(version_compare("1.2", "1.2.0") == 0);      /* missing part is zero */
+    assert(version_compare("0.10.0", "0.9.0") == 1);   /* numeric, not textual */
+    assert(version_compare("v0.6.0-rc1", "0.6.0") == 0); /* suffix ignored */
+    assert(version_compare("", "0.0.1") == -1);        /* garbage reads as 0.0.0 */
 }
 
 int main(void)
@@ -202,6 +216,9 @@ int main(void)
     assert(stats_tracking_since(t.stats) > 0);
 
     tracker_close(&t);
+
+    test_version_compare();
+
     printf("all tracker tests ok\n");
     return 0;
 }
