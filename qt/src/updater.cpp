@@ -171,19 +171,28 @@ void Updater::check()
     f.close();
     QFile::remove(jsonPath);
 
-    /* /latest answers with one release; the list answers with an array, newest
-     * first — take its head, whether that is a draft-free pre-release or a
-     * final one. */
+    /* /latest answers with one release; the list answers with an array — and
+     * that array is not in date order. GitHub sorts it by tag name as text, so
+     * a run of candidates comes back as rc9, rc8 … rc2, rc11, rc10, rc1: the
+     * two newest sit in the middle, and taking the head offered a device on
+     * rc9 its own version and called it up to date. Compare them instead and
+     * keep the highest. */
     QJsonObject release;
     if (doc.isObject()) {
         release = doc.object();
-    } else if (doc.isArray() && !doc.array().isEmpty()) {
+    } else if (doc.isArray()) {
         for (const QJsonValue &value : doc.array()) {
             const QJsonObject candidate = value.toObject();
             if (candidate.value(QStringLiteral("draft")).toBool())
                 continue;
-            release = candidate;
-            break;
+            const QString tag = candidate.value(QStringLiteral("tag_name")).toString();
+            if (tag.isEmpty())
+                continue;
+            if (release.isEmpty()
+                || version_compare(release.value(QStringLiteral("tag_name"))
+                                       .toString().toUtf8().constData(),
+                                   tag.toUtf8().constData()) < 0)
+                release = candidate;
         }
     }
     if (release.isEmpty()) {
