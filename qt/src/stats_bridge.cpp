@@ -309,9 +309,6 @@ QVariantMap StatsBridge::overall()
     overall_stats o;
     stats_overall(db_, &o);
     QVariantMap m;
-    m[QStringLiteral("todaySecs")] = o.today_secs;
-    m[QStringLiteral("todayPages")] = o.today_pages;
-    m[QStringLiteral("weekSecs")] = o.week_secs;
     m[QStringLiteral("avgSessionMin")] = o.avg_session_min;
     /* Per hour, not per minute: a real reading speed is 0.1 pages a minute,
      * which reads as a broken counter. The same number as 6 pages an hour
@@ -359,14 +356,11 @@ QVariantMap StatsBridge::overall()
         sqlite3_finalize(st);
         sqlite3_close(exp);
     }
-    m[QStringLiteral("booksTotal")] = libraryTotal;
-    m[QStringLiteral("booksOnDeviceFinished")] = libraryFinished;
     m[QStringLiteral("booksFinished")] = finishedBooks(false).size();
     m[QStringLiteral("finishedFrac")] =
         libraryTotal > 0 ? double(libraryFinished) / libraryTotal : 0.0;
     m[QStringLiteral("progressFrac")] =
         libraryTotal > 0 ? libraryProgress / libraryTotal : 0.0;
-    m[QStringLiteral("streakDays")] = o.streak_days;
 
     return m;
 }
@@ -386,7 +380,6 @@ QVariantMap StatsBridge::currentBook()
     double prog = s.completed ? 1.0
                               : (s.npage > 0 ? double(s.cpage) / s.npage : 0.0);
     m[QStringLiteral("percent")] = int(prog * 100 + 0.5);
-    m[QStringLiteral("completed")] = s.completed != 0;
 
     QString coverUrl;
     if (sqlite3 *exp = openExplorer()) {
@@ -400,11 +393,6 @@ QVariantMap StatsBridge::currentBook()
         }
     }
     m[QStringLiteral("coverUrl")] = coverUrl;
-
-    const int64_t started = stats_book_started(db_, s.bookid);
-    m[QStringLiteral("startedDaysAgo")] = started > 0
-        ? QDateTime::fromSecsSinceEpoch(started).date().daysTo(QDate::currentDate())
-        : -1;
 
     int64_t bsecs = 0;
     double bppm = 0;

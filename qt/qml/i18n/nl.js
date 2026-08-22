@@ -11,7 +11,6 @@ var strings = {
 
     "nav.overview": "Overzicht",
     "nav.calendar": "Kalender",
-    "nav.about": "Info",
 
     "overview.left": "Nog ong. {time}",
     "overview.noBook": "Nog geen boek geopend",
@@ -53,14 +52,11 @@ var strings = {
 
     "date.months": ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"],
     "date.monthsGen": ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"],
-    "date.monthsShort": ["jan", "feb", "mrt", "apr", "mei", "jun", "jul", "aug", "sep", "okt", "nov", "dec"],
     "date.weekdays": ["Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"],
     "date.dayMonth": "{d} {monthGen}",
 
     "time.hm": "{h} u {m} min",
     "time.m": "{m} min",
 
-    "plural.days": ["dag", "dagen"],
-    "plural.books": ["boek", "boeken"],
-    "plural.pages": ["pagina", "pagina's"]
+    "plural.days": ["dag", "dagen"]
 };

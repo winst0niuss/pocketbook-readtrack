@@ -16,7 +16,6 @@ var strings = {
 
     "nav.overview": "Prezentare",
     "nav.calendar": "Calendar",
-    "nav.about": "Info",
 
     "overview.left": "Au rămas cca {time}",
     "overview.noBook": "Nicio carte deschisă încă",
@@ -58,14 +57,11 @@ var strings = {
 
     "date.months": ["Ianuarie", "Februarie", "Martie", "Aprilie", "Mai", "Iunie", "Iulie", "August", "Septembrie", "Octombrie", "Noiembrie", "Decembrie"],
     "date.monthsGen": ["ianuarie", "februarie", "martie", "aprilie", "mai", "iunie", "iulie", "august", "septembrie", "octombrie", "noiembrie", "decembrie"],
-    "date.monthsShort": ["ian", "feb", "mar", "apr", "mai", "iun", "iul", "aug", "sep", "oct", "noi", "dec"],
     "date.weekdays": ["Lun", "Mar", "Mie", "Joi", "Vin", "Sâm", "Dum"],
     "date.dayMonth": "{d} {monthGen}",
 
     "time.hm": "{h} h {m} min",
     "time.m": "{m} min",
 
-    "plural.days": ["zi", "zile", "de zile"],
-    "plural.books": ["carte", "cărți", "de cărți"],
-    "plural.pages": ["pagină", "pagini", "de pagini"]
+    "plural.days": ["zi", "zile", "de zile"]
 };

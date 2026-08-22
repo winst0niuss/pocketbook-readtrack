@@ -11,7 +11,6 @@ var strings = {
 
     "nav.overview": "Aperçu",
     "nav.calendar": "Calendrier",
-    "nav.about": "Infos",
 
     "overview.left": "Reste env. {time}",
     "overview.noBook": "Aucun livre ouvert pour l'instant",
@@ -53,14 +52,11 @@ var strings = {
 
     "date.months": ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"],
     "date.monthsGen": ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"],
-    "date.monthsShort": ["janv", "févr", "mars", "avr", "mai", "juin", "juil", "août", "sept", "oct", "nov", "déc"],
     "date.weekdays": ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],
     "date.dayMonth": "{d} {monthGen}",
 
     "time.hm": "{h} h {m} min",
     "time.m": "{m} min",
 
-    "plural.days": ["jour", "jours"],
-    "plural.books": ["livre", "livres"],
-    "plural.pages": ["page", "pages"]
+    "plural.days": ["jour", "jours"]
 };

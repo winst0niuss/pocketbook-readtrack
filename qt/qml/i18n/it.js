@@ -11,7 +11,6 @@ var strings = {
 
     "nav.overview": "Panoramica",
     "nav.calendar": "Calendario",
-    "nav.about": "Info",
 
     "overview.left": "Restano circa {time}",
     "overview.noBook": "Nessun libro ancora aperto",
@@ -53,14 +52,11 @@ var strings = {
 
     "date.months": ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"],
     "date.monthsGen": ["gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto", "settembre", "ottobre", "novembre", "dicembre"],
-    "date.monthsShort": ["gen", "feb", "mar", "apr", "mag", "giu", "lug", "ago", "set", "ott", "nov", "dic"],
     "date.weekdays": ["Lun", "Mar", "Mer", "Gio", "Ven", "Sab", "Dom"],
     "date.dayMonth": "{d} {monthGen}",
 
     "time.hm": "{h} h {m} min",
     "time.m": "{m} min",
 
-    "plural.days": ["giorno", "giorni"],
-    "plural.books": ["libro", "libri"],
-    "plural.pages": ["pagina", "pagine"]
+    "plural.days": ["giorno", "giorni"]
 };

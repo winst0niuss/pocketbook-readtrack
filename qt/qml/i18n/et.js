@@ -11,7 +11,6 @@ var strings = {
 
     "nav.overview": "Ülevaade",
     "nav.calendar": "Kalender",
-    "nav.about": "Teave",
 
     "overview.left": "Jäänud u {time}",
     "overview.noBook": "Ühtegi raamatut pole veel avatud",
@@ -53,14 +52,11 @@ var strings = {
 
     "date.months": ["Jaanuar", "Veebruar", "Märts", "Aprill", "Mai", "Juuni", "Juuli", "August", "September", "Oktoober", "November", "Detsember"],
     "date.monthsGen": ["jaanuar", "veebruar", "märts", "aprill", "mai", "juuni", "juuli", "august", "september", "oktoober", "november", "detsember"],
-    "date.monthsShort": ["jaan", "veebr", "märts", "apr", "mai", "juuni", "juuli", "aug", "sept", "okt", "nov", "dets"],
     "date.weekdays": ["E", "T", "K", "N", "R", "L", "P"],
     "date.dayMonth": "{d}. {monthGen}",
 
     "time.hm": "{h} t {m} min",
     "time.m": "{m} min",
 
-    "plural.days": ["päev", "päeva"],
-    "plural.books": ["raamat", "raamatut"],
-    "plural.pages": ["lehekülg", "lehekülge"]
+    "plural.days": ["päev", "päeva"]
 };

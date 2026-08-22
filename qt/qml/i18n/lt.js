@@ -16,7 +16,6 @@ var strings = {
 
     "nav.overview": "Apžvalga",
     "nav.calendar": "Kalendorius",
-    "nav.about": "Apie",
 
     "overview.left": "Liko apie {time}",
     "overview.noBook": "Dar neatverstos jokios knygos",
@@ -58,14 +57,11 @@ var strings = {
 
     "date.months": ["Sausis", "Vasaris", "Kovas", "Balandis", "Gegužė", "Birželis", "Liepa", "Rugpjūtis", "Rugsėjis", "Spalis", "Lapkritis", "Gruodis"],
     "date.monthsGen": ["sausio", "vasario", "kovo", "balandžio", "gegužės", "birželio", "liepos", "rugpjūčio", "rugsėjo", "spalio", "lapkričio", "gruodžio"],
-    "date.monthsShort": ["saus", "vas", "kov", "bal", "geg", "birž", "liep", "rugp", "rugs", "spal", "lapkr", "gruod"],
     "date.weekdays": ["Pr", "An", "Tr", "Kt", "Pn", "Št", "Sk"],
     "date.dayMonth": "{monthGen} {d} d.",
 
     "time.hm": "{h} val {m} min",
     "time.m": "{m} min",
 
-    "plural.days": ["diena", "dienos", "dienų"],
-    "plural.books": ["knyga", "knygos", "knygų"],
-    "plural.pages": ["puslapis", "puslapiai", "puslapių"]
+    "plural.days": ["diena", "dienos", "dienų"]
 };

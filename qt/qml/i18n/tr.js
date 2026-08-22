@@ -11,7 +11,6 @@ var strings = {
 
     "nav.overview": "Genel bakış",
     "nav.calendar": "Takvim",
-    "nav.about": "Hakkında",
 
     "overview.left": "Yaklaşık {time} kaldı",
     "overview.noBook": "Henüz kitap açılmadı",
@@ -53,14 +52,11 @@ var strings = {
 
     "date.months": ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
     "date.monthsGen": ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
-    "date.monthsShort": ["Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"],
     "date.weekdays": ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"],
     "date.dayMonth": "{d} {monthGen}",
 
     "time.hm": "{h} sa {m} dk",
     "time.m": "{m} dk",
 
-    "plural.days": ["gün", "gün"],
-    "plural.books": ["kitap", "kitap"],
-    "plural.pages": ["sayfa", "sayfa"]
+    "plural.days": ["gün", "gün"]
 };

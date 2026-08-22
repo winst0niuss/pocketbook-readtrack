@@ -8,7 +8,7 @@ import com.pocketbook.controls
 Canvas {
     id: icon
 
-    // "home" | "flame" | "calendar" | "books" | "bars" | "info"
+    // "home" | "calendar" | "info"
     property string kind: "home"
     property bool active: false
     property color ink: GlobalValues.defaultTextColor
@@ -58,18 +58,6 @@ Canvas {
             ctx.lineTo(x0 + d * 0.86, y0 + d * 0.95);
             ctx.lineTo(x0 + d * 0.86, y0 + d * 0.42);
             ctx.stroke();
-        } else if (kind === "flame") {
-            // A streak: one flame outline, no inner tongue — it turns to mush
-            // at 40 px on a mono screen.
-            ctx.beginPath();
-            ctx.moveTo(x0 + d * 0.5, y0 + d * 0.04);
-            ctx.bezierCurveTo(x0 + d * 0.86, y0 + d * 0.34,
-                              x0 + d * 0.92, y0 + d * 0.66,
-                              x0 + d * 0.5, y0 + d * 0.97);
-            ctx.bezierCurveTo(x0 + d * 0.08, y0 + d * 0.66,
-                              x0 + d * 0.14, y0 + d * 0.34,
-                              x0 + d * 0.5, y0 + d * 0.04);
-            ctx.stroke();
         } else if (kind === "calendar") {
             ctx.strokeRect(x0, y0 + d * 0.14, d, d * 0.82);
             ctx.beginPath();
@@ -80,22 +68,6 @@ Canvas {
             ctx.moveTo(x0 + d * 0.72, y0 + d * 0.02);
             ctx.lineTo(x0 + d * 0.72, y0 + d * 0.24);
             ctx.stroke();
-        } else if (kind === "books") {
-            // Two volumes side by side, the right one leaning.
-            ctx.strokeRect(x0 + d * 0.06, y0 + d * 0.12, d * 0.34, d * 0.8);
-            ctx.save();
-            ctx.translate(x0 + d * 0.66, y0 + d * 0.52);
-            ctx.rotate(0.16);
-            ctx.strokeRect(-d * 0.17, -d * 0.4, d * 0.34, d * 0.8);
-            ctx.restore();
-        } else if (kind === "bars") {
-            var bw = d * 0.22;
-            var heights = [0.38, 0.62, 0.92];
-            for (var i = 0; i < 3; i++) {
-                var bx = x0 + d * 0.06 + i * (bw + d * 0.11);
-                var bh = d * heights[i];
-                ctx.strokeRect(bx, y0 + d - bh, bw, bh);
-            }
         } else if (kind === "info") {
             ctx.beginPath();
             ctx.arc(x0 + d / 2, y0 + d / 2, d / 2, 0, 2 * Math.PI);

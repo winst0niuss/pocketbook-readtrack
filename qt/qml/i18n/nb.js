@@ -11,7 +11,6 @@ var strings = {
 
     "nav.overview": "Oversikt",
     "nav.calendar": "Kalender",
-    "nav.about": "Om",
 
     "overview.left": "Ca. {time} igjen",
     "overview.noBook": "Ingen bok åpnet ennå",
@@ -53,14 +52,11 @@ var strings = {
 
     "date.months": ["Januar", "Februar", "Mars", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Desember"],
     "date.monthsGen": ["januar", "februar", "mars", "april", "mai", "juni", "juli", "august", "september", "oktober", "november", "desember"],
-    "date.monthsShort": ["jan", "feb", "mar", "apr", "mai", "jun", "jul", "aug", "sep", "okt", "nov", "des"],
     "date.weekdays": ["Man", "Tir", "Ons", "Tor", "Fre", "Lør", "Søn"],
     "date.dayMonth": "{d}. {monthGen}",
 
     "time.hm": "{h} t {m} min",
     "time.m": "{m} min",
 
-    "plural.days": ["dag", "dager"],
-    "plural.books": ["bok", "bøker"],
-    "plural.pages": ["side", "sider"]
+    "plural.days": ["dag", "dager"]
 };

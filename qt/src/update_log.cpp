@@ -44,7 +44,3 @@ QString updateLogTail(int lines)
     return all.mid(qMax(0, all.size() - lines)).join(QLatin1Char('\n'));
 }
 
-void updateLogClear()
-{
-    QFile::remove(QString::fromLatin1(kLogPath));
-}

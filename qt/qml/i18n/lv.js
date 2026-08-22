@@ -15,7 +15,6 @@ var strings = {
 
     "nav.overview": "Pārskats",
     "nav.calendar": "Kalendārs",
-    "nav.about": "Par",
 
     "overview.left": "Atlicis apm. {time}",
     "overview.noBook": "Neviena grāmata vēl nav atvērta",
@@ -57,14 +56,11 @@ var strings = {
 
     "date.months": ["Janvāris", "Februāris", "Marts", "Aprīlis", "Maijs", "Jūnijs", "Jūlijs", "Augusts", "Septembris", "Oktobris", "Novembris", "Decembris"],
     "date.monthsGen": ["janvāra", "februāra", "marta", "aprīļa", "maija", "jūnija", "jūlija", "augusta", "septembra", "oktobra", "novembra", "decembra"],
-    "date.monthsShort": ["jan", "feb", "mar", "apr", "mai", "jūn", "jūl", "aug", "sep", "okt", "nov", "dec"],
     "date.weekdays": ["Pr", "Ot", "Tr", "Ce", "Pk", "Se", "Sv"],
     "date.dayMonth": "{d}. {monthGen}",
 
     "time.hm": "{h} st {m} min",
     "time.m": "{m} min",
 
-    "plural.days": ["diena", "dienas", "dienu"],
-    "plural.books": ["grāmata", "grāmatas", "grāmatu"],
-    "plural.pages": ["lappuse", "lappuses", "lappušu"]
+    "plural.days": ["diena", "dienas", "dienu"]
 };

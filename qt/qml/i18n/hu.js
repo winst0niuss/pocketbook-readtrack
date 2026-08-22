@@ -11,7 +11,6 @@ var strings = {
 
     "nav.overview": "Áttekintés",
     "nav.calendar": "Naptár",
-    "nav.about": "Névjegy",
 
     "overview.left": "Kb. {time} van hátra",
     "overview.noBook": "Még nincs megnyitott könyv",
@@ -53,14 +52,11 @@ var strings = {
 
     "date.months": ["Január", "Február", "Március", "Április", "Május", "Június", "Július", "Augusztus", "Szeptember", "Október", "November", "December"],
     "date.monthsGen": ["január", "február", "március", "április", "május", "június", "július", "augusztus", "szeptember", "október", "november", "december"],
-    "date.monthsShort": ["jan", "febr", "márc", "ápr", "máj", "jún", "júl", "aug", "szept", "okt", "nov", "dec"],
     "date.weekdays": ["H", "K", "Sze", "Cs", "P", "Szo", "V"],
     "date.dayMonth": "{monthGen} {d}.",
 
     "time.hm": "{h} ó {m} p",
     "time.m": "{m} perc",
 
-    "plural.days": ["nap", "nap"],
-    "plural.books": ["könyv", "könyv"],
-    "plural.pages": ["oldal", "oldal"]
+    "plural.days": ["nap", "nap"]
 };

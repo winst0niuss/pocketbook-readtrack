@@ -12,9 +12,7 @@ Rectangle {
     /* Empty means the theme's UI font; the Overview passes a serif so its
      * figures match the book above them. */
     property string figureFamily: ""
-    property real cellHeight: Global.dp(84)
-
-    height: cellHeight
+    height: Global.dp(84)
     color: "transparent"
     border.width: Math.max(1, Math.round(GlobalValues.defaultSolidSeparatorThickness))
     border.color: GlobalValues.defaultBorderColor

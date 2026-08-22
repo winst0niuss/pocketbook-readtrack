@@ -16,7 +16,6 @@ var strings = {
 
     "nav.overview": "Pregled",
     "nav.calendar": "Kalendar",
-    "nav.about": "Info",
 
     "overview.left": "Preostalo oko {time}",
     "overview.noBook": "Nijedna knjiga još nije otvorena",
@@ -58,14 +57,11 @@ var strings = {
 
     "date.months": ["Siječanj", "Veljača", "Ožujak", "Travanj", "Svibanj", "Lipanj", "Srpanj", "Kolovoz", "Rujan", "Listopad", "Studeni", "Prosinac"],
     "date.monthsGen": ["siječnja", "veljače", "ožujka", "travnja", "svibnja", "lipnja", "srpnja", "kolovoza", "rujna", "listopada", "studenoga", "prosinca"],
-    "date.monthsShort": ["sij", "velj", "ožu", "tra", "svi", "lip", "srp", "kol", "ruj", "lis", "stu", "pro"],
     "date.weekdays": ["Pon", "Uto", "Sri", "Čet", "Pet", "Sub", "Ned"],
     "date.dayMonth": "{d}. {monthGen}",
 
     "time.hm": "{h} h {m} min",
     "time.m": "{m} min",
 
-    "plural.days": ["dan", "dana", "dana"],
-    "plural.books": ["knjiga", "knjige", "knjiga"],
-    "plural.pages": ["stranica", "stranice", "stranica"]
+    "plural.days": ["dan", "dana", "dana"]
 };

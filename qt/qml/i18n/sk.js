@@ -15,7 +15,6 @@ var strings = {
 
     "nav.overview": "Prehľad",
     "nav.calendar": "Kalendár",
-    "nav.about": "Info",
 
     "overview.left": "Zostáva asi {time}",
     "overview.noBook": "Zatiaľ nebola otvorená kniha",
@@ -57,14 +56,11 @@ var strings = {
 
     "date.months": ["Január", "Február", "Marec", "Apríl", "Máj", "Jún", "Júl", "August", "September", "Október", "November", "December"],
     "date.monthsGen": ["januára", "februára", "marca", "apríla", "mája", "júna", "júla", "augusta", "septembra", "októbra", "novembra", "decembra"],
-    "date.monthsShort": ["jan", "feb", "mar", "apr", "máj", "jún", "júl", "aug", "sep", "okt", "nov", "dec"],
     "date.weekdays": ["Po", "Ut", "St", "Št", "Pi", "So", "Ne"],
     "date.dayMonth": "{d}. {monthGen}",
 
     "time.hm": "{h} h {m} min",
     "time.m": "{m} min",
 
-    "plural.days": ["deň", "dni", "dní"],
-    "plural.books": ["kniha", "knihy", "kníh"],
-    "plural.pages": ["strana", "strany", "strán"]
+    "plural.days": ["deň", "dni", "dní"]
 };

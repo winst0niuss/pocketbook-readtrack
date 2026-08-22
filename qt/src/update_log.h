@@ -8,4 +8,3 @@
  * cable can still say where it stopped. */
 void updateLog(const QString &line);
 QString updateLogTail(int lines = 12);
-void updateLogClear();

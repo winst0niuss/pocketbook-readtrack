@@ -3,7 +3,7 @@ CFLAGS   := -O2 -Wall -Wextra -std=gnu99
 # Cross-compiler image with the on-device Qt 6.8.2 headers and InkView stubs.
 QT_IMG   := ghcr.io/fstanis/pocketbook-sdk-qt6-builder
 # Device mount point for the dev deploy target (adjust to your reader's volume).
-DEVICE   := /Volumes/PB710
+DEVICE   := /Volumes/NO NAME
 
 # ---- One-time setup: fetch the PocketBook Qt6 SDK (sparse, ~2 MB) ----
 # Clones fstanis/pocketbook-sdk-qt6 and its SDK submodule, checking out only the

@@ -15,7 +15,6 @@ var strings = {
 
     "nav.overview": "Přehled",
     "nav.calendar": "Kalendář",
-    "nav.about": "Info",
 
     "overview.left": "Zbývá asi {time}",
     "overview.noBook": "Zatím nebyla otevřena kniha",
@@ -57,14 +56,11 @@ var strings = {
 
     "date.months": ["Leden", "Únor", "Březen", "Duben", "Květen", "Červen", "Červenec", "Srpen", "Září", "Říjen", "Listopad", "Prosinec"],
     "date.monthsGen": ["ledna", "února", "března", "dubna", "května", "června", "července", "srpna", "září", "října", "listopadu", "prosince"],
-    "date.monthsShort": ["led", "úno", "bře", "dub", "kvě", "čvn", "čvc", "srp", "zář", "říj", "lis", "pro"],
     "date.weekdays": ["Po", "Út", "St", "Čt", "Pá", "So", "Ne"],
     "date.dayMonth": "{d}. {monthGen}",
 
     "time.hm": "{h} h {m} min",
     "time.m": "{m} min",
 
-    "plural.days": ["den", "dny", "dní"],
-    "plural.books": ["kniha", "knihy", "knih"],
-    "plural.pages": ["strana", "strany", "stran"]
+    "plural.days": ["den", "dny", "dní"]
 };

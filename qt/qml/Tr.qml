@@ -106,12 +106,7 @@ QtObject {
         return forms[Math.min(catalog.plural(n), forms.length - 1)];
     }
 
-    function pluralUpper(key, n) {
-        return plural(key, n).toUpperCase();
-    }
-
     readonly property var monthsFull: entry("date.months")
-    readonly property var monthsShort: entry("date.monthsShort")
     readonly property var weekdaysShort: entry("date.weekdays")
 
     /* Day and month in the order the language writes them, with the month in
@@ -120,13 +115,6 @@ QtObject {
         return t("date.dayMonth", { d: d.getDate(),
                                     month: entry("date.months")[d.getMonth()],
                                     monthGen: entry("date.monthsGen")[d.getMonth()] });
-    }
-
-    /* 5 240 rather than 5240: at four digits a number starts reading as an
-     * identifier. Narrow no-break space, so it never wraps mid-number. */
-    function fmtNumber(n) {
-        return String(Math.round(n || 0))
-               .replace(/\B(?=(\d{3})+(?!\d))/g, "\u202f");
     }
 
     /* Reading time: "1h 05m" / "1 ч 05 мин" / "12 min" */

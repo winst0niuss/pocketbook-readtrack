@@ -48,7 +48,7 @@ make deploy          # copies to $(DEVICE)/applications/PocketBookStatistics.app
 ```
 
 Adjust `DEVICE` at the top of the `Makefile` to your reader's mount point
-(default `/Volumes/PB710`).
+(default `/Volumes/NO NAME`).
 
 ## Tests
 

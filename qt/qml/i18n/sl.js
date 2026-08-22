@@ -18,7 +18,6 @@ var strings = {
 
     "nav.overview": "Pregled",
     "nav.calendar": "Koledar",
-    "nav.about": "Info",
 
     "overview.left": "Ostalo pribl. {time}",
     "overview.noBook": "Nobena knjiga še ni odprta",
@@ -60,14 +59,11 @@ var strings = {
 
     "date.months": ["Januar", "Februar", "Marec", "April", "Maj", "Junij", "Julij", "Avgust", "September", "Oktober", "November", "December"],
     "date.monthsGen": ["januarja", "februarja", "marca", "aprila", "maja", "junija", "julija", "avgusta", "septembra", "oktobra", "novembra", "decembra"],
-    "date.monthsShort": ["jan", "feb", "mar", "apr", "maj", "jun", "jul", "avg", "sep", "okt", "nov", "dec"],
     "date.weekdays": ["Pon", "Tor", "Sre", "Čet", "Pet", "Sob", "Ned"],
     "date.dayMonth": "{d}. {monthGen}",
 
     "time.hm": "{h} h {m} min",
     "time.m": "{m} min",
 
-    "plural.days": ["dan", "dneva", "dnevi", "dni"],
-    "plural.books": ["knjiga", "knjigi", "knjige", "knjig"],
-    "plural.pages": ["stran", "strani", "strani", "strani"]
+    "plural.days": ["dan", "dneva", "dnevi", "dni"]
 };

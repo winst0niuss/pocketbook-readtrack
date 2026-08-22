@@ -1,8 +1,8 @@
 # What the device already knows
 
-Everything the PB710 firmware stores that a reading-stats app could use, and —
-just as important — what it does not store. Surveyed on a **PocketBook Era Lite
-(PB710), firmware U629.6.10.1461**, from the USB-mounted `/mnt/ext1` with a
+Everything the PB629 firmware stores that a reading-stats app could use, and —
+just as important — what it does not store. Surveyed on a **PocketBook Verse (PB629),
+firmware U629.6.10.1461**, from the USB-mounted `/mnt/ext1` with a
 library of 223 indexed files and 84 opened books.
 
 Read this before inventing a new metric: half the things that look like they

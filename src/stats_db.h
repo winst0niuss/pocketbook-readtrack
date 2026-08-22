@@ -9,10 +9,6 @@ typedef struct {
     int session_count;
     double avg_session_min;
     double pages_per_min;      /* nur aus Sessions mit bekannten Seiten */
-    int books_total, books_finished;
-    int streak_days;
-    int today_secs, today_pages;
-    int week_secs, week_pages;
 } overall_stats;
 
 /* Sessions before this moment were reconstructed from the firmware's
@@ -29,6 +25,5 @@ int64_t stats_tracking_since(sqlite3 *db);
 void stats_book(sqlite3 *db, int64_t bookid, int64_t *secs, double *pages_per_min);
 
 /* Epoch second of the first measured session for a book, 0 if none. */
-int64_t stats_book_started(sqlite3 *db, int64_t bookid);
 
 #endif

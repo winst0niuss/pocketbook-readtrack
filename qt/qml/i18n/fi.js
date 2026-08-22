@@ -11,7 +11,6 @@ var strings = {
 
     "nav.overview": "Yleiskuva",
     "nav.calendar": "Kalenteri",
-    "nav.about": "Tiedot",
 
     "overview.left": "Jäljellä n. {time}",
     "overview.noBook": "Yhtään kirjaa ei ole vielä avattu",
@@ -53,14 +52,11 @@ var strings = {
 
     "date.months": ["Tammikuu", "Helmikuu", "Maaliskuu", "Huhtikuu", "Toukokuu", "Kesäkuu", "Heinäkuu", "Elokuu", "Syyskuu", "Lokakuu", "Marraskuu", "Joulukuu"],
     "date.monthsGen": ["tammikuuta", "helmikuuta", "maaliskuuta", "huhtikuuta", "toukokuuta", "kesäkuuta", "heinäkuuta", "elokuuta", "syyskuuta", "lokakuuta", "marraskuuta", "joulukuuta"],
-    "date.monthsShort": ["tammi", "helmi", "maalis", "huhti", "touko", "kesä", "heinä", "elo", "syys", "loka", "marras", "joulu"],
     "date.weekdays": ["Ma", "Ti", "Ke", "To", "Pe", "La", "Su"],
     "date.dayMonth": "{d}. {monthGen}",
 
     "time.hm": "{h} t {m} min",
     "time.m": "{m} min",
 
-    "plural.days": ["päivä", "päivää"],
-    "plural.books": ["kirja", "kirjaa"],
-    "plural.pages": ["sivu", "sivua"]
+    "plural.days": ["päivä", "päivää"]
 };

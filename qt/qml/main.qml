@@ -34,7 +34,7 @@ Window {
     Item {
         id: infoButton
 
-        /* Measured off the firmware's home button on a PB710: a ~30 dp glyph
+        /* Measured off the firmware's home button on a PB629: a ~30 dp glyph
          * drawn with a hairline, sitting 20 dp from its edge of the screen.
          * NavIcon keeps a tenth of its box as padding, so the box is bigger
          * than the glyph and the margin gives that padding back — otherwise

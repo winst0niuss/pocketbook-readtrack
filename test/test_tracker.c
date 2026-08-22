@@ -189,28 +189,8 @@ int main(void)
      * the pre-marker database: nothing gets filtered out. */
     overall_stats o;
     set_since(t.stats, "0");
-    ex(t.stats, "UPDATE books SET completed=1"); /* for the finished counter */
     assert(stats_overall(t.stats, &o) == 0);
-    assert(o.books_total == 1 && o.books_finished == 1);
     assert(o.total_hours > 0);
-
-    /* Streak: anchored at today, one day of gap ends it, < 60 s/day never counts */
-    set_since(t.stats, "strftime('%s','now','-30 days')");
-    ex(t.stats, "DELETE FROM sessions");
-    ex(t.stats, "INSERT INTO sessions (book_id,start_time,end_time,active_seconds)"
-                " VALUES (7, strftime('%s','now','-2 days'),"
-                "            strftime('%s','now','-2 days'), 120)");
-    assert(stats_overall(t.stats, &o) == 0);
-    assert(o.streak_days == 0);
-    ex(t.stats, "DELETE FROM sessions");
-    ex(t.stats, "INSERT INTO sessions (book_id,start_time,end_time,active_seconds)"
-                " VALUES (7, strftime('%s','now'), strftime('%s','now'), 120),"
-                "        (7, strftime('%s','now','-1 days'),"
-                "            strftime('%s','now','-1 days'), 120),"
-                "        (7, strftime('%s','now','-2 days'),"
-                "            strftime('%s','now','-2 days'), 30)");
-    assert(stats_overall(t.stats, &o) == 0);
-    assert(o.streak_days == 2);
 
     /* Everything before tracking started is reconstructed from the firmware's
      * last-open timestamps, not measured, so no view may count it. */
@@ -221,7 +201,6 @@ int main(void)
                 "            strftime('%s','now','-5 days'), 3600, 1),"
                 "        (7, strftime('%s','now'), strftime('%s','now'), 1800, 0)");
     assert(stats_overall(t.stats, &o) == 0);
-    assert(o.streak_days == 1);              /* the day 5 days back is invisible */
     assert(o.total_hours > 0.49 && o.total_hours < 0.51); /* only the 1800 s row */
     assert(stats_tracking_since(t.stats) > 0);
 

@@ -1,98 +1,107 @@
 # PocketBook Statistics
 
-Reading statistics for stock PocketBook e-readers — no KOReader, no account, no
-cloud. PocketBook Statistics turns what the firmware already records into a proper stats
-screen, built from the firmware's own UI components so it looks native.
+Reading statistics for stock PocketBook e-readers. The firmware already records
+what you read and when you last touched it; this app turns that into a stats
+screen, built from the firmware's own UI components so it looks like it belongs
+there.
 
-> Built and tested on a **PocketBook Era Lite (PB710), firmware 6.x**. Other
-> Allwinner **B288/B300** readers on Qt 6.8 firmware very likely work, but are
-> untested — feedback welcome.
+> Developed and tested on a **PocketBook Verse (PB629), firmware
+> U629.6.10.1461**. Other Allwinner **B288/B300** readers on Qt 6.8 firmware
+> should work the same way, but none has been tried — reports welcome.
 
-## Features
+## What it shows
 
-Two screens, no scrolling (e-ink scrolling is fiddly):
+Two screens:
 
-- **Overview** — the book in hand with its cover, progress and time left; hours
-  spent on it, minutes per session and pages per hour; then the library behind
-  it — a ring of how much of the books on the device you have read, with the
-  finished ones marked out inside it, the all-time finished count and total
-  hours read.
-- **Calendar** — month grid with the day's most-read book cover; tap a day for
-  the breakdown.
+- **Overview** — the book in hand with its cover, how far in you are and what
+  is left; hours spent on that book, minutes per session, pages per hour. Below
+  it, the library: a ring of how much of the books on the device you have read,
+  the all-time count of finished books, total hours.
+- **Calendar** — a month at a time, each day carrying the cover of whatever you
+  read most that day. Tap a day for the breakdown, tap a book for its detail.
 
-*About* — installed version and a one-tap update over Wi-Fi — sits behind the
-info glyph in the header, opposite the reader's home button.
+The **ⓘ** in the header opens version and update; it sits opposite the reader's
+home button because an update check is a detour, not a screen.
 
-Covers are extracted from your EPUBs, since the firmware's cover cache is
-sometimes wrong for sideloaded books. The interface follows the device
-language across 29 of them — every European language a PocketBook ships with,
-plus Kazakh and Azerbaijani — and falls back to English for anything else.
+Covers come from your EPUBs when the firmware's cache is wrong for a sideloaded
+book, and are kept in the app's own cache so a finished book keeps its
+thumbnail after you delete the file. The interface follows the device language
+across 29 of them — every European language a PocketBook ships with, plus
+Kazakh and Azerbaijani — and falls back to English.
 
-## How it works
+## How the time is counted
 
-A daemon in the same binary polls the firmware's library database
-(`explorer-3.db`) **read-only** every 30 seconds and derives sessions from open
-time and last position. Idle gaps are capped so standby isn't reading time. If
-the daemon wasn't running, the last session per book is reconstructed on the
-next launch.
+The firmware keeps no session history: per book it stores when it was opened,
+when the position last moved, and which page you are on. A daemon in the same
+binary reads that database **read-only** every 30 seconds and turns movements
+of the position into reading time. Gaps are capped at ten minutes, so a book
+left open overnight does not become eight hours of reading, and a session is
+split at local midnight so day figures stay honest.
 
-The firmware keeps no session history — only a "last opened" and "last
-position" per book — so the time before you installed PocketBook Statistics cannot be
-recovered. Rather than pass guesses off as history, stats start at the install
-date and earlier days are drawn as unknown. Finished books are the exception:
-the firmware dates those, so they appear on the calendar even for days before
-the install date, and "finished" always means the firmware's own *mark as read*
-flag.
+The daemon starts with the app and keeps running after you close it, through
+sleep. It does not survive a reboot — open the app once after switching the
+reader on, and it is back. Time missed while it was not running is
+reconstructed from the firmware's own timestamps, capped at 90 minutes per
+book, and marked as an estimate: it counts toward total hours but never toward
+averages, pages per hour or session counts.
+
+Nothing before the install date is presented as history, because there is none
+to present — those days are drawn as unknown rather than as "did not read".
+Finished books are the exception: the firmware dates those itself, so they show
+whenever they happened, and "finished" always means the firmware's own *mark as
+read* flag, exactly as the Library app shows it.
 
 ## Privacy
 
 Your reading data never leaves the device: no account, no telemetry, nothing
-uploaded. PocketBook Statistics only **reads** the firmware database and writes its own
-files under `system/pocketbook-statistics/`.
+uploaded. The app only **reads** the firmware's library database and writes its
+own files under `system/pocketbook-statistics/`.
 
-The one request that goes out is to `api.github.com`, and only when you press
-*Check for update*. There is no background check and no other host is contacted.
+One request goes out, to `api.github.com`, and only when you press *Check for
+update*. There is no background check and no other host is ever contacted.
 
 ## Install
 
 1. Download the `.zip` from the [latest release](../../releases/latest) and
-   unzip it.
+   unpack it.
 2. Copy `PocketBookStatistics.app` to `applications/` on the reader over USB.
-3. Eject, open PocketBook Statistics once, then reboot so the custom icon appears.
+3. Eject, open the app once, then reboot so the custom launcher icon appears.
 
 The tile is labelled in the reader's language ("Statistics", "Статистика",
-"Statistik", …). First launch installs the launcher icon by adding one entry to
-`system/config/desktop/view.json`, backed up next to it as
-`view.json.pbstatistics-backup`. If that file can't be touched, the app still runs
-with the default icon.
+"Statistik", …) — it says what it does, like the firmware's own tiles. First
+launch registers it by adding one entry to
+`system/config/desktop/view.json`, backed up beside it as
+`view.json.pbstatistics-backup`. If that file cannot be written, the app still
+runs with the default icon.
 
-**Updating:** *About* → *Check for update* does it on the device — downloads the
-release, swaps the binary and restarts. Copying a newer `PocketBookStatistics.app` over the
-old one via USB works too. Your stats database is left alone either way.
+**Updating:** ⓘ → *Check for update* does it on the device — fetches the
+release, swaps the binary, restarts. Copying a newer `PocketBookStatistics.app`
+over the old one via USB works too. Your statistics are left alone either way.
 
-**Uninstall:** delete `applications/PocketBookStatistics.app`, and restore `view.json` from
-the backup if you want the launcher entry gone.
+**Uninstall:** delete `applications/PocketBookStatistics.app`; restore
+`view.json` from the backup to remove the launcher tile, and delete
+`system/pocketbook-statistics/` to remove the statistics with it.
 
-## Data
+## Under the hood
 
-[docs/STATS-PLAN.md](docs/STATS-PLAN.md) is the plan for what the app shows and
-why, measured against Kobo, KOReader and Goodreads.
-[docs/DEVICE-DATA.md](docs/DEVICE-DATA.md) surveys everything the firmware
-stores that reading stats can be built from — the two databases, the cover
-cache, how they join — and what it does not store, which is why PocketBook Statistics
-derives sessions itself.
+One ARM binary that is both the app and its daemon, linking the Qt 6.8.2 that
+is already on the reader — nothing Qt is bundled. See
+[BUILDING.md](BUILDING.md): `make sdk` once, then `make qt` produces
+`build-qt/PocketBookStatistics.app`; `make test` runs the host-side tests.
 
-## Building
-
-See [BUILDING.md](BUILDING.md): `make sdk` once, then `make qt` produces
-`build-qt/PocketBookStatistics.app`. `make test` runs the host-side tests.
+[docs/DEVICE-DATA.md](docs/DEVICE-DATA.md) is the survey of what the firmware
+actually stores — the two databases, the cover cache, the hash that joins them,
+and what is missing, which is why the app derives sessions itself.
+[docs/STATS-PLAN.md](docs/STATS-PLAN.md) is what the screens show and why,
+measured against Kobo, KOReader and Goodreads.
 
 ## License and credits
 
 MIT — see [LICENSE](LICENSE). Bundles [SQLite](https://www.sqlite.org/) (public
-domain) and [miniz](https://github.com/richgel999/miniz) (MIT); cross-compilation
-builds on [fstanis/pocketbook-sdk-qt6](https://github.com/fstanis/pocketbook-sdk-qt6).
+domain) and [miniz](https://github.com/richgel999/miniz) (MIT);
+cross-compilation builds on
+[fstanis/pocketbook-sdk-qt6](https://github.com/fstanis/pocketbook-sdk-qt6).
 
-Not affiliated with PocketBook. It only reads the firmware database and makes a
-single backed-up edit to the launcher config, but you are installing third-party
-software on your reader — use at your own risk.
+Not affiliated with PocketBook. It only reads the firmware's database and makes
+a single backed-up edit to the launcher config, but you are installing
+third-party software on your reader — use at your own risk.
