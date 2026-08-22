@@ -9,6 +9,7 @@ typedef struct {
     int session_count;
     double avg_session_min;
     double pages_per_min;      /* nur aus Sessions mit bekannten Seiten */
+    int today_secs;            /* measured today, local time */
 } overall_stats;
 
 /* Sessions before this moment were reconstructed from the firmware's

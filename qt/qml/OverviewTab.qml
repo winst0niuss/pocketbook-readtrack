@@ -2,9 +2,9 @@ import QtQuick
 import com.pocketbook.controls
 import "."
 
-/* Everything worth knowing on one screen, in the order a reader asks for it:
- * the book in hand, how it is going, then the library behind it. Modelled on
- * Kobo's reading-stats page — no sparkline, no streak, no second thought. */
+/* Three sections, each a heading over a rule and a row of framed figures: the
+ * book in hand, today, and everything ever read. Nothing here is inferred from
+ * the library — only what was measured. */
 Item {
     id: tab
 
@@ -20,84 +20,159 @@ Item {
     onVisibleChanged: if (visible) refresh()
 
     readonly property real sideMargin: GlobalValues.defaultViewSideMargin
-
-    /* The firmware sets Roboto for its own UI and PT Serif for reading. The
-     * reference page uses a serif for the book and its figures, which reads as
-     * "this is about books" rather than "this is a settings screen". If the
-     * family is missing, Qt falls back to the UI font and nothing breaks. */
-    readonly property string serif: "PT Serif"
-
-    /* The bottom row is a grid, not a free-standing pile: one gap everywhere,
-     * the same hairline the figures above are divided by, and two stat cells
-     * that share whatever the ring and its caption leave over — so the last
-     * label ends at the same margin the ring starts at. */
-    readonly property real gap: Global.dp(16)
+    readonly property real gap: Global.dp(14)
+    readonly property real pad: Global.dp(14)
     readonly property real hairline: Math.max(1, Math.round(
         GlobalValues.defaultSolidSeparatorThickness))
-    readonly property real donutSize: Global.dp(128)
-    readonly property real captionWidth: Global.dp(120)
-    /* The stat cells run to the screen edge, not to the side margin: a figure
-     * centred inside the margin sits closer to its divider than to the edge of
-     * the display, which is what the eye measures. Only the ring keeps the
-     * margin, because it starts the row. */
-    readonly property real statWidth: Math.max(Global.dp(60),
-        (width - sideMargin - donutSize - captionWidth
-         - 5 * gap - 2 * hairline) / 2)
+    /* Two cards to a row with one gap between: derive the width rather than
+     * place the cards, and the row cannot come out lopsided. */
+    readonly property real cardWidth: (width - 2 * sideMargin - gap) / 2
+
+    /* The firmware sets Roboto for its own UI and PT Serif for reading. The
+     * figures and the book title use the serif, which reads as "this is about
+     * books" rather than "this is a settings screen". */
+    readonly property string serif: "PT Serif"
+
+    /* A framed card: hairline outline, faint wash inside. The wash is the text
+     * colour at 5 % alpha — never defaultBorderColor, which is black on this
+     * firmware and would fill the card solid. Alpha rather than `opacity`,
+     * because opacity multiplies onto children and would fade the outline. */
+    component Card: Rectangle {
+        radius: GlobalValues.defaultElementBorderRadius
+        color: Qt.rgba(GlobalValues.defaultTextColor.r,
+                       GlobalValues.defaultTextColor.g,
+                       GlobalValues.defaultTextColor.b, 0.05)
+        border.width: tab.hairline
+        border.color: GlobalValues.defaultTextColor
+    }
+
+    // A section heading with the rule under it. Every section has one.
+    component SectionHeading: Column {
+        property alias text: label.text
+
+        width: parent ? parent.width : 0
+        spacing: Global.dp(6)
+
+        StyledText {
+            id: label
+
+            styledFont: FontStyles.Caption1
+            color: GlobalValues.defaultTextColor
+            opacity: 0.7
+        }
+
+        Rectangle {
+            width: parent.width
+            height: tab.hairline
+            color: GlobalValues.defaultTextColor
+            opacity: 0.25
+        }
+    }
+
+    /* One figure over its caption, framed. Both rows use it, so both rows
+     * agree on width, height and where the text sits. */
+    component StatCard: Item {
+        property string value: ""
+        property string caption: ""
+
+        width: tab.cardWidth
+        height: Global.dp(92)
+
+        Card { anchors.fill: parent }
+
+        Column {
+            anchors.centerIn: parent
+            width: parent.width - 2 * Global.dp(10)
+            spacing: Global.dp(2)
+
+            StyledText {
+                anchors.horizontalCenter: parent.horizontalCenter
+                styledFont: FontStyles.Heading2
+                font.family: tab.serif
+                color: GlobalValues.defaultTextColor
+                text: value
+            }
+
+            StyledText {
+                width: parent.width
+                horizontalAlignment: Text.AlignHCenter
+                styledFont: FontStyles.BodyS
+                color: GlobalValues.defaultTextColor
+                opacity: 0.7
+                text: caption
+                wrapMode: Text.WordWrap
+                maximumLineCount: 2
+                elide: Text.ElideRight
+            }
+        }
+    }
 
     Column {
-        id: head
-
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
+        anchors.topMargin: Global.dp(14)
         anchors.leftMargin: tab.sideMargin
         anchors.rightMargin: tab.sideMargin
-        spacing: Global.dp(18)
+        spacing: Global.dp(14)
 
-        Item { width: 1; height: Global.dp(14) }
+        SectionHeading { text: Tr.t("overview.currentBook") }
 
         // The book in hand
-        Row {
+        Item {
             width: parent.width
-            spacing: Global.dp(20)
+            /* Whichever is taller: a long title in a 29-language interface can
+             * outgrow the cover, and the card must not clip it. */
+            height: Math.max(cover.height, bookText.implicitHeight) + 2 * tab.pad
             visible: tab.book.ok === true
+
+            Card { anchors.fill: parent }
 
             Image {
                 id: cover
 
+                anchors.left: parent.left
+                anchors.leftMargin: tab.pad
+                anchors.verticalCenter: parent.verticalCenter
                 source: tab.book.coverUrl || ""
                 visible: (tab.book.coverUrl || "") !== ""
-                width: Global.dp(145)
-                height: Global.dp(218)
+                width: Global.dp(104)
+                height: Global.dp(156)
                 fillMode: Image.PreserveAspectFit
             }
 
             Column {
-                width: parent.width - (cover.visible ? cover.width + Global.dp(20) : 0)
-                spacing: Global.dp(8)
+                id: bookText
+
+                anchors.left: cover.visible ? cover.right : parent.left
+                anchors.leftMargin: tab.pad
+                anchors.right: parent.right
+                anchors.rightMargin: tab.pad
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: Global.dp(6)
 
                 StyledText {
                     width: parent.width
-                    styledFont: FontStyles.Heading3
+                    styledFont: FontStyles.Heading4
                     font.family: tab.serif
                     font.italic: true
                     color: GlobalValues.defaultTextColor
                     text: tab.book.title || ""
-                    wrapMode: Text.Wrap
+                    wrapMode: Text.WordWrap
                     maximumLineCount: 2
                     elide: Text.ElideRight
                 }
 
                 StyledText {
                     width: parent.width
-                    styledFont: FontStyles.Body
+                    styledFont: FontStyles.BodyS
                     color: GlobalValues.defaultTextColor
                     opacity: 0.7
                     text: tab.book.author || ""
                     elide: Text.ElideRight
                 }
 
-                Item { width: 1; height: Global.dp(4) }
+                Item { width: 1; height: Global.dp(2) }
 
                 StyledText {
                     styledFont: FontStyles.Body
@@ -108,9 +183,9 @@ Item {
                 Rectangle {
                     width: parent.width
                     height: Global.dp(12)
+                    radius: height / 2
                     color: "transparent"
-                    border.width: Math.max(1, Math.round(
-                        GlobalValues.defaultSolidSeparatorThickness))
+                    border.width: tab.hairline
                     border.color: GlobalValues.defaultTextColor
 
                     Rectangle {
@@ -118,9 +193,10 @@ Item {
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
                         anchors.margins: Global.dp(2)
-                        // A started book always shows a mark: at 1 % the bar
-                        // would otherwise look the same as an unopened one,
-                        // which is exactly the case worth seeing.
+                        radius: height / 2
+                        /* A started book always shows a mark: at 1 % the bar
+                         * would otherwise look the same as an unopened one,
+                         * which is exactly the case worth seeing. */
                         width: (tab.book.percent || 0) > 0
                                ? Math.max(Global.dp(6),
                                           (parent.width - Global.dp(4))
@@ -149,214 +225,41 @@ Item {
             text: Tr.t("overview.noBook")
         }
 
-        // How the reading itself is going
-        MetricRow {
-            width: parent.width
-            figureFamily: tab.serif
-            items: [
-                { v: ((tab.book.bookSecs || 0) / 3600).toFixed(1),
-                  l: Tr.t("overview.hoursOfReading") },
-                { v: Math.round(tab.ov.avgSessionMin || 0) + "",
-                  l: Tr.t("overview.minPerSession") },
-                // Per hour rather than per minute: a real pace is 0.6 pages a
-                // minute, which reads as a broken counter.
-                { v: Math.round(tab.ov.pagesPerHour || 0) + "",
-                  l: Tr.t("overview.pagesPerHour") }
-            ]
-        }
-    }
-
-    /* The library behind the book. It follows the figures instead of being
-     * pinned to the bottom edge — hung there it floated away from what it
-     * belongs to and left a hole in the middle of the page. */
-    Column {
-        id: allBooks
-
-        anchors.top: head.bottom
-        anchors.topMargin: Global.dp(18)
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.leftMargin: tab.sideMargin
-        spacing: Global.dp(14)
-
-        Column {
-            width: parent.width - tab.sideMargin
-            spacing: Global.dp(6)
-
-            StyledText {
-                styledFont: FontStyles.Caption1
-                color: GlobalValues.defaultTextColor
-                opacity: 0.7
-                text: Tr.t("overview.allBooks")
-            }
-
-            Rectangle {
-                width: parent.width
-                height: tab.hairline
-                color: GlobalValues.defaultTextColor
-                opacity: 0.25
-            }
-        }
+        SectionHeading { text: Tr.t("overview.today") }
 
         Row {
             width: parent.width
-            /* No spacing between the cells: a gap added from outside belongs
-             * to neither of them, and the figure ends up nearer its left
-             * divider than its right one — 84 px against 103 px on a PB629.
-             * Each cell pads itself on both sides instead, which brings it to
-             * 94 and 92. The ring keeps its own inner spacing. */
-            spacing: 0
+            spacing: tab.gap
 
-            // The ring and the sentence that explains it are one cell: the
-            // caption says what the percentage counts, not what sits beside it.
-            Row {
-                spacing: tab.gap
-
-                Item {
-                    width: tab.donutSize
-                    height: tab.donutSize
-
-                    Canvas {
-                        id: donut
-
-                        anchors.fill: parent
-                        antialiasing: true
-
-                        /* Two arcs on one ring: whole books finished, drawn
-                         * solid, and everything read including the books still
-                         * open, drawn faint behind it. A shelf with nothing
-                         * finished yet is not 0 % read, and saying so was the
-                         * ring's least useful state. */
-                        readonly property real frac: tab.ov.progressFrac || 0
-                        readonly property real done: tab.ov.finishedFrac || 0
-
-                        onFracChanged: requestPaint()
-                        onDoneChanged: requestPaint()
-                        onPaint: {
-                            var ctx = getContext("2d");
-                            ctx.reset();
-                            var cx = width / 2, cy = height / 2;
-                            var r = Math.min(cx, cy) - Global.dp(11);
-                            var top = -Math.PI / 2;
-                            ctx.lineWidth = Global.dp(22);
-                            // Not defaultBorderColor: it is black on this
-                            // firmware, and the ring would vanish into its fill.
-                            ctx.strokeStyle = GlobalValues.defaultTextColor;
-
-                            ctx.beginPath();
-                            ctx.arc(cx, cy, r, 0, 2 * Math.PI);
-                            ctx.globalAlpha = 0.22;
-                            ctx.stroke();
-
-                            if (frac > 0) {
-                                ctx.beginPath();
-                                ctx.arc(cx, cy, r, top, top + frac * 2 * Math.PI);
-                                ctx.globalAlpha = 0.55;
-                                ctx.stroke();
-                            }
-
-                            if (done > 0) {
-                                ctx.beginPath();
-                                ctx.arc(cx, cy, r, top, top + done * 2 * Math.PI);
-                                ctx.globalAlpha = 1.0;
-                                ctx.stroke();
-                            }
-                            ctx.globalAlpha = 1.0;
-                        }
-                    }
-
-                    StyledText {
-                        anchors.centerIn: parent
-                        styledFont: FontStyles.Heading4
-                        font.family: tab.serif
-                        color: GlobalValues.defaultTextColor
-                        // A started shelf never reads as 0 %: rounding down
-                        // to it is the one case where the figure contradicts
-                        // the ring drawn around it.
-                        text: donut.frac > 0 && Math.round(donut.frac * 100) < 1
-                              ? "< 1 %"
-                              : Math.round(donut.frac * 100) + " %"
-                    }
-                }
-
-                StyledText {
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: tab.captionWidth
-                    styledFont: FontStyles.BodyS
-                    color: GlobalValues.defaultTextColor
-                    opacity: 0.7
-                    text: Tr.t("overview.donutCaption")
-                    wrapMode: Text.Wrap
-                }
+            StatCard {
+                value: Math.round((tab.ov.todaySecs || 0) / 60) + ""
+                caption: Tr.t("overview.minutesToday")
             }
 
-            Repeater {
-                model: [
-                    { v: (tab.ov.booksFinished || 0) + "", l: Tr.t("overview.booksFinished") },
-                    { v: (tab.ov.totalHours || 0).toFixed(1), l: Tr.t("overview.totalHours") }
-                ]
+            StatCard {
+                value: Math.round(tab.ov.pagesPerHour || 0) + ""
+                caption: Tr.t("overview.pagesPerHour")
+            }
+        }
 
-                // Each cell carries its own divider on the left, as the row of
-                // figures above does, so the two rows read as one grid.
-                Item {
-                    required property var modelData
+        SectionHeading { text: Tr.t("overview.allBooks") }
 
-                    width: tab.hairline + tab.gap + tab.statWidth + tab.gap
-                    height: tab.donutSize
+        Row {
+            width: parent.width
+            spacing: tab.gap
 
-                    Rectangle {
-                        anchors.left: parent.left
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: tab.hairline
-                        height: parent.height - Global.dp(20)
-                        color: GlobalValues.defaultBorderColor
-                    }
+            StatCard {
+                value: (tab.ov.booksFinished || 0) + ""
+                caption: Tr.t("overview.booksFinished")
+            }
 
-                    /* Centred in the space its dividers enclose — the figure
-                     * over its label, both on the same axis, the way the metric
-                     * row above does it. Left-aligned they read as text that
-                     * happened to land between two lines. */
-                    Column {
-                        anchors.left: parent.left
-                        anchors.leftMargin: tab.hairline
-                        anchors.right: parent.right
-                        anchors.verticalCenter: parent.verticalCenter
-                        spacing: Global.dp(2)
-
-                        StyledText {
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            styledFont: FontStyles.Heading2
-                            font.family: tab.serif
-                            color: GlobalValues.defaultTextColor
-                            text: modelData.v
-                        }
-
-                        StyledText {
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            /* Narrower than the cell on purpose: at full width
-                             * a two-word label runs from divider to divider and
-                             * reads as if it were touching them. One gap of
-                             * clearance on each side is enough to break it in
-                             * two — and no narrower, or a long word ends up
-                             * split down the middle ("прочит / ано"). */
-                            width: tab.statWidth - 2 * tab.gap
-                            horizontalAlignment: Text.AlignHCenter
-                            styledFont: FontStyles.BodyS
-                            color: GlobalValues.defaultTextColor
-                            opacity: 0.7
-                            text: modelData.l
-                            // WordWrap, not Wrap: Wrap falls back to breaking
-                            // inside a word when it does not fit, which is what
-                            // produced "прочит / ано".
-                            wrapMode: Text.WordWrap
-                            /* Two lines tall even when the words fit on one:
-                             * the cells are centred vertically, so a shorter
-                             * label would lift its figure above the other. */
-                            height: lineCount === 1 ? implicitHeight * 2
-                                                    : implicitHeight
-                        }
-                    }
-                }
+            StatCard {
+                /* Whole hours once there are enough to round without losing
+                 * anything; a tenth while the figure is still small. */
+                value: (tab.ov.totalHours || 0) >= 10
+                       ? Math.round(tab.ov.totalHours) + ""
+                       : (tab.ov.totalHours || 0).toFixed(1)
+                caption: Tr.t("overview.totalHours")
             }
         }
     }

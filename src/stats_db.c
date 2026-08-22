@@ -35,6 +35,12 @@ int stats_overall(sqlite3 *db, overall_stats *o)
         " AND active_seconds > 0 AND recovered = 0" AND_TRACKED);
     if (mins > 0)
         o->pages_per_min = pages / mins;
+    /* Today is the one window the Overview shows directly. Estimates count
+     * here as they do in the totals: the day is what it is. */
+    o->today_secs = (int)q_double(db,
+        "SELECT IFNULL(SUM(active_seconds),0) FROM sessions"
+        " WHERE date(end_time,'unixepoch','localtime') = date('now','localtime')"
+        AND_TRACKED);
     return 0;
 }
 
