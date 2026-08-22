@@ -284,9 +284,10 @@ void Updater::install()
      * we used to sit there waiting for the user to close the app, so the swap
      * happened on the timeout. That is where the ~25 s after an update came
      * from. Quitting on our own turns it into about a second; the delay lets
-     * the "ready" line reach the panel first, which on e-ink is not instant. */
+     * the "ready" line reach the panel first — a full e-ink refresh is close
+     * to a second by itself, so the wait is two. */
     updateLog(QStringLiteral("install: quitting for the handover"));
-    QTimer::singleShot(1200, qApp, &QCoreApplication::quit);
+    QTimer::singleShot(2000, qApp, &QCoreApplication::quit);
 }
 
 bool Updater::unpack(const QString &zip, const QString &dest)

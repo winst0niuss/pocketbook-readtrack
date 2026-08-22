@@ -119,7 +119,11 @@ bool Shim::installed() const
 
 void Shim::refresh()
 {
-    if (!installed())
+    /* Deliberately not installed(): that also demands an entry for every
+     * format, and a device set up by hand — or by an older build — may name
+     * only one. The script on disk is ours whatever the entries say, and
+     * leaving a stale copy there is how a fix to it never reaches the reader. */
+    if (!QFileInfo::exists(QString::fromLatin1(kScriptPath)))
         return;
     QFile src(QStringLiteral(":/shim/open-book.sh"));
     QFile installedFile(QString::fromLatin1(kScriptPath));
