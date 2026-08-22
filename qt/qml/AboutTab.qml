@@ -8,6 +8,11 @@ import "."
 Item {
     id: tab
 
+    /* There is no scrolling on this screen — the column has to fit. It grew
+     * past the bottom edge once and painted over the navigation bar, so the
+     * content is clipped as a backstop and the texts are kept short. */
+    clip: true
+
     readonly property bool busy: updater.state === "checking"
                                  || updater.state === "downloading"
                                  || updater.state === "ready"
@@ -59,7 +64,7 @@ Item {
         anchors.right: parent.right
         anchors.leftMargin: GlobalValues.defaultViewSideMargin
         anchors.rightMargin: GlobalValues.defaultViewSideMargin
-        spacing: Global.dp(20)
+        spacing: Global.dp(16)
 
         Item { width: 1; height: Global.dp(24) }
 
@@ -163,15 +168,6 @@ Item {
             }
         }
 
-        StyledText {
-            width: parent.width
-            wrapMode: Text.Wrap
-            styledFont: FontStyles.BodyS
-            color: GlobalValues.defaultDisabledTextColor
-            text: tab.shimOn ? Tr.t("about.shimActive") : Tr.t("about.shimInactive")
-        }
-
-        Item { width: 1; height: Global.dp(12) }
 
         StyledText {
             width: parent.width
@@ -188,6 +184,11 @@ Item {
             width: parent.width
             visible: updater.diagnostics !== ""
             wrapMode: Text.Wrap
+            // The log is up to a dozen lines and this screen does not scroll:
+            // capped, because the last lines are the interesting ones and the
+            // rest must not push the page over the navigation bar.
+            maximumLineCount: 6
+            elide: Text.ElideRight
             styledFont: FontStyles.BodyS
             color: GlobalValues.defaultDisabledTextColor
             text: Tr.t("about.log") + "\n" + updater.diagnostics

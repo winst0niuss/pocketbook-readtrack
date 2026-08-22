@@ -42,12 +42,10 @@ var strings = {
     "about.ready": "Update downloaded. {app} closes now and starts again on its own \u2014 if it doesn't, open it from the launcher.",
     "about.privacy": "The update is fetched from GitHub over Wi-Fi, and only when you press the button. {app} goes online at no other time.",
 
-    "about.shim": "Start tracking when a book opens",
-    "about.shimHint": "Nothing starts by itself after the reader is switched on. With this on, opening a book starts the tracker first and then hands the book to the usual reader — for EPUB, FB2 and PDF.",
+    "about.shim": "Track from the moment a book opens",
+    "about.shimHint": "Opening an EPUB, FB2 or PDF starts the tracker, then hands the book to the usual reader. Without it, open this app once after switching the reader on.",
     "about.shimOn": "Turn on",
     "about.shimOff": "Turn off",
-    "about.shimActive": "On. Books open as before; the reader is unchanged.",
-    "about.shimInactive": "Off. Open this app once after switching the reader on, or the day goes unrecorded.",
     "about.log": "Last attempt:",
 
     "update.errNoNetwork": "No connection. Turn on Wi-Fi and try again.",
