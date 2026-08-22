@@ -332,17 +332,22 @@ Item {
                         }
 
                         StyledText {
-                            width: parent.width
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            /* Narrower than the cell on purpose. At full width
+                             * a two-word label runs from divider to divider and
+                             * reads as if it were touching them; this makes it
+                             * break into two lines, which is also what keeps
+                             * the figures at the same height across languages. */
+                            width: Math.round(tab.statWidth * 0.62)
                             horizontalAlignment: Text.AlignHCenter
                             styledFont: FontStyles.BodyS
                             color: GlobalValues.defaultTextColor
                             opacity: 0.7
                             text: modelData.l
                             wrapMode: Text.Wrap
-                            /* Always two lines tall, even when the words fit on
-                             * one: the cells are centred vertically, so a label
-                             * of a different height would drop its figure below
-                             * the one beside it. */
+                            /* Two lines tall even when the words fit on one:
+                             * the cells are centred vertically, so a shorter
+                             * label would lift its figure above the other. */
                             height: lineCount === 1 ? implicitHeight * 2
                                                     : implicitHeight
                         }
