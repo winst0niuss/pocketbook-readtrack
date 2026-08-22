@@ -61,7 +61,7 @@ Item {
             color: GlobalValues.defaultTextColor
             // The repository name: this is where an update comes from, so it
             // is the name worth showing next to the version.
-            text: "pocketbook-readtrack"
+            text: "pocketbook-statistics"
             elide: Text.ElideRight
         }
 

@@ -24,7 +24,7 @@ extern "C" {
 namespace {
 
 constexpr const char *kApiUrl =
-    "https://api.github.com/repos/winst0niuss/pocketbook-readtrack/releases/latest";
+    "https://api.github.com/repos/winst0niuss/pocketbook-statistics/releases/latest";
 constexpr const char *kAssetName = "ReadTrack.zip";
 constexpr const char *kUpdateDir = STATS_DIR "/update";
 /* Anything smaller than this is a proxy error page, not our binary. */

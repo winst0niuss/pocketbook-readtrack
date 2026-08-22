@@ -1,0 +1,81 @@
+.pragma library
+
+/* Romanian catalog. Three plural forms: 1 carte, 2 cărți, 20 de cărți. */
+
+function plural(n) {
+    var m100 = n % 100;
+    if (n === 1)
+        return 0;
+    if (n === 0 || (m100 >= 1 && m100 <= 19))
+        return 1;
+    return 2;
+}
+
+var strings = {
+    "app.title": "Statistici",
+
+    "nav.overview": "Prezentare",
+    "nav.streak": "Serie",
+    "nav.calendar": "Calendar",
+    "nav.year": "An",
+
+    "overview.progress": "Progres: {percent} %",
+    "overview.read": "Citit: {time}",
+    "overview.left": "Au rămas cca {time}",
+    "overview.noBook": "Nicio carte deschisă încă",
+    "overview.today": "Citit astăzi",
+    "overview.minPerSession": "min pe sesiune",
+    "overview.pagesPerMinute": "pagini pe minut",
+    "overview.allBooks": "TOATE CĂRȚILE",
+    "overview.donutCaption": "dintre cărțile tale terminate",
+    "overview.booksFinished": "Cărți terminate",
+    "overview.totalHours": "Ore în total",
+
+    "streak.current": "{days} în seria curentă",
+    "streak.best": "{days} în cea mai bună serie {year}",
+    "streak.readingDays": "{n} {daysCaps} DE CITIT ÎN {year}",
+    "streak.none": "Încă nicio serie de lectură — azi e o zi bună să începi una.",
+    "streak.longest": "Cea mai lungă serie a început pe {when} și a durat {n} {days}.",
+    "streak.trackingSince": "Datele de lectură sunt înregistrate din {date}.",
+    "streak.legendNotRead": "fără lectură",
+    "streak.legendRead": "lectură",
+    "streak.legendFinished": "carte terminată",
+
+    "calendar.dayTitle": "{date}  ·  {time}",
+    "calendar.finished": "Terminată",
+
+    "year.title": "Cărți terminate în {year}",
+    "year.monthTitle": "{month} {year}  ·  {n} {books}",
+    "book.finishedOn": "Terminată pe {date}",
+
+    "about.version": "Versiunea {version}",
+    "about.check": "Caută actualizare",
+    "about.install": "Instalează {version}",
+    "about.checking": "Întreb GitHub de ultima versiune…",
+    "about.uptodate": "Aceasta este cea mai nouă versiune.",
+    "about.available": "Versiunea {version} este disponibilă.",
+    "about.downloading": "Descarc actualizarea…",
+    "about.ready": "Actualizare descărcată. ReadTrack se închide și pornește singur din nou — dacă nu, deschide-l din meniul de aplicații.",
+    "about.privacy": "Actualizarea este adusă de pe GitHub prin Wi-Fi, doar când apeși butonul. În rest, ReadTrack nu se conectează la rețea.",
+    "about.log": "Ultima încercare:",
+
+    "update.errNoNetwork": "Fără conexiune. Pornește Wi-Fi și încearcă din nou.",
+    "update.errDownload": "Descărcarea a eșuat.",
+    "update.errResponse": "GitHub a răspuns neașteptat.",
+    "update.errNoAsset": "Ultima versiune nu conține un fișier instalabil.",
+    "update.errUnsupported": "Acest firmware nu poate descărca actualizarea.",
+    "update.errCorrupt": "Fișierul descărcat este deteriorat — nu s-a schimbat nimic.",
+    "update.errHandover": "Aplicația nu a putut fi înlocuită. Noua versiune se află aici:",
+
+    "date.months": ["Ianuarie", "Februarie", "Martie", "Aprilie", "Mai", "Iunie", "Iulie", "August", "Septembrie", "Octombrie", "Noiembrie", "Decembrie"],
+    "date.monthsGen": ["ianuarie", "februarie", "martie", "aprilie", "mai", "iunie", "iulie", "august", "septembrie", "octombrie", "noiembrie", "decembrie"],
+    "date.monthsShort": ["ian", "feb", "mar", "apr", "mai", "iun", "iul", "aug", "sep", "oct", "noi", "dec"],
+    "date.weekdays": ["Lun", "Mar", "Mie", "Joi", "Vin", "Sâm", "Dum"],
+    "date.dayMonth": "{d} {monthGen}",
+
+    "time.hm": "{h} h {m} min",
+    "time.m": "{m} min",
+
+    "plural.days": ["zi", "zile", "de zile"],
+    "plural.books": ["carte", "cărți", "de cărți"]
+};

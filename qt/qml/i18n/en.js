@@ -8,11 +8,12 @@ function plural(n) {
 }
 
 var strings = {
+    "app.title": "Statistics",
+
     "nav.overview": "Overview",
     "nav.streak": "Streak",
     "nav.calendar": "Calendar",
     "nav.year": "Year",
-    "nav.about": "About",
 
     "overview.progress": "Progress: {percent} %",
     "overview.read": "Read: {time}",

@@ -1,0 +1,76 @@
+.pragma library
+
+/* French catalog. Two plural forms; 0 stays singular. */
+
+function plural(n) {
+    return n <= 1 ? 0 : 1;
+}
+
+var strings = {
+    "app.title": "Statistiques",
+
+    "nav.overview": "Aperçu",
+    "nav.streak": "Série",
+    "nav.calendar": "Calendrier",
+    "nav.year": "Année",
+
+    "overview.progress": "Progression : {percent} %",
+    "overview.read": "Lu : {time}",
+    "overview.left": "Reste env. {time}",
+    "overview.noBook": "Aucun livre ouvert pour l'instant",
+    "overview.today": "Lu aujourd'hui",
+    "overview.minPerSession": "min par séance",
+    "overview.pagesPerMinute": "pages par minute",
+    "overview.allBooks": "TOUS LES LIVRES",
+    "overview.donutCaption": "de vos livres terminés",
+    "overview.booksFinished": "Livres terminés",
+    "overview.totalHours": "Heures au total",
+
+    "streak.current": "{days} de série en cours",
+    "streak.best": "{days} de meilleure série {year}",
+    "streak.readingDays": "{n} {daysCaps} DE LECTURE EN {year}",
+    "streak.none": "Pas encore de série de lecture — aujourd'hui est un bon jour pour la commencer.",
+    "streak.longest": "Votre plus longue série a commencé le {when} et a duré {n} {days}.",
+    "streak.trackingSince": "Les données de lecture sont enregistrées depuis le {date}.",
+    "streak.legendNotRead": "pas de lecture",
+    "streak.legendRead": "lecture",
+    "streak.legendFinished": "livre terminé",
+
+    "calendar.dayTitle": "{date}  ·  {time}",
+    "calendar.finished": "Terminé",
+
+    "year.title": "Livres terminés en {year}",
+    "year.monthTitle": "{month} {year}  ·  {n} {books}",
+    "book.finishedOn": "Terminé le {date}",
+
+    "about.version": "Version {version}",
+    "about.check": "Rechercher une mise à jour",
+    "about.install": "Installer {version}",
+    "about.checking": "Interrogation de GitHub sur la dernière version…",
+    "about.uptodate": "C'est la dernière version.",
+    "about.available": "La version {version} est disponible.",
+    "about.downloading": "Téléchargement de la mise à jour…",
+    "about.ready": "Mise à jour téléchargée. ReadTrack se ferme et redémarre tout seul — sinon, ouvrez-le depuis le menu des applications.",
+    "about.privacy": "La mise à jour est récupérée sur GitHub par Wi-Fi, uniquement quand vous appuyez sur le bouton. Le reste du temps, ReadTrack ne se connecte pas.",
+    "about.log": "Dernière tentative :",
+
+    "update.errNoNetwork": "Pas de connexion. Activez le Wi-Fi et réessayez.",
+    "update.errDownload": "Échec du téléchargement.",
+    "update.errResponse": "GitHub a répondu de façon inattendue.",
+    "update.errNoAsset": "La dernière version ne contient aucun binaire installable.",
+    "update.errUnsupported": "Ce micrologiciel n'offre aucun moyen de télécharger la mise à jour.",
+    "update.errCorrupt": "Le fichier téléchargé est endommagé — rien n'a été modifié.",
+    "update.errHandover": "Impossible de remplacer l'application. La nouvelle version se trouve ici :",
+
+    "date.months": ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"],
+    "date.monthsGen": ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"],
+    "date.monthsShort": ["janv", "févr", "mars", "avr", "mai", "juin", "juil", "août", "sept", "oct", "nov", "déc"],
+    "date.weekdays": ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],
+    "date.dayMonth": "{d} {monthGen}",
+
+    "time.hm": "{h} h {m} min",
+    "time.m": "{m} min",
+
+    "plural.days": ["jour", "jours"],
+    "plural.books": ["livre", "livres"]
+};

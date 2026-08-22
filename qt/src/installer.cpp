@@ -30,16 +30,41 @@ constexpr const char *kAppId = "U_readtrack";
 
 /* The launcher label. Every other user-facing string comes from the QML
  * catalogs in qt/qml/i18n/, but this one is written into the firmware's config
- * before any QML engine exists, so it carries its own small table — keep the
- * two in step. The device language is read on every launch, so switching the
- * reader's language relabels the tile on the next start. */
+ * before any QML engine exists, so it carries its own table — one row per
+ * catalog, keep the two in step. The label says what the app does, like the
+ * firmware's own tiles do, rather than repeating its name. The device language
+ * is read on every launch, so switching the reader's language relabels the
+ * tile on the next start. */
+struct LauncherName {
+    const char *lang;
+    const char *title;
+};
+
+constexpr LauncherName kLauncherNames[] = {
+    {"az", "Statistika"},      {"bg", "Статистика"},
+    {"cs", "Statistika"},      {"da", "Statistik"},
+    {"de", "Statistik"},       {"el", "Στατιστικά"},
+    {"en", "Statistics"},      {"es", "Estadísticas"},
+    {"et", "Statistika"},      {"fi", "Tilastot"},
+    {"fr", "Statistiques"},    {"hr", "Statistika"},
+    {"hu", "Statisztika"},     {"it", "Statistiche"},
+    {"kk", "Статистика"},      {"lt", "Statistika"},
+    {"lv", "Statistika"},      {"nb", "Statistikk"},
+    {"nl", "Statistieken"},    {"no", "Statistikk"},
+    {"pl", "Statystyki"},      {"pt", "Estatísticas"},
+    {"ro", "Statistici"},      {"ru", "Статистика"},
+    {"sk", "Štatistika"},      {"sl", "Statistika"},
+    {"sr", "Статистика"},      {"sv", "Statistik"},
+    {"tr", "İstatistikler"},   {"uk", "Статистика"},
+};
+
 QString launcherTitle()
 {
     const QString lang = inkViewLang().left(2).toLower();
-    if (lang == QLatin1String("ru"))
-        return QStringLiteral("Статистика");
-    if (lang == QLatin1String("de"))
-        return QStringLiteral("Statistik");
+    for (const LauncherName &name : kLauncherNames) {
+        if (lang == QLatin1String(name.lang))
+            return QString::fromUtf8(name.title);
+    }
     return QStringLiteral("Statistics");
 }
 

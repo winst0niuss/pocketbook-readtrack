@@ -13,11 +13,12 @@ function plural(n) {
 }
 
 var strings = {
+    "app.title": "Статистика",
+
     "nav.overview": "Обзор",
     "nav.streak": "Серия",
     "nav.calendar": "Календарь",
     "nav.year": "Год",
-    "nav.about": "Версия",
 
     "overview.progress": "Прогресс: {percent} %",
     "overview.read": "Прочитано: {time}",

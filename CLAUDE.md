@@ -4,8 +4,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Environment quirks
 
-- The working directory name ends with a **trailing space** (`pocketbook-readtrack `). Always quote paths.
-- Git repo on `main`, remote `origin` → `winst0niuss/pocketbook-readtrack`. History is short; the two `tmp:` commits were CI probes for the qmllint gate.
+- The working directory still has its old name, `pocketbook-readtrack `, **with a trailing space**. Always quote paths. The project and its GitHub repo are `pocketbook-statistics`; only the local checkout lags behind.
+- Git repo on `main`, remote `origin` → `winst0niuss/pocketbook-statistics`. History is short; the two `tmp:` commits were CI probes for the qmllint gate.
 
 ## Commands
 
@@ -37,7 +37,7 @@ One ARM ELF that is both the app and its background daemon; it links the device'
 - `qt/src/stats_bridge.cpp` — the only QML-visible object (`stats` context property); each `Q_INVOKABLE` opens/closes explorer-3 itself.
 - `qt/src/inkview_bridge.cpp` — the **only** TU allowed to include `inkview.h`; its macros collide with Qt. Also holds the two network calls (Wi-Fi up, download-to-file).
 - `qt/src/updater.cpp` — the `updater` context property: version check against the GitHub release, unpack, stage, hand over.
-- `qt/qml/` — five tabs, no scrolling (e-ink), plus `PanelDialog.qml` and the `Tr` i18n singleton.
+- `qt/qml/` — five tabs, no scrolling (e-ink), plus `PanelDialog.qml`, `BookDialog.qml` and the `Tr` i18n singleton. The fifth tab is an info glyph (an "i" drawn as a circle, since U+24D8 is not in every firmware font); the other four size themselves to their own label and share the leftover width as equal gaps, measured in bold so switching tabs cannot shift them.
 
 `docs/DEVICE-DATA.md` is the survey of what the firmware stores (both databases, their field coverage on a real device, the hash that joins them) and what it does not. Check it before designing a metric — it saves a USB round trip.
 
@@ -75,7 +75,7 @@ One ARM ELF that is both the app and its background daemon; it links the device'
 
 - New source files must be added to `CMakeLists.txt`; new QML files to **both** `qt/qml/readtrack.qrc` and the parent tab.
 - The launcher tile's label is the **one** user-facing string outside the catalogs: `launcherTitle()` in `installer.cpp` picks it from the device language, because it is written into `view.json` before a QML engine exists. Adding a language means touching that table too. The label is "Statistics"/"Статистика"/"Statistik", not the app name — it sits among firmware tiles that are named for what they do.
-- All other user-facing strings go through `Tr.t("<key>")`, resolved against the catalogs in `qt/qml/i18n/`; `Tr.plural("plural.<noun>", n)` inflects a noun for a count. A missing key falls back to English, then renders as the key itself. Adding a language never touches a call site.
+- All other user-facing strings go through `Tr.t("<key>")`, resolved against the 29 catalogs in `qt/qml/i18n/`; `Tr.plural("plural.<noun>", n)` inflects a noun for a count. A missing key falls back to English, then renders as the key itself. Adding a language never touches a call site: write the catalog, list it in `readtrack.qrc`, add an import and a row to the `catalogs` table in `Tr.qml`, and a row to `kLauncherNames` in `installer.cpp`. Each catalog carries its own `plural(n)`; the form arrays must be long enough for the largest index it returns (Slovenian needs four).
 - Sizing and color come from the firmware theme: `Global.dp(n)`, `GlobalValues.*`, `FontStyles.*`, `StyledText` instead of `Text`. No hardcoded pixels or colors, so dark/light follows the device.
 - Tabs refresh in `Component.onCompleted` and `onVisibleChanged` — there is no live binding to the DB.
 - C code is `-Wall -Wextra -std=gnu99`, no allocation in the poll path; existing comments are English (a few older ones German).
