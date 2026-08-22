@@ -122,6 +122,8 @@ int main(int argc, char *argv[])
     StatsBridge stats;
     Updater updater;
     Shim shim;
+    /* An app update ships a new shim; nothing else would ever install it. */
+    shim.refresh();
     spawn_daemon(QGuiApplication::applicationFilePath().toUtf8().constData());
 
     QQmlApplicationEngine engine;

@@ -18,6 +18,10 @@ public:
 
     /* True when the script is in place and at least one format names it. */
     Q_INVOKABLE bool installed() const;
+    /* Rewrites the installed script if the app now ships a different one.
+     * Called at startup: an app update otherwise leaves the old script in
+     * place forever, since nothing else ever touches it. */
+    void refresh();
     Q_INVOKABLE bool install();
     Q_INVOKABLE bool remove();
 };

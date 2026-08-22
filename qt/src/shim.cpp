@@ -117,6 +117,37 @@ bool Shim::installed() const
     return true;
 }
 
+void Shim::refresh()
+{
+    if (!installed())
+        return;
+    QFile src(QStringLiteral(":/shim/open-book.sh"));
+    QFile installedFile(QString::fromLatin1(kScriptPath));
+    if (!src.open(QIODevice::ReadOnly) || !installedFile.open(QIODevice::ReadOnly))
+        return;
+    const QByteArray shipped = src.readAll();
+    const bool same = installedFile.readAll() == shipped;
+    installedFile.close();
+    if (same)
+        return;
+    /* Same write as install(), minus the extensions.cfg work: the entries are
+     * already there and name a script that is about to be replaced in place. */
+    QFile out(QString::fromLatin1(kScriptPath));
+    if (!out.open(QIODevice::WriteOnly | QIODevice::Truncate))
+        return;
+    if (out.write(shipped) != shipped.size() || !out.flush()) {
+        out.close();
+        updateLog(QStringLiteral("shim: refresh failed, leaving the old script"));
+        return;
+    }
+    out.close();
+    QFile::setPermissions(QString::fromLatin1(kScriptPath),
+                          QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner
+                              | QFile::ReadGroup | QFile::ExeGroup
+                              | QFile::ReadOther | QFile::ExeOther);
+    updateLog(QStringLiteral("shim: script refreshed"));
+}
+
 bool Shim::install()
 {
     QDir().mkpath(QString::fromLatin1(kBinDir));

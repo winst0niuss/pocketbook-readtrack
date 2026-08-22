@@ -9,6 +9,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QProcess>
+#include <QTimer>
 
 #include <cstring>
 
@@ -277,6 +278,15 @@ void Updater::install()
         return;
     }
     publish(QStringLiteral("ready"));
+
+    /* And now get out of the way. The handover script polls for this process
+     * to disappear before it swaps the binary, once a second for thirty — and
+     * we used to sit there waiting for the user to close the app, so the swap
+     * happened on the timeout. That is where the ~25 s after an update came
+     * from. Quitting on our own turns it into about a second; the delay lets
+     * the "ready" line reach the panel first, which on e-ink is not instant. */
+    updateLog(QStringLiteral("install: quitting for the handover"));
+    QTimer::singleShot(1200, qApp, &QCoreApplication::quit);
 }
 
 bool Updater::unpack(const QString &zip, const QString &dest)
