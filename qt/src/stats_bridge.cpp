@@ -30,6 +30,31 @@ StatsBridge::~StatsBridge()
         sqlite3_close(db_);
 }
 
+/* The daemon polls every 30 s, so closing a book and opening this app lands in
+ * the middle of that window: the screen then shows the state from up to half a
+ * minute ago, which is exactly the reading just done. And if the daemon was
+ * killed while the reader held the foreground, nothing wrote that session at
+ * all until the next launch spawned it again — which is why restarting the app
+ * "fixed" it.
+ *
+ * So take the reading ourselves before every aggregate. It costs one read-only
+ * query against explorer-3 and at most one INSERT OR IGNORE plus one UPDATE:
+ * this is the same tracker the daemon runs, sessions are keyed on
+ * (book_id, start_time), and a row can only gain seconds the firmware has
+ * already recorded. Both processes writing at once is fine — tracker_init sets
+ * a busy timeout — and they cannot double-count the same gap, because
+ * position_ts does not advance while the reader is closed. */
+void StatsBridge::catchUp()
+{
+    tracker t;
+    if (tracker_init(&t, stats_db_path(), explorer_db_path()) != 0)
+        return;
+    pb_state s;
+    if (tracker_read_state(t.explorer_path, &s) == 0)
+        tracker_observe(&t, &s);
+    tracker_close(&t);
+}
+
 namespace {
 
 /* Cover for the key stored in our own books table. Rows written before v0.7
@@ -280,6 +305,7 @@ QList<FinishedBook> finishedBooks(bool withCovers)
 
 QVariantMap StatsBridge::overall()
 {
+    catchUp();
     overall_stats o;
     stats_overall(db_, &o);
     QVariantMap m;
@@ -292,20 +318,34 @@ QVariantMap StatsBridge::overall()
      * reads as a fact. */
     m[QStringLiteral("pagesPerHour")] = o.pages_per_min * 60.0;
     m[QStringLiteral("totalHours")] = o.total_hours;
-    /* The donut answers "how much of what I have have I read", so both halves
-     * count the books currently on the device — download twenty more and it
+    /* The donut answers "how much of what I have have I read", so every half
+     * counts the books currently on the device — download twenty more and it
      * halves. Titles, not book_ids: the same book sits in books_impl several
      * times over, once per copy.
      *
-     * The tile beside it is the all-time count instead, which is why the two
-     * disagree: finished books are usually deleted and leave the library. */
+     * Two figures come out of it. Finished books are whole ones; progress adds
+     * the part-read ones at cpage/npage, so a shelf where nothing is finished
+     * yet still shows what has been read of it instead of a flat zero. A book
+     * with no page count contributes nothing — it cannot be measured, and
+     * calling that zero is closer than dropping it from the denominator, which
+     * would make five books look like four.
+     *
+     * The tile beside it is the all-time finished count instead, which is why
+     * the two disagree: finished books are usually deleted and leave the
+     * library. */
     int libraryTotal = 0;
     int libraryFinished = 0;
+    double libraryProgress = 0.0;
     if (sqlite3 *exp = openExplorer()) {
         sqlite3_stmt *st = nullptr;
         const char *sql =
-            "SELECT COUNT(*), IFNULL(SUM(fin),0) FROM ("
-            "  SELECT MAX(IFNULL(s.completed,0)) AS fin"
+            "SELECT COUNT(*), IFNULL(SUM(fin),0), IFNULL(SUM(prog),0) FROM ("
+            "  SELECT MAX(IFNULL(s.completed,0)) AS fin,"
+            "         MAX(CASE WHEN IFNULL(s.completed,0) = 1 THEN 1.0"
+            "                  WHEN IFNULL(s.npage,0) > 0"
+            "                   THEN MIN(1.0, CAST(IFNULL(s.cpage,0) AS REAL)"
+            "                                 / s.npage)"
+            "                  ELSE 0.0 END) AS prog"
             "  FROM books_impl b"
             "  JOIN files f ON f.book_id = b.id"
             "  LEFT JOIN books_settings s ON s.bookid = b.id"
@@ -314,6 +354,7 @@ QVariantMap StatsBridge::overall()
                 && sqlite3_step(st) == SQLITE_ROW) {
             libraryTotal = sqlite3_column_int(st, 0);
             libraryFinished = sqlite3_column_int(st, 1);
+            libraryProgress = sqlite3_column_double(st, 2);
         }
         sqlite3_finalize(st);
         sqlite3_close(exp);
@@ -323,6 +364,8 @@ QVariantMap StatsBridge::overall()
     m[QStringLiteral("booksFinished")] = finishedBooks(false).size();
     m[QStringLiteral("finishedFrac")] =
         libraryTotal > 0 ? double(libraryFinished) / libraryTotal : 0.0;
+    m[QStringLiteral("progressFrac")] =
+        libraryTotal > 0 ? libraryProgress / libraryTotal : 0.0;
     m[QStringLiteral("streakDays")] = o.streak_days;
 
     return m;
@@ -330,6 +373,7 @@ QVariantMap StatsBridge::overall()
 
 QVariantMap StatsBridge::currentBook()
 {
+    catchUp();
     QVariantMap m;
     pb_state s;
     if (tracker_read_state(explorer_db_path(), &s) != 0) {
@@ -381,6 +425,7 @@ QVariantMap StatsBridge::currentBook()
 
 QVariantMap StatsBridge::month(int year, int mon)
 {
+    catchUp();
     QVariantMap m;
     const QDate first(year, mon, 1);
     const int ndays = first.daysInMonth();
@@ -439,9 +484,10 @@ QVariantMap StatsBridge::month(int year, int mon)
         sqlite3_close(exp);
 
     /* Finish dates come from the firmware, so they belong on the calendar even
-     * for days before tracking started — the same exception the year heatmap
-     * makes. They carry no reading time: the firmware dates the finish, it
-     * does not say how long the day's reading was. */
+     * for days before tracking started — the one exception to the rule that
+     * nothing before meta.tracking_since is history. They carry no reading
+     * time: the firmware dates the finish, it does not say how long the day's
+     * reading was. */
     const QList<FinishedBook> finished = finishedBooks(true);
     for (const FinishedBook &fb : finished) {
         if (fb.day.year() != year || fb.day.month() != mon)

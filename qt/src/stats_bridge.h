@@ -18,5 +18,10 @@ public:
     Q_INVOKABLE QVariantMap month(int year, int mon);
 
 private:
+    /* Reads the firmware's current state and folds it into our DB before a
+     * screen aggregates it, so a tab never shows what the daemon last happened
+     * to poll. */
+    void catchUp();
+
     sqlite3 *db_ = nullptr;
 };

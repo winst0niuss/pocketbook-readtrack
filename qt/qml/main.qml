@@ -34,28 +34,35 @@ Window {
     Item {
         id: infoButton
 
+        /* Measured off the firmware's home button on a PB710: a ~30 dp glyph
+         * drawn with a hairline, sitting 20 dp from its edge of the screen.
+         * NavIcon keeps a tenth of its box as padding, so the box is bigger
+         * than the glyph and the margin gives that padding back — otherwise
+         * the "i" would sit further in than the house opposite it. */
+        readonly property real glyph: Global.dp(30)
+
         anchors.right: appHeader.right
-        anchors.rightMargin: GlobalValues.defaultViewSideMargin
+        anchors.rightMargin: Math.round(Global.dp(20) - (width - glyph) / 2)
         anchors.verticalCenter: appHeader.verticalCenter
-        // A square the height of the header, so the touch target matches the
-        // firmware button's without the glyph growing with it.
-        width: appHeader.height
-        height: appHeader.height
+        width: Math.round(glyph / 0.8)
+        height: width
         z: 1
 
         NavIcon {
-            anchors.centerIn: parent
-            width: Math.round(appHeader.height * 0.42)
-            height: width
+            anchors.fill: parent
             kind: "info"
-            // A header icon is never "inactive": the firmware's home button is
-            // solid black whatever screen you are on.
+            // A header icon is never "inactive": the home button is solid
+            // black whatever screen you are on.
             opacity: 1.0
-            strokeRatio: 0.055
+            // The house is drawn with a 1.5 dp line at any size; a share of the
+            // icon would thicken with it.
+            strokeRatio: Global.dp(1.5) / Math.min(width, height)
         }
 
         MouseArea {
+            // The target stays finger-sized even though the glyph is not.
             anchors.fill: parent
+            anchors.margins: -Global.dp(10)
             // Tapping it again goes back where you were, so the button is a
             // toggle rather than a one-way door.
             onClicked: nav.current = nav.current === nav.infoIndex

@@ -27,7 +27,22 @@ Item {
      * family is missing, Qt falls back to the UI font and nothing breaks. */
     readonly property string serif: "PT Serif"
 
+    /* The bottom row is a grid, not a free-standing pile: one gap everywhere,
+     * the same hairline the figures above are divided by, and two stat cells
+     * that share whatever the ring and its caption leave over — so the last
+     * label ends at the same margin the ring starts at. */
+    readonly property real gap: Global.dp(16)
+    readonly property real hairline: Math.max(1, Math.round(
+        GlobalValues.defaultSolidSeparatorThickness))
+    readonly property real donutSize: Global.dp(128)
+    readonly property real captionWidth: Global.dp(120)
+    readonly property real statWidth: Math.max(Global.dp(60),
+        (width - 2 * sideMargin - donutSize - captionWidth
+         - 5 * gap - 2 * hairline) / 2)
+
     Column {
+        id: head
+
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
@@ -147,12 +162,14 @@ Item {
         }
     }
 
-    // The library behind the book, along the bottom edge.
+    /* The library behind the book. It follows the figures instead of being
+     * pinned to the bottom edge — hung there it floated away from what it
+     * belongs to and left a hole in the middle of the page. */
     Column {
         id: allBooks
 
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: Global.dp(16)
+        anchors.top: head.bottom
+        anchors.topMargin: Global.dp(18)
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.leftMargin: tab.sideMargin
@@ -172,8 +189,7 @@ Item {
 
             Rectangle {
                 width: parent.width
-                height: Math.max(1, Math.round(
-                    GlobalValues.defaultSolidSeparatorThickness))
+                height: tab.hairline
                 color: GlobalValues.defaultTextColor
                 opacity: 0.25
             }
@@ -181,64 +197,89 @@ Item {
 
         Row {
             width: parent.width
-            spacing: Global.dp(16)
+            spacing: tab.gap
 
-            Item {
-                width: Global.dp(128)
-                height: Global.dp(128)
+            // The ring and the sentence that explains it are one cell: the
+            // caption says what the percentage counts, not what sits beside it.
+            Row {
+                spacing: tab.gap
 
-                Canvas {
-                    id: donut
+                Item {
+                    width: tab.donutSize
+                    height: tab.donutSize
 
-                    anchors.fill: parent
-                    antialiasing: true
+                    Canvas {
+                        id: donut
 
-                    readonly property real frac: tab.ov.finishedFrac || 0
+                        anchors.fill: parent
+                        antialiasing: true
 
-                    onFracChanged: requestPaint()
-                    onPaint: {
-                        var ctx = getContext("2d");
-                        ctx.reset();
-                        var cx = width / 2, cy = height / 2;
-                        var r = Math.min(cx, cy) - Global.dp(11);
-                        ctx.lineWidth = Global.dp(22);
+                        /* Two arcs on one ring: whole books finished, drawn
+                         * solid, and everything read including the books still
+                         * open, drawn faint behind it. A shelf with nothing
+                         * finished yet is not 0 % read, and saying so was the
+                         * ring's least useful state. */
+                        readonly property real frac: tab.ov.progressFrac || 0
+                        readonly property real done: tab.ov.finishedFrac || 0
 
-                        ctx.beginPath();
-                        ctx.arc(cx, cy, r, 0, 2 * Math.PI);
-                        // Not defaultBorderColor: it is black on this
-                        // firmware, and the ring would vanish into its fill.
-                        ctx.strokeStyle = GlobalValues.defaultTextColor;
-                        ctx.globalAlpha = 0.22;
-                        ctx.stroke();
-                        ctx.globalAlpha = 1.0;
-
-                        if (frac > 0) {
-                            ctx.beginPath();
-                            ctx.arc(cx, cy, r, -Math.PI / 2,
-                                    -Math.PI / 2 + frac * 2 * Math.PI);
+                        onFracChanged: requestPaint()
+                        onDoneChanged: requestPaint()
+                        onPaint: {
+                            var ctx = getContext("2d");
+                            ctx.reset();
+                            var cx = width / 2, cy = height / 2;
+                            var r = Math.min(cx, cy) - Global.dp(11);
+                            var top = -Math.PI / 2;
+                            ctx.lineWidth = Global.dp(22);
+                            // Not defaultBorderColor: it is black on this
+                            // firmware, and the ring would vanish into its fill.
                             ctx.strokeStyle = GlobalValues.defaultTextColor;
+
+                            ctx.beginPath();
+                            ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+                            ctx.globalAlpha = 0.22;
                             ctx.stroke();
+
+                            if (frac > 0) {
+                                ctx.beginPath();
+                                ctx.arc(cx, cy, r, top, top + frac * 2 * Math.PI);
+                                ctx.globalAlpha = 0.55;
+                                ctx.stroke();
+                            }
+
+                            if (done > 0) {
+                                ctx.beginPath();
+                                ctx.arc(cx, cy, r, top, top + done * 2 * Math.PI);
+                                ctx.globalAlpha = 1.0;
+                                ctx.stroke();
+                            }
+                            ctx.globalAlpha = 1.0;
                         }
+                    }
+
+                    StyledText {
+                        anchors.centerIn: parent
+                        styledFont: FontStyles.Heading4
+                        font.family: tab.serif
+                        color: GlobalValues.defaultTextColor
+                        // A started shelf never reads as 0 %: rounding down
+                        // to it is the one case where the figure contradicts
+                        // the ring drawn around it.
+                        text: donut.frac > 0 && Math.round(donut.frac * 100) < 1
+                              ? "< 1 %"
+                              : Math.round(donut.frac * 100) + " %"
                     }
                 }
 
                 StyledText {
-                    anchors.centerIn: parent
-                    styledFont: FontStyles.Heading4
-                    font.family: tab.serif
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: tab.captionWidth
+                    styledFont: FontStyles.BodyS
                     color: GlobalValues.defaultTextColor
-                    text: Math.round((tab.ov.finishedFrac || 0) * 100) + " %"
+                    opacity: 0.7
+                    text: Tr.t("overview.donutCaption")
+                    wrapMode: Text.Wrap
                 }
-            }
-
-            StyledText {
-                anchors.verticalCenter: parent.verticalCenter
-                width: Global.dp(150)
-                styledFont: FontStyles.BodyS
-                color: GlobalValues.defaultTextColor
-                opacity: 0.7
-                text: Tr.t("overview.donutCaption")
-                wrapMode: Text.Wrap
             }
 
             Repeater {
@@ -247,28 +288,43 @@ Item {
                     { v: (tab.ov.totalHours || 0).toFixed(1), l: Tr.t("overview.totalHours") }
                 ]
 
-                Column {
+                // Each cell carries its own divider on the left, as the row of
+                // figures above does, so the two rows read as one grid.
+                Item {
                     required property var modelData
 
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: (parent.width - Global.dp(112) - Global.dp(150)
-                            - 3 * Global.dp(16)) / 2
-                    spacing: Global.dp(2)
+                    width: tab.hairline + tab.gap + tab.statWidth
+                    height: tab.donutSize
 
-                    StyledText {
-                        styledFont: FontStyles.Heading2
-                        font.family: tab.serif
-                        color: GlobalValues.defaultTextColor
-                        text: modelData.v
+                    Rectangle {
+                        anchors.left: parent.left
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: tab.hairline
+                        height: parent.height - Global.dp(20)
+                        color: GlobalValues.defaultBorderColor
                     }
 
-                    StyledText {
-                        width: parent.width
-                        styledFont: FontStyles.BodyS
-                        color: GlobalValues.defaultTextColor
-                        opacity: 0.7
-                        text: modelData.l
-                        wrapMode: Text.Wrap
+                    Column {
+                        anchors.right: parent.right
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: tab.statWidth
+                        spacing: Global.dp(2)
+
+                        StyledText {
+                            styledFont: FontStyles.Heading2
+                            font.family: tab.serif
+                            color: GlobalValues.defaultTextColor
+                            text: modelData.v
+                        }
+
+                        StyledText {
+                            width: parent.width
+                            styledFont: FontStyles.BodyS
+                            color: GlobalValues.defaultTextColor
+                            opacity: 0.7
+                            text: modelData.l
+                            wrapMode: Text.Wrap
+                        }
                     }
                 }
             }

@@ -10,16 +10,18 @@ screen, built from the firmware's own UI components so it looks native.
 
 ## Features
 
-Five tabs, no scrolling (e-ink scrolling is fiddly):
+Two screens, no scrolling (e-ink scrolling is fiddly):
 
-- **Overview** — current book with cover, progress and time left; time read
-  today, minutes per session, pages per minute, books-finished donut.
-- **Streak** — current and best streak, a year heatmap with finished-book
-  markers, longest-streak insight.
+- **Overview** — the book in hand with its cover, progress and time left; hours
+  spent on it, minutes per session and pages per hour; then the library behind
+  it — a ring of how much of the books on the device you have read, with the
+  finished ones marked out inside it, the all-time finished count and total
+  hours read.
 - **Calendar** — month grid with the day's most-read book cover; tap a day for
   the breakdown.
-- **Year** — books finished per month; tap a month for finish dates.
-- **About** — installed version and one-tap update over Wi-Fi.
+
+*About* — installed version and a one-tap update over Wi-Fi — sits behind the
+info glyph in the header, opposite the reader's home button.
 
 Covers are extracted from your EPUBs, since the firmware's cover cache is
 sometimes wrong for sideloaded books. The interface follows the device
@@ -38,8 +40,9 @@ The firmware keeps no session history — only a "last opened" and "last
 position" per book — so the time before you installed ReadTrack cannot be
 recovered. Rather than pass guesses off as history, stats start at the install
 date and earlier days are drawn as unknown. Finished books are the exception:
-the firmware dates those, so they show for the whole year, and "finished" always
-means the firmware's own *mark as read* flag.
+the firmware dates those, so they appear on the calendar even for days before
+the install date, and "finished" always means the firmware's own *mark as read*
+flag.
 
 ## Privacy
 
@@ -93,7 +96,3 @@ builds on [fstanis/pocketbook-sdk-qt6](https://github.com/fstanis/pocketbook-sdk
 Not affiliated with PocketBook. It only reads the firmware database and makes a
 single backed-up edit to the launcher config, but you are installing third-party
 software on your reader — use at your own risk.
-
-ReadTrack is a fork of [Better Stats](https://github.com/nikljuel/better-stats)
-by Niklas Jülicher, renamed and continued as a separate project. The original is
-MIT-licensed and its copyright notice is kept in [LICENSE](LICENSE).

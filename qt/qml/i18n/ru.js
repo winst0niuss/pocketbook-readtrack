@@ -19,7 +19,7 @@ var strings = {
     "nav.calendar": "Календарь",
     "nav.about": "Инфо",
 
-    "overview.left": "Осталось ок. {time}",
+    "overview.left": "Осталось около {time}",
     "overview.noBook": "Книга ещё не открыта",
     "overview.bookProgress": "Прогресс книги: {percent} %",
     "overview.hoursOfReading": "часов чтения",
