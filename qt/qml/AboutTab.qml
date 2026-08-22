@@ -22,20 +22,17 @@ Item {
      * change but our own buttons. */
     property bool shimOn: false
 
-    function refresh() { shimOn = shim.installed(); }
+    function refresh() {
+        shimOn = shim.installed();
+        shimBox.checked = shimOn ? 1 : 0;
+    }
 
     Component.onCompleted: refresh()
     onVisibleChanged: if (visible) refresh()
 
-    /* The screen's only interactive element, so it is worth drawing properly:
-     * the theme's own button height and corner radius rather than a hand-picked
-     * box, full column width so the three of them line up, and a fill that
-     * inverts on press — on e-ink an inversion is the one state change that is
-     * unmistakable at a glance.
-     *
-     * "primary" fills the button instead of outlining it, for the action the
-     * screen is actually offering (installing an update); the rest stay
-     * outlined so a page of solid black slabs does not shout. */
+    /* Compact by design: these sit side by side, so they are sized by their
+     * label rather than stretched across the page. Pressing inverts the fill —
+     * on e-ink that is the one state change that reads instantly. */
     component ActionButton: Rectangle {
         id: btn
 
@@ -45,8 +42,8 @@ Item {
 
         signal clicked()
 
-        width: parent.width
-        height: GlobalValues.defaultTextButtonHeight
+        width: label.implicitWidth + Global.dp(28)
+        height: Global.dp(52)
         radius: GlobalValues.defaultElementBorderRadius
         color: btn.filled && btn.enabled ? GlobalValues.defaultTextColor
                                          : GlobalValues.defaultBackgroundColor
@@ -61,10 +58,7 @@ Item {
             id: label
 
             anchors.centerIn: parent
-            width: parent.width - 2 * Global.dp(16)
-            horizontalAlignment: Text.AlignHCenter
-            elide: Text.ElideRight
-            styledFont: btn.primary ? FontStyles.BodyLBold : FontStyles.BodyL
+            styledFont: FontStyles.Body
             color: !btn.enabled ? GlobalValues.defaultDisabledTextColor
                                 : (btn.filled ? GlobalValues.defaultBackgroundColor
                                               : GlobalValues.defaultTextColor)
@@ -83,55 +77,91 @@ Item {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
+        anchors.topMargin: Global.dp(10)
         anchors.leftMargin: GlobalValues.defaultViewSideMargin
         anchors.rightMargin: GlobalValues.defaultViewSideMargin
-        spacing: Global.dp(16)
+        spacing: Global.dp(12)
 
-        Item { width: 1; height: Global.dp(24) }
+        // The launcher's own glyph beside the name, so the screen introduces
+        // itself the way the tile does.
+        Row {
+            spacing: Global.dp(10)
 
-        StyledText {
+            NavIcon {
+                anchors.verticalCenter: parent.verticalCenter
+                width: Global.dp(26)
+                height: Global.dp(26)
+                kind: "bars"
+                active: true
+            }
+
+            StyledText {
+                anchors.verticalCenter: parent.verticalCenter
+                styledFont: FontStyles.Heading4
+                // The serif the book title uses on the Overview: this is the
+                // one place the app says its own name, and it can look like a
+                // name rather than a path.
+                font.family: "PT Serif"
+                font.italic: true
+                color: GlobalValues.defaultTextColor
+                text: "pocketbook-statistics"
+            }
+        }
+
+        Row {
             width: parent.width
-            styledFont: FontStyles.Heading3
-            color: GlobalValues.defaultTextColor
-            text: "pocketbook-statistics"
-            elide: Text.ElideRight
+            spacing: Global.dp(8)
+
+            NavIcon {
+                anchors.verticalCenter: parent.verticalCenter
+                width: Global.dp(18)
+                height: Global.dp(18)
+                kind: "github"
+                active: true
+                opacity: 0.7
+            }
+
+            StyledText {
+                anchors.verticalCenter: parent.verticalCenter
+                width: parent.width - Global.dp(26)
+                styledFont: FontStyles.BodyS
+                color: GlobalValues.defaultTextColor
+                opacity: 0.7
+                text: "github.com/winst0niuss/pocketbook-statistics"
+                elide: Text.ElideMiddle
+            }
         }
 
         StyledText {
-            width: parent.width
-            styledFont: FontStyles.BodyS
-            color: GlobalValues.defaultTextColor
-            opacity: 0.7
-            text: "github.com/winst0niuss/pocketbook-statistics"
-            elide: Text.ElideMiddle
-        }
-
-        StyledText {
-            styledFont: FontStyles.BodyL
+            styledFont: FontStyles.Body
             color: GlobalValues.defaultTextColor
             text: Tr.t("about.version", { version: updater.currentVersion })
         }
 
-        Item { width: 1; height: Global.dp(8) }
+        // Side by side: the second one only appears when there is something to
+        // install, and the row must not push the page down when it does.
+        Row {
+            spacing: Global.dp(12)
 
-        ActionButton {
-            text: Tr.t("about.check")
-            enabled: !tab.busy
-            onClicked: updater.check()
-        }
+            ActionButton {
+                text: Tr.t("about.check")
+                enabled: !tab.busy
+                onClicked: updater.check()
+            }
 
-        ActionButton {
-            visible: updater.state === "available"
-            primary: true
-            text: Tr.t("about.install", { version: updater.latestVersion })
-            enabled: !tab.busy
-            onClicked: updater.install()
+            ActionButton {
+                visible: updater.state === "available"
+                primary: true
+                text: Tr.t("about.install", { version: updater.latestVersion })
+                enabled: !tab.busy
+                onClicked: updater.install()
+            }
         }
 
         StyledText {
             width: parent.width
             wrapMode: Text.Wrap
-            styledFont: FontStyles.BodyL
+            styledFont: FontStyles.Body
             color: GlobalValues.defaultTextColor
             visible: text !== ""
             text: {
@@ -157,39 +187,57 @@ Item {
             text: updater.errorDetail
         }
 
-        Item { width: 1; height: Global.dp(12) }
-
-        /* Nothing of ours starts at boot — the firmware has no place for that
-         * outside its own partition. This is the way around it: the firmware
-         * runs our shim when a book is opened, and the shim starts the daemon
-         * before handing the book to the reader. */
-        StyledText {
+        // Updating and tracking are separate concerns; the rule says so.
+        Rectangle {
             width: parent.width
-            wrapMode: Text.Wrap
-            styledFont: FontStyles.BodyL
+            height: Math.max(1, Math.round(
+                GlobalValues.defaultSolidSeparatorThickness))
             color: GlobalValues.defaultTextColor
-            text: Tr.t("about.shim")
+            opacity: 0.25
         }
 
-        StyledText {
+        /* A setting, so it looks like one: the firmware's checkbox with the
+         * explanation beside it, rather than a button that has to spell out
+         * which way it is about to flip. */
+        Row {
             width: parent.width
-            wrapMode: Text.Wrap
-            styledFont: FontStyles.BodyS
-            color: GlobalValues.defaultDisabledTextColor
-            text: Tr.t("about.shimHint")
-        }
+            spacing: Global.dp(12)
 
-        ActionButton {
-            text: tab.shimOn ? Tr.t("about.shimOff") : Tr.t("about.shimOn")
-            onClicked: {
-                if (tab.shimOn)
-                    shim.remove();
-                else
-                    shim.install();
-                tab.refresh();
+            CheckBox {
+                id: shimBox
+
+                anchors.verticalCenter: parent.verticalCenter
+                onClicked: {
+                    if (tab.shimOn)
+                        shim.remove();
+                    else
+                        shim.install();
+                    tab.refresh();
+                }
+            }
+
+            Column {
+                anchors.verticalCenter: parent.verticalCenter
+                width: parent.width - shimBox.width - Global.dp(12)
+                spacing: Global.dp(4)
+
+                StyledText {
+                    width: parent.width
+                    wrapMode: Text.Wrap
+                    styledFont: FontStyles.Body
+                    color: GlobalValues.defaultTextColor
+                    text: Tr.t("about.shim")
+                }
+
+                StyledText {
+                    width: parent.width
+                    wrapMode: Text.Wrap
+                    styledFont: FontStyles.BodyS
+                    color: GlobalValues.defaultDisabledTextColor
+                    text: Tr.t("about.shimHint")
+                }
             }
         }
-
 
         StyledText {
             width: parent.width
@@ -209,18 +257,11 @@ Item {
             // The log is up to a dozen lines and this screen does not scroll:
             // capped, because the last lines are the interesting ones and the
             // rest must not push the page over the navigation bar.
-            maximumLineCount: 6
+            maximumLineCount: 5
             elide: Text.ElideRight
             styledFont: FontStyles.BodyS
             color: GlobalValues.defaultDisabledTextColor
             text: Tr.t("about.log") + "\n" + updater.diagnostics
         }
-    }
-
-    /* The handover script is already waiting for this process to go away. */
-    Timer {
-        running: updater.state === "ready"
-        interval: 2500
-        onTriggered: Qt.quit()
     }
 }

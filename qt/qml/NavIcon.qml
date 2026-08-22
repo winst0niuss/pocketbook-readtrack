@@ -8,7 +8,7 @@ import com.pocketbook.controls
 Canvas {
     id: icon
 
-    // "home" | "calendar" | "info"
+    // "home" | "calendar" | "info" | "bars" | "github"
     property string kind: "home"
     property bool active: false
     property color ink: GlobalValues.defaultTextColor
@@ -67,6 +67,48 @@ Canvas {
             ctx.lineTo(x0 + d * 0.28, y0 + d * 0.24);
             ctx.moveTo(x0 + d * 0.72, y0 + d * 0.02);
             ctx.lineTo(x0 + d * 0.72, y0 + d * 0.24);
+            ctx.stroke();
+        } else if (kind === "bars") {
+            /* The launcher tile's glyph, to the same proportions as
+             * tools/make_icon.py draws it: three rising bars, 10 wide with a
+             * gap of 4 on a 48 grid, standing on a base at 42. */
+            var bw = d * (10 / 48);
+            var gap = d * (4 / 48);
+            var base = y0 + d * (42 / 48);
+            var bars = [16, 26, 36];
+            var bx = x0 + (d - (3 * bw + 2 * gap)) / 2;
+            for (var i = 0; i < 3; i++) {
+                var bh = d * (bars[i] / 48);
+                ctx.strokeRect(bx, base - bh, bw, bh);
+                bx += bw + gap;
+            }
+        } else if (kind === "github") {
+            /* The octocat as a silhouette: at the size of a line of text
+             * nothing finer survives, and the round body with two ears and a
+             * tail is what the eye recognises anyway. */
+            var cx = x0 + d / 2, cy = y0 + d * 0.54, r = d * 0.42;
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+            ctx.fill();
+            // ears
+            ctx.beginPath();
+            ctx.moveTo(cx - r * 0.85, cy - r * 0.55);
+            ctx.lineTo(cx - r * 0.62, cy - r * 1.25);
+            ctx.lineTo(cx - r * 0.18, cy - r * 0.86);
+            ctx.closePath();
+            ctx.fill();
+            ctx.beginPath();
+            ctx.moveTo(cx + r * 0.85, cy - r * 0.55);
+            ctx.lineTo(cx + r * 0.62, cy - r * 1.25);
+            ctx.lineTo(cx + r * 0.18, cy - r * 0.86);
+            ctx.closePath();
+            ctx.fill();
+            // tail, curling out to the left
+            ctx.beginPath();
+            ctx.lineWidth = Math.max(1, d * 0.09);
+            ctx.moveTo(cx - r * 0.55, cy + r * 0.92);
+            ctx.quadraticCurveTo(cx - r * 1.25, cy + r * 1.15,
+                                 cx - r * 1.15, cy + r * 0.35);
             ctx.stroke();
         } else if (kind === "info") {
             ctx.beginPath();
