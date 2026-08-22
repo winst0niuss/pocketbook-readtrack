@@ -27,7 +27,7 @@ var strings = {
     "overview.minPerSession": "хв за сеанс",
     "overview.pagesPerMinute": "сторінок за хвилину",
     "overview.allBooks": "УСІ КНИГИ",
-    "overview.donutCaption": "ваших книг прочитано",
+    "overview.donutCaption": "книг на пристрої дочитано",
     "overview.booksFinished": "Книг прочитано",
     "overview.totalHours": "Годин усього",
 

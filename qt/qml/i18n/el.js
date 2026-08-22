@@ -22,7 +22,7 @@ var strings = {
     "overview.minPerSession": "λεπτά ανά συνεδρία",
     "overview.pagesPerMinute": "σελίδες ανά λεπτό",
     "overview.allBooks": "ΟΛΑ ΤΑ ΒΙΒΛΙΑ",
-    "overview.donutCaption": "από τα βιβλία σας ολοκληρώθηκαν",
+    "overview.donutCaption": "από τα βιβλία στη συσκευή",
     "overview.booksFinished": "Ολοκληρωμένα βιβλία",
     "overview.totalHours": "Ώρες συνολικά",
 

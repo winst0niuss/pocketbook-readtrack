@@ -72,6 +72,8 @@ the backup if you want the launcher entry gone.
 
 ## Data
 
+[docs/STATS-PLAN.md](docs/STATS-PLAN.md) is the plan for what the app shows and
+why, measured against Kobo, KOReader and Goodreads.
 [docs/DEVICE-DATA.md](docs/DEVICE-DATA.md) surveys everything the firmware
 stores that reading stats can be built from — the two databases, the cover
 cache, how they join — and what it does not store, which is why ReadTrack

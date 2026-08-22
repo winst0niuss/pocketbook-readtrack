@@ -27,7 +27,7 @@ var strings = {
     "overview.minPerSession": "min po sesiji",
     "overview.pagesPerMinute": "stranica u minuti",
     "overview.allBooks": "SVE KNJIGE",
-    "overview.donutCaption": "vaših knjiga pročitano",
+    "overview.donutCaption": "knjiga na uređaju",
     "overview.booksFinished": "Pročitane knjige",
     "overview.totalHours": "Sati ukupno",
 

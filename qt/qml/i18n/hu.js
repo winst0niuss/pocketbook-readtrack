@@ -22,7 +22,7 @@ var strings = {
     "overview.minPerSession": "perc alkalmanként",
     "overview.pagesPerMinute": "oldal percenként",
     "overview.allBooks": "MINDEN KÖNYV",
-    "overview.donutCaption": "könyved kiolvasva",
+    "overview.donutCaption": "a készüléken lévő könyvekből",
     "overview.booksFinished": "Kiolvasott könyvek",
     "overview.totalHours": "Óra összesen",
 

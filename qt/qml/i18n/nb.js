@@ -22,7 +22,7 @@ var strings = {
     "overview.minPerSession": "min per økt",
     "overview.pagesPerMinute": "sider per minutt",
     "overview.allBooks": "ALLE BØKER",
-    "overview.donutCaption": "av bøkene dine ferdiglest",
+    "overview.donutCaption": "av bøkene på enheten",
     "overview.booksFinished": "Ferdigleste bøker",
     "overview.totalHours": "Timer totalt",
 

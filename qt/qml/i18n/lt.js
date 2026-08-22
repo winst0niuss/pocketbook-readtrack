@@ -27,7 +27,7 @@ var strings = {
     "overview.minPerSession": "min per seansą",
     "overview.pagesPerMinute": "puslapių per minutę",
     "overview.allBooks": "VISOS KNYGOS",
-    "overview.donutCaption": "jūsų knygų perskaityta",
+    "overview.donutCaption": "iš knygų įrenginyje",
     "overview.booksFinished": "Perskaitytos knygos",
     "overview.totalHours": "Iš viso valandų",
 

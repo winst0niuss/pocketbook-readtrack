@@ -281,27 +281,37 @@ QVariantMap StatsBridge::overall()
     m[QStringLiteral("avgSessionMin")] = o.avg_session_min;
     m[QStringLiteral("pagesPerMin")] = o.pages_per_min;
     m[QStringLiteral("totalHours")] = o.total_hours;
-    /* Book counts deduplicated from the firmware DB rather than the tracking
-     * DB (which counts each file copy separately). Total = current library. */
-    int finished = finishedBooks(false).size();
-    int total = 0;
+    /* The donut answers "how much of what I have have I read", so both halves
+     * count the books currently on the device — download twenty more and it
+     * halves. Titles, not book_ids: the same book sits in books_impl several
+     * times over, once per copy.
+     *
+     * The tile beside it is the all-time count instead, which is why the two
+     * disagree: finished books are usually deleted and leave the library. */
+    int libraryTotal = 0;
+    int libraryFinished = 0;
     if (sqlite3 *exp = openExplorer()) {
         sqlite3_stmt *st = nullptr;
         const char *sql =
-            "SELECT COUNT(DISTINCT lower(trim(IFNULL(b.title,'?'))))"
-            " FROM books_impl b JOIN files f ON f.book_id = b.id";
+            "SELECT COUNT(*), IFNULL(SUM(fin),0) FROM ("
+            "  SELECT MAX(IFNULL(s.completed,0)) AS fin"
+            "  FROM books_impl b"
+            "  JOIN files f ON f.book_id = b.id"
+            "  LEFT JOIN books_settings s ON s.bookid = b.id"
+            "  GROUP BY lower(trim(IFNULL(b.title,'?'))))";
         if (sqlite3_prepare_v2(exp, sql, -1, &st, nullptr) == SQLITE_OK
-                && sqlite3_step(st) == SQLITE_ROW)
-            total = sqlite3_column_int(st, 0);
+                && sqlite3_step(st) == SQLITE_ROW) {
+            libraryTotal = sqlite3_column_int(st, 0);
+            libraryFinished = sqlite3_column_int(st, 1);
+        }
         sqlite3_finalize(st);
         sqlite3_close(exp);
     }
-    if (total < finished)
-        total = finished; /* finished books whose file was deleted */
-    m[QStringLiteral("booksTotal")] = total;
-    m[QStringLiteral("booksFinished")] = finished;
+    m[QStringLiteral("booksTotal")] = libraryTotal;
+    m[QStringLiteral("booksOnDeviceFinished")] = libraryFinished;
+    m[QStringLiteral("booksFinished")] = finishedBooks(false).size();
     m[QStringLiteral("finishedFrac")] =
-        total > 0 ? double(finished) / total : 0.0;
+        libraryTotal > 0 ? double(libraryFinished) / libraryTotal : 0.0;
     m[QStringLiteral("streakDays")] = o.streak_days;
     return m;
 }

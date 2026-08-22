@@ -26,7 +26,7 @@ var strings = {
     "overview.minPerSession": "min na čítanie",
     "overview.pagesPerMinute": "strán za minútu",
     "overview.allBooks": "VŠETKY KNIHY",
-    "overview.donutCaption": "vašich kníh dočítaných",
+    "overview.donutCaption": "kníh v zariadení",
     "overview.booksFinished": "Dočítané knihy",
     "overview.totalHours": "Hodín celkovo",
 

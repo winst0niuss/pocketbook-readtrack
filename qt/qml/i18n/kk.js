@@ -22,7 +22,7 @@ var strings = {
     "overview.minPerSession": "бір сеансқа мин",
     "overview.pagesPerMinute": "минутына бет",
     "overview.allBooks": "БАРЛЫҚ КІТАПТАР",
-    "overview.donutCaption": "кітабыңыз оқып бітті",
+    "overview.donutCaption": "құрылғыдағы кітаптардың",
     "overview.booksFinished": "Оқып бітірген кітаптар",
     "overview.totalHours": "Барлығы сағат",
 

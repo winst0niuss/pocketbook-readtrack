@@ -22,7 +22,7 @@ var strings = {
     "overview.minPerSession": "min per lukukerta",
     "overview.pagesPerMinute": "sivua minuutissa",
     "overview.allBooks": "KAIKKI KIRJAT",
-    "overview.donutCaption": "kirjoistasi luettu loppuun",
+    "overview.donutCaption": "laitteen kirjoista",
     "overview.booksFinished": "Loppuun luetut kirjat",
     "overview.totalHours": "Tunteja yhteensä",
 

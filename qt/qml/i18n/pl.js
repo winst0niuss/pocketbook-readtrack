@@ -27,7 +27,7 @@ var strings = {
     "overview.minPerSession": "min na sesję",
     "overview.pagesPerMinute": "stron na minutę",
     "overview.allBooks": "WSZYSTKIE KSIĄŻKI",
-    "overview.donutCaption": "twoich książek przeczytanych",
+    "overview.donutCaption": "książek na urządzeniu",
     "overview.booksFinished": "Przeczytane książki",
     "overview.totalHours": "Godzin łącznie",
 

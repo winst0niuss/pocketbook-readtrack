@@ -22,7 +22,7 @@ var strings = {
     "overview.minPerSession": "min lugemiskorra kohta",
     "overview.pagesPerMinute": "lehekülge minutis",
     "overview.allBooks": "KÕIK RAAMATUD",
-    "overview.donutCaption": "sinu raamatutest loetud",
+    "overview.donutCaption": "seadmes olevatest raamatutest",
     "overview.booksFinished": "Läbi loetud raamatud",
     "overview.totalHours": "Tunde kokku",
 

@@ -27,7 +27,7 @@ var strings = {
     "overview.minPerSession": "min pe sesiune",
     "overview.pagesPerMinute": "pagini pe minut",
     "overview.allBooks": "TOATE CĂRȚILE",
-    "overview.donutCaption": "dintre cărțile tale terminate",
+    "overview.donutCaption": "din cărțile de pe dispozitiv",
     "overview.booksFinished": "Cărți terminate",
     "overview.totalHours": "Ore în total",
 

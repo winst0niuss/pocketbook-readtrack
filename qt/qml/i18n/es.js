@@ -22,7 +22,7 @@ var strings = {
     "overview.minPerSession": "min por sesión",
     "overview.pagesPerMinute": "páginas por minuto",
     "overview.allBooks": "TODOS LOS LIBROS",
-    "overview.donutCaption": "de tus libros terminados",
+    "overview.donutCaption": "de los libros en el dispositivo",
     "overview.booksFinished": "Libros terminados",
     "overview.totalHours": "Horas en total",
 

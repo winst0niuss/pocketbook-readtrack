@@ -28,7 +28,7 @@ var strings = {
     "overview.minPerSession": "мин за сессию",
     "overview.pagesPerMinute": "страниц в минуту",
     "overview.allBooks": "ВСЕ КНИГИ",
-    "overview.donutCaption": "ваших книг прочитано",
+    "overview.donutCaption": "книг на устройстве прочитано",
     "overview.booksFinished": "Книг прочитано",
     "overview.totalHours": "Часов всего",
 

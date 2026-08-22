@@ -22,7 +22,7 @@ var strings = {
     "overview.minPerSession": "min per sessie",
     "overview.pagesPerMinute": "pagina's per minuut",
     "overview.allBooks": "ALLE BOEKEN",
-    "overview.donutCaption": "van je boeken uitgelezen",
+    "overview.donutCaption": "van de boeken op je toestel",
     "overview.booksFinished": "Boeken uitgelezen",
     "overview.totalHours": "Uren totaal",
 

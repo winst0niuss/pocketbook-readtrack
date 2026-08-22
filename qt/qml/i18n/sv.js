@@ -22,7 +22,7 @@ var strings = {
     "overview.minPerSession": "min per pass",
     "overview.pagesPerMinute": "sidor per minut",
     "overview.allBooks": "ALLA BÖCKER",
-    "overview.donutCaption": "av dina böcker utlästa",
+    "overview.donutCaption": "av böckerna på enheten",
     "overview.booksFinished": "Utlästa böcker",
     "overview.totalHours": "Timmar totalt",
 

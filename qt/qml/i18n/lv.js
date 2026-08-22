@@ -26,7 +26,7 @@ var strings = {
     "overview.minPerSession": "min uz sesiju",
     "overview.pagesPerMinute": "lappuses minūtē",
     "overview.allBooks": "VISAS GRĀMATAS",
-    "overview.donutCaption": "jūsu grāmatu izlasītas",
+    "overview.donutCaption": "no grāmatām ierīcē",
     "overview.booksFinished": "Izlasītās grāmatas",
     "overview.totalHours": "Stundas kopā",
 

@@ -22,7 +22,7 @@ var strings = {
     "overview.minPerSession": "oturum başına dk",
     "overview.pagesPerMinute": "dakikada sayfa",
     "overview.allBooks": "TÜM KİTAPLAR",
-    "overview.donutCaption": "kitabınız bitirildi",
+    "overview.donutCaption": "cihazdaki kitapların",
     "overview.booksFinished": "Bitirilen kitaplar",
     "overview.totalHours": "Toplam saat",
 
