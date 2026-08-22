@@ -333,18 +333,22 @@ Item {
 
                         StyledText {
                             anchors.horizontalCenter: parent.horizontalCenter
-                            /* Narrower than the cell on purpose. At full width
+                            /* Narrower than the cell on purpose: at full width
                              * a two-word label runs from divider to divider and
-                             * reads as if it were touching them; this makes it
-                             * break into two lines, which is also what keeps
-                             * the figures at the same height across languages. */
-                            width: Math.round(tab.statWidth * 0.62)
+                             * reads as if it were touching them. One gap of
+                             * clearance on each side is enough to break it in
+                             * two — and no narrower, or a long word ends up
+                             * split down the middle ("прочит / ано"). */
+                            width: tab.statWidth - 2 * tab.gap
                             horizontalAlignment: Text.AlignHCenter
                             styledFont: FontStyles.BodyS
                             color: GlobalValues.defaultTextColor
                             opacity: 0.7
                             text: modelData.l
-                            wrapMode: Text.Wrap
+                            // WordWrap, not Wrap: Wrap falls back to breaking
+                            // inside a word when it does not fit, which is what
+                            // produced "прочит / ано".
+                            wrapMode: Text.WordWrap
                             /* Two lines tall even when the words fit on one:
                              * the cells are centred vertically, so a shorter
                              * label would lift its figure above the other. */
