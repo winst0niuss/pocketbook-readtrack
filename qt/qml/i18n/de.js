@@ -42,6 +42,12 @@ var strings = {
     "about.ready": "Update geladen. {app} schließt sich und startet von selbst neu \u2014 falls nicht, über das Menü öffnen.",
     "about.privacy": "Das Update kommt per WLAN von GitHub, und nur auf Knopfdruck. Sonst geht {app} nie online.",
 
+    "about.shim": "Zählung beim Öffnen eines Buches starten",
+    "about.shimHint": "Nach dem Einschalten startet von selbst nichts. Ist dies aktiv, startet das Öffnen eines Buches zuerst die Zählung und übergibt das Buch dann dem gewohnten Reader — für EPUB, FB2 und PDF.",
+    "about.shimOn": "Einschalten",
+    "about.shimOff": "Ausschalten",
+    "about.shimActive": "Aktiv. Bücher öffnen wie bisher, der Reader bleibt derselbe.",
+    "about.shimInactive": "Aus. Nach dem Einschalten die App einmal öffnen, sonst wird der Tag nicht erfasst.",
     "about.log": "Letzter Versuch:",
 
     "update.errNoNetwork": "Keine Verbindung. WLAN einschalten und erneut versuchen.",

@@ -18,6 +18,7 @@ pocketbook_add_app(PocketBookStatistics
     qt/src/stats_bridge.cpp
     qt/src/epub_cover.cpp
     qt/src/installer.cpp
+    qt/src/shim.cpp
     qt/src/updater.cpp
     qt/src/update_log.cpp
     src/tracker.c

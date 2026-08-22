@@ -16,6 +16,7 @@ extern "C" {
 #include "inkview_bridge.h"
 #include "installer.h"
 #include "stats_bridge.h"
+#include "shim.h"
 #include "updater.h"
 
 namespace {
@@ -59,12 +60,14 @@ int main(int argc, char *argv[])
 
     StatsBridge stats;
     Updater updater;
+    Shim shim;
     spawn_daemon(QGuiApplication::applicationFilePath().toUtf8().constData());
 
     QQmlApplicationEngine engine;
     engine.addImportPath(QString::fromUtf8(kQmlPath));
     engine.rootContext()->setContextProperty(QStringLiteral("stats"), &stats);
     engine.rootContext()->setContextProperty(QStringLiteral("updater"), &updater);
+    engine.rootContext()->setContextProperty(QStringLiteral("shim"), &shim);
     engine.rootContext()->setContextProperty(QStringLiteral("deviceLang"),
                                               inkViewLang());
     engine.rootContext()->setContextProperty(QStringLiteral("screenW"), screen.width);

@@ -12,6 +12,16 @@ Item {
                                  || updater.state === "downloading"
                                  || updater.state === "ready"
 
+    /* Whether the open-book shim is installed. Read on show rather than bound:
+     * it lives in two files on the user partition, and nothing signals a
+     * change but our own buttons. */
+    property bool shimOn: false
+
+    function refresh() { shimOn = shim.installed(); }
+
+    Component.onCompleted: refresh()
+    onVisibleChanged: if (visible) refresh()
+
     // Tapping a tab-sized target is the whole interaction here, so the button
     // follows the firmware's list-item height instead of a text-sized box.
     component ActionButton: Rectangle {
@@ -118,6 +128,47 @@ Item {
             color: GlobalValues.defaultDisabledTextColor
             visible: updater.state === "error" && updater.errorDetail !== ""
             text: updater.errorDetail
+        }
+
+        Item { width: 1; height: Global.dp(12) }
+
+        /* Nothing of ours starts at boot — the firmware has no place for that
+         * outside its own partition. This is the way around it: the firmware
+         * runs our shim when a book is opened, and the shim starts the daemon
+         * before handing the book to the reader. */
+        StyledText {
+            width: parent.width
+            wrapMode: Text.Wrap
+            styledFont: FontStyles.BodyL
+            color: GlobalValues.defaultTextColor
+            text: Tr.t("about.shim")
+        }
+
+        StyledText {
+            width: parent.width
+            wrapMode: Text.Wrap
+            styledFont: FontStyles.BodyS
+            color: GlobalValues.defaultDisabledTextColor
+            text: Tr.t("about.shimHint")
+        }
+
+        ActionButton {
+            text: tab.shimOn ? Tr.t("about.shimOff") : Tr.t("about.shimOn")
+            onClicked: {
+                if (tab.shimOn)
+                    shim.remove();
+                else
+                    shim.install();
+                tab.refresh();
+            }
+        }
+
+        StyledText {
+            width: parent.width
+            wrapMode: Text.Wrap
+            styledFont: FontStyles.BodyS
+            color: GlobalValues.defaultDisabledTextColor
+            text: tab.shimOn ? Tr.t("about.shimActive") : Tr.t("about.shimInactive")
         }
 
         Item { width: 1; height: Global.dp(12) }

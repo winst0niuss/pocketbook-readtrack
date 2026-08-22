@@ -39,6 +39,7 @@
         <file>OverviewTab.qml</file>
         <file>CalendarTab.qml</file>
         <file>AboutTab.qml</file>
+        <file>shim/open-book.sh</file>
         <file>pocketbook-statistics.bmp</file>
         <file>pocketbook-statistics_f.bmp</file>
     </qresource>
