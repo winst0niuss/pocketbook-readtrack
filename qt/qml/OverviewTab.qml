@@ -304,13 +304,19 @@ Item {
                         color: GlobalValues.defaultBorderColor
                     }
 
+                    /* Centred in the space its dividers enclose — the figure
+                     * over its label, both on the same axis, the way the metric
+                     * row above does it. Left-aligned they read as text that
+                     * happened to land between two lines. */
                     Column {
+                        anchors.left: parent.left
+                        anchors.leftMargin: tab.hairline
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
-                        width: tab.statWidth
                         spacing: Global.dp(2)
 
                         StyledText {
+                            anchors.horizontalCenter: parent.horizontalCenter
                             styledFont: FontStyles.Heading2
                             font.family: tab.serif
                             color: GlobalValues.defaultTextColor
@@ -319,6 +325,7 @@ Item {
 
                         StyledText {
                             width: parent.width
+                            horizontalAlignment: Text.AlignHCenter
                             styledFont: FontStyles.BodyS
                             color: GlobalValues.defaultTextColor
                             opacity: 0.7
