@@ -20,7 +20,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y libsqlite3-dev
       - run: make test
 
-  # Cross-compile in the SDK image and publish ReadTrack.zip.
+  # Cross-compile in the SDK image and publish PocketBookStatistics.zip.
   build:
     runs-on: ubuntu-latest
     permissions:
@@ -57,16 +57,16 @@ jobs:
 
       - name: Package
         run: |
-          cp build-qt/ReadTrack.app .
-          zip -9 ReadTrack.zip ReadTrack.app
+          cp build-qt/PocketBookStatistics.app .
+          zip -9 PocketBookStatistics.zip PocketBookStatistics.app
 
       - uses: actions/upload-artifact@v4
         with:
-          name: ReadTrack
-          path: ReadTrack.zip
+          name: PocketBookStatistics
+          path: PocketBookStatistics.zip
 
       - name: Release
         if: startsWith(github.ref, 'refs/tags/v')
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" ReadTrack.zip --generate-notes
+        run: gh release create "$GITHUB_REF_NAME" PocketBookStatistics.zip --generate-notes

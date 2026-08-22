@@ -1,6 +1,6 @@
-# Building ReadTrack
+# Building PocketBook Statistics
 
-ReadTrack is a single ARM ELF that dynamically links the Qt 6.8.2 already
+PocketBook Statistics is a single ARM ELF that dynamically links the Qt 6.8.2 already
 present on the device (in `/ebrmain`), so nothing Qt-related is bundled. The
 build runs in a Docker container that provides the cross-compiler and the
 matching Qt headers; you don't need Qt or an ARM toolchain on your host.
@@ -30,7 +30,7 @@ not the full 2.6 GB SDK submodule.
 make qt
 ```
 
-Produces `build-qt/ReadTrack.app` (an ARM32 softfp ELF). The Makefile runs:
+Produces `build-qt/PocketBookStatistics.app` (an ARM32 softfp ELF). The Makefile runs:
 
 ```
 docker run --rm -v "$PWD:/src" -w /src \
@@ -44,7 +44,7 @@ docker run --rm -v "$PWD:/src" -w /src \
 With the reader mounted over USB:
 
 ```bash
-make deploy          # copies to $(DEVICE)/applications/ReadTrack.app
+make deploy          # copies to $(DEVICE)/applications/PocketBookStatistics.app
 ```
 
 Adjust `DEVICE` at the top of the `Makefile` to your reader's mount point
@@ -103,7 +103,7 @@ the hard constraints (softfp ABI, `rcc --no-zstd`, exact Qt version match).
 ## CI
 
 `.github/workflows/build.yml` runs the host tests on every push and builds the
-app in the SDK image. Every run uploads `ReadTrack.zip` as a workflow artifact;
+app in the SDK image. Every run uploads `PocketBookStatistics.zip` as a workflow artifact;
 pushing a tag that starts with `v` additionally publishes it as a GitHub
 release, so installing needs no local toolchain:
 
@@ -121,7 +121,7 @@ to ignore a placeholder its wording doesn't need.
 
 To add a language, copy `en.js` to `<code>.js`, translate it, then:
 
-1. add `<file>i18n/<code>.js</file>` to `qt/qml/readtrack.qrc`,
+1. add `<file>i18n/<code>.js</file>` to `qt/qml/pocketbook-statistics.qrc`,
 2. add `import "i18n/<code>.js" as <Name>` and one `case "<code>": return <Name>;`
    to `Tr.qml`.
 

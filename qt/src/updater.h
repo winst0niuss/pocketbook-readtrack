@@ -5,7 +5,7 @@
 
 /* Self-update against the project's GitHub releases.
  *
- * The only part of ReadTrack that touches the network, and only when the user
+ * The only part of the app that touches the network, and only when the user
  * presses a button: nothing here runs on its own. The transfers themselves are
  * the firmware's (see inkview_bridge), so no TLS or certificate handling of
  * our own.

@@ -30,12 +30,12 @@ qt:
 	docker run --rm -v "$(CURDIR):/src" -w /src $(QT_IMG) bash -c '\
 	  cmake -B build-qt -DCMAKE_TOOLCHAIN_FILE=/src/third_party/pocketbook-sdk-qt6/cmake/pocketbook.toolchain.cmake \
 	  && cmake --build build-qt -j8'
-	@echo "Built build-qt/ReadTrack.app"
+	@echo "Built build-qt/PocketBookStatistics.app"
 
 # ---- Dev deploy to a USB-mounted reader ----
 deploy:
-	cp build-qt/ReadTrack.app "$(DEVICE)/applications/ReadTrack.app"
-	rm -f "$(DEVICE)/applications/._ReadTrack.app"
+	cp build-qt/PocketBookStatistics.app "$(DEVICE)/applications/PocketBookStatistics.app"
+	rm -f "$(DEVICE)/applications/._PocketBookStatistics.app"
 	sync
 
 # ---- Regenerate the launcher icons (needs Pillow) ----

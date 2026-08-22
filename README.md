@@ -1,7 +1,7 @@
-# ReadTrack
+# PocketBook Statistics
 
 Reading statistics for stock PocketBook e-readers — no KOReader, no account, no
-cloud. ReadTrack turns what the firmware already records into a proper stats
+cloud. PocketBook Statistics turns what the firmware already records into a proper stats
 screen, built from the firmware's own UI components so it looks native.
 
 > Built and tested on a **PocketBook Era Lite (PB710), firmware 6.x**. Other
@@ -37,7 +37,7 @@ the daemon wasn't running, the last session per book is reconstructed on the
 next launch.
 
 The firmware keeps no session history — only a "last opened" and "last
-position" per book — so the time before you installed ReadTrack cannot be
+position" per book — so the time before you installed PocketBook Statistics cannot be
 recovered. Rather than pass guesses off as history, stats start at the install
 date and earlier days are drawn as unknown. Finished books are the exception:
 the firmware dates those, so they appear on the calendar even for days before
@@ -47,8 +47,8 @@ flag.
 ## Privacy
 
 Your reading data never leaves the device: no account, no telemetry, nothing
-uploaded. ReadTrack only **reads** the firmware database and writes its own
-files under `system/readtrack/`.
+uploaded. PocketBook Statistics only **reads** the firmware database and writes its own
+files under `system/pocketbook-statistics/`.
 
 The one request that goes out is to `api.github.com`, and only when you press
 *Check for update*. There is no background check and no other host is contacted.
@@ -57,20 +57,20 @@ The one request that goes out is to `api.github.com`, and only when you press
 
 1. Download the `.zip` from the [latest release](../../releases/latest) and
    unzip it.
-2. Copy `ReadTrack.app` to `applications/` on the reader over USB.
-3. Eject, open ReadTrack once, then reboot so the custom icon appears.
+2. Copy `PocketBookStatistics.app` to `applications/` on the reader over USB.
+3. Eject, open PocketBook Statistics once, then reboot so the custom icon appears.
 
 The tile is labelled in the reader's language ("Statistics", "Статистика",
 "Statistik", …). First launch installs the launcher icon by adding one entry to
 `system/config/desktop/view.json`, backed up next to it as
-`view.json.readtrack-backup`. If that file can't be touched, the app still runs
+`view.json.pbstatistics-backup`. If that file can't be touched, the app still runs
 with the default icon.
 
 **Updating:** *About* → *Check for update* does it on the device — downloads the
-release, swaps the binary and restarts. Copying a newer `ReadTrack.app` over the
+release, swaps the binary and restarts. Copying a newer `PocketBookStatistics.app` over the
 old one via USB works too. Your stats database is left alone either way.
 
-**Uninstall:** delete `applications/ReadTrack.app`, and restore `view.json` from
+**Uninstall:** delete `applications/PocketBookStatistics.app`, and restore `view.json` from
 the backup if you want the launcher entry gone.
 
 ## Data
@@ -79,13 +79,13 @@ the backup if you want the launcher entry gone.
 why, measured against Kobo, KOReader and Goodreads.
 [docs/DEVICE-DATA.md](docs/DEVICE-DATA.md) surveys everything the firmware
 stores that reading stats can be built from — the two databases, the cover
-cache, how they join — and what it does not store, which is why ReadTrack
+cache, how they join — and what it does not store, which is why PocketBook Statistics
 derives sessions itself.
 
 ## Building
 
 See [BUILDING.md](BUILDING.md): `make sdk` once, then `make qt` produces
-`build-qt/ReadTrack.app`. `make test` runs the host-side tests.
+`build-qt/PocketBookStatistics.app`. `make test` runs the host-side tests.
 
 ## License and credits
 

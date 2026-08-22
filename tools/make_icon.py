@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generates the PocketBook launcher icons (8-bit BMP) for ReadTrack.
+"""Generates the PocketBook launcher icons (8-bit BMP) for the app.
 Three rising bars, outlined. Black on white; the _f variant is inverted
 (the firmware's focused style).
 
@@ -69,8 +69,8 @@ def draw_icon(fg, bg):
 
 def main(outdir):
     os.makedirs(outdir, exist_ok=True)
-    draw_icon(fg=0, bg=255).save(os.path.join(outdir, "readtrack.bmp"))
-    draw_icon(fg=255, bg=0).save(os.path.join(outdir, "readtrack_f.bmp"))
+    draw_icon(fg=0, bg=255).save(os.path.join(outdir, "pocketbook-statistics.bmp"))
+    draw_icon(fg=255, bg=0).save(os.path.join(outdir, "pocketbook-statistics_f.bmp"))
     print("written:", outdir)
 
 

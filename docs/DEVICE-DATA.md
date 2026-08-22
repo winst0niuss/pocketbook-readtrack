@@ -18,13 +18,13 @@ half cannot be derived at all, no matter how the query is written.
 | Genres, series, language, publisher, publish year | `books.db` |
 | Bookmarks, highlights, quotes — with timestamps | `books.db` |
 | Covers the firmware already rendered | `cover_chache/hashed/` |
-| **How long anyone read, and on which days** | **nowhere — this is why ReadTrack exists** |
+| **How long anyone read, and on which days** | **nowhere — this is why PocketBook Statistics exists** |
 
 ## Sources, in order of usefulness
 
 ### 1. `system/explorer-3/explorer-3.db` — the library
 
-The Library app's own database, and the one ReadTrack already polls. Opened
+The Library app's own database, and the one PocketBook Statistics already polls. Opened
 **read-only, always** — it is the firmware's working state, and a write would be
 noticed.
 
@@ -65,7 +65,7 @@ state left behind does, and the three cases are worth keeping apart:
 So "deleted" splits into a real library of 78 books that were actually read and
 140 that were only ever indexed. Any count of "books I own" or "books I read"
 has to pick one of these deliberately — and note that a book deleted **before**
-ReadTrack was installed carries firmware timestamps only, which is exactly the
+PocketBook Statistics was installed carries firmware timestamps only, which is exactly the
 history our own sessions cannot vouch for.
 
 Two consequences worth designing around:
@@ -124,7 +124,7 @@ their equivalents live in `explorer-3.db`. A tag name is not a promise.
 Bookmark timestamps are the one genuinely dated activity the firmware keeps
 besides `completed_ts`: 39 of the 84 bookmarks here were created in one month.
 That is a real, if partial, record of reading days — and unlike our own
-sessions, it predates ReadTrack's installation.
+sessions, it predates PocketBook Statistics's installation.
 
 ### 3. Joining the two databases
 
@@ -155,7 +155,7 @@ system/cover_chache/hashed/<storageid><lower(hex(fast_hash))>.png
                            └─ "1" for internal storage
 ```
 
-ReadTrack already builds exactly this key (`tracker.c`), and prefers its own
+PocketBook Statistics already builds exactly this key (`tracker.c`), and prefers its own
 EPUB extraction because the cache holds the wrong image for some sideloaded
 books.
 
@@ -169,7 +169,7 @@ books.
 | `system/player-2/player-2.db` | music tracks | irrelevant |
 | `system/pbdicts/pbdicts.db` | 92 installed dictionaries | a catalogue, **not** a lookup history |
 | `system/browser.sqlite` | browser history | out of scope |
-| `system/config/desktop/view.json` | launcher entries | ReadTrack writes here (icon registration) |
+| `system/config/desktop/view.json` | launcher entries | PocketBook Statistics writes here (icon registration) |
 | `Notes/` | empty on this device | export target, not a store |
 
 ### 5. Third-party, if installed
@@ -185,7 +185,7 @@ page_stat_data(id_book, page, start_time, duration, total_pages)
 Per-page durations, so real reading time. On this device it holds 4 books and
 10 rows from two evenings in July 2026 — enough to prove the format, not enough
 to import. Worth knowing about as an optional source for people who use both;
-it is not something ReadTrack can rely on.
+it is not something PocketBook Statistics can rely on.
 
 ## What the firmware does not have
 
@@ -199,7 +199,7 @@ it is not something ReadTrack can rely on.
   bookmark `created` stamps are the only exceptions — everything else is a
   single "most recent" value.
 
-This is the whole reason ReadTrack runs a daemon: reading time has to be
+This is the whole reason PocketBook Statistics runs a daemon: reading time has to be
 *derived*, by polling `position_ts` every 30 seconds and turning the movement
 into sessions in our own database. See `src/tracker.c` and the invariants in
 `CLAUDE.md`.
@@ -219,7 +219,7 @@ already exists — no new tracking, no schema change on our side.
 | Shelf-based stats | `bookshelfs_books` | 1 shelf, 11 books here. |
 | Library growth over time | `books_impl.ts_added` | 102 of 223 rows have it. |
 | "Owned but never opened" | `books_impl` minus `books_settings` | 140 rows here, file present or not; mixed with indexed non-books, so filter by extension or hash presence. |
-| Books read but no longer on the device | `books_settings` where no `files` row | 78 here (26 of them finished) — invisible in the Library UI, and most of ReadTrack's own history points at them. |
+| Books read but no longer on the device | `books_settings` where no `files` row | 78 here (26 of them finished) — invisible in the Library UI, and most of PocketBook Statistics's own history points at them. |
 
 ## Rules for using any of it
 

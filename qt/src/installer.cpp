@@ -14,19 +14,23 @@ namespace {
 // The launcher resolves the app "path" as an absolute path, but the icon
 // paths relative to the storage root (/mnt/ext1). Mixing them is required:
 // an absolute icon path shows no icon, a relative app path won't launch.
-constexpr const char *kAppPath = "/mnt/ext1/applications/ReadTrack.app";
+constexpr const char *kAppPath =
+    "/mnt/ext1/applications/PocketBookStatistics.app";
 constexpr const char *kIconDir = "/mnt/ext1/applications/icons";
-constexpr const char *kIconRel = "applications/icons/readtrack.bmp";
-constexpr const char *kIconFocusedRel = "applications/icons/readtrack_f.bmp";
+constexpr const char *kIconRel =
+    "applications/icons/pocketbook-statistics.bmp";
+constexpr const char *kIconFocusedRel =
+    "applications/icons/pocketbook-statistics_f.bmp";
 // Absolute variants for writing the files to disk.
-constexpr const char *kIconPath = "/mnt/ext1/applications/icons/readtrack.bmp";
+constexpr const char *kIconPath =
+    "/mnt/ext1/applications/icons/pocketbook-statistics.bmp";
 constexpr const char *kIconFocusedPath =
-    "/mnt/ext1/applications/icons/readtrack_f.bmp";
+    "/mnt/ext1/applications/icons/pocketbook-statistics_f.bmp";
 constexpr const char *kViewJson =
     "/mnt/ext1/system/config/desktop/view.json";
 constexpr const char *kBackup =
-    "/mnt/ext1/system/config/desktop/view.json.readtrack-backup";
-constexpr const char *kAppId = "U_readtrack";
+    "/mnt/ext1/system/config/desktop/view.json.pbstatistics-backup";
+constexpr const char *kAppId = "U_pocketbook_statistics";
 
 /* The launcher label. Every other user-facing string comes from the QML
  * catalogs in qt/qml/i18n/, but this one is written into the firmware's config
@@ -113,17 +117,20 @@ void patchViewJson()
 
     QJsonObject root = doc.object();
     QJsonObject apps = root.value(QStringLiteral("applications")).toObject();
+    QJsonObject view = root.value(QStringLiteral("view")).toObject();
+    QJsonArray groups = view.value(QStringLiteral("groups")).toArray();
     const QString title = launcherTitle();
+    bool changed = false;
 
     if (apps.contains(QLatin1String(kAppId))) {
         // Registered already: the only thing that can still change is the
         // label, when the reader's language does.
         QJsonObject entry = apps.value(QLatin1String(kAppId)).toObject();
-        if (entry.value(QStringLiteral("title")).toString() == title)
-            return;
-        entry[QStringLiteral("title")] = title;
-        apps[QLatin1String(kAppId)] = entry;
-        root[QStringLiteral("applications")] = apps;
+        if (entry.value(QStringLiteral("title")).toString() != title) {
+            entry[QStringLiteral("title")] = title;
+            apps[QLatin1String(kAppId)] = entry;
+            changed = true;
+        }
     } else {
         // Back up the original once, before the first modification.
         if (!QFile::exists(QLatin1String(kBackup)))
@@ -140,21 +147,24 @@ void patchViewJson()
         entry[QStringLiteral("icon")] = icon;
         entry[QStringLiteral("focused_icon")] = iconFocused;
         apps[QLatin1String(kAppId)] = entry;
-        root[QStringLiteral("applications")] = apps;
 
         // Put the app id into the first launcher group so it shows up.
-        QJsonObject view = root.value(QStringLiteral("view")).toObject();
-        QJsonArray groups = view.value(QStringLiteral("groups")).toArray();
         if (!groups.isEmpty()) {
             QJsonObject g0 = groups.at(0).toObject();
             QJsonArray appList = g0.value(QStringLiteral("apps")).toArray();
             appList.append(QLatin1String(kAppId));
             g0[QStringLiteral("apps")] = appList;
             groups.replace(0, g0);
-            view[QStringLiteral("groups")] = groups;
-            root[QStringLiteral("view")] = view;
         }
+        changed = true;
     }
+
+    if (!changed)
+        return;
+
+    root[QStringLiteral("applications")] = apps;
+    view[QStringLiteral("groups")] = groups;
+    root[QStringLiteral("view")] = view;
 
     if (!f.open(QIODevice::WriteOnly | QIODevice::Truncate))
         return;
@@ -167,9 +177,9 @@ void patchViewJson()
 void ensureRegistered()
 {
     QDir().mkpath(QLatin1String(kIconDir));
-    writeResourceIfChanged(QStringLiteral(":/readtrack.bmp"),
+    writeResourceIfChanged(QStringLiteral(":/pocketbook-statistics.bmp"),
                            QLatin1String(kIconPath));
-    writeResourceIfChanged(QStringLiteral(":/readtrack_f.bmp"),
+    writeResourceIfChanged(QStringLiteral(":/pocketbook-statistics_f.bmp"),
                            QLatin1String(kIconFocusedPath));
     patchViewJson();
 }

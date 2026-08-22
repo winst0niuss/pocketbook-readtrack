@@ -32,7 +32,7 @@ import "i18n/tr.js" as LangTr
 import "i18n/uk.js" as LangUk
 
 /* Key-based localization. To add a language: copy a catalog in i18n/, list it
- * in readtrack.qrc, then add one import above and one row to the table below —
+ * in pocketbook-statistics.qrc, then add one import above and one row to the table below —
  * call sites never change. A key a catalog is missing falls back to English,
  * and so does a device language no catalog covers. The launcher tile's label
  * is the one string outside this system; see launcherTitle() in installer.cpp. */

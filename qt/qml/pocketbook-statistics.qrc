@@ -39,7 +39,7 @@
         <file>OverviewTab.qml</file>
         <file>CalendarTab.qml</file>
         <file>AboutTab.qml</file>
-        <file>readtrack.bmp</file>
-        <file>readtrack_f.bmp</file>
+        <file>pocketbook-statistics.bmp</file>
+        <file>pocketbook-statistics_f.bmp</file>
     </qresource>
 </RCC>

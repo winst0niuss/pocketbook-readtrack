@@ -17,13 +17,13 @@ static void on_term(int sig)
 
 const char *stats_db_path(void)
 {
-    const char *p = getenv("READTRACK_DB");
+    const char *p = getenv("POCKETBOOK_STATISTICS_DB");
     return p ? p : STATS_DB;
 }
 
 const char *explorer_db_path(void)
 {
-    const char *p = getenv("READTRACK_EXPLORER_DB");
+    const char *p = getenv("POCKETBOOK_STATISTICS_EXPLORER_DB");
     return p ? p : EXPLORER_DB;
 }
 

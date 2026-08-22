@@ -1,17 +1,17 @@
 cmake_minimum_required(VERSION 3.21)
-project(readtrack CXX C)
+project(pocketbook-statistics CXX C)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # The version the update check compares against the latest GitHub release tag.
 # A release tag must match this file — CI enforces that on tag builds.
-file(READ "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" READTRACK_VERSION)
-string(STRIP "${READTRACK_VERSION}" READTRACK_VERSION)
+file(READ "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" APP_VERSION)
+string(STRIP "${APP_VERSION}" APP_VERSION)
 
 add_subdirectory(third_party/pocketbook-sdk-qt6)
 
-pocketbook_add_app(ReadTrack
+pocketbook_add_app(PocketBookStatistics
   SOURCES
     qt/src/main.cpp
     qt/src/inkview_bridge.cpp
@@ -26,11 +26,11 @@ pocketbook_add_app(ReadTrack
     src/version.c
     qt/third_party/sqlite3.c
     qt/third_party/miniz.c
-  QRC qt/qml/readtrack.qrc
+  QRC qt/qml/pocketbook-statistics.qrc
 )
 
-target_include_directories(ReadTrack PRIVATE qt/third_party src qt/src)
-target_compile_definitions(ReadTrack PRIVATE
+target_include_directories(PocketBookStatistics PRIVATE qt/third_party src qt/src)
+target_compile_definitions(PocketBookStatistics PRIVATE
   SQLITE_OMIT_LOAD_EXTENSION SQLITE_THREADSAFE=1
-  READTRACK_VERSION="${READTRACK_VERSION}")
-target_link_libraries(ReadTrack PRIVATE m pthread dl)
+  APP_VERSION="${APP_VERSION}")
+target_link_libraries(PocketBookStatistics PRIVATE m pthread dl)
