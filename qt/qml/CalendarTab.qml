@@ -195,10 +195,17 @@ Item {
                 readonly property bool untracked:
                     cell.day < (tab.m.trackedFromDay || 0)
 
-                x: (cellIdx % 7) * grid.cw
-                y: Math.floor(cellIdx / 7) * grid.ch
-                width: grid.cw
-                height: grid.ch
+                /* Rounded, so the grid reads as a row of tiles rather than a
+                 * table. That needs the cells apart: butted together, their
+                 * corners would leave a pinhole at every crossing, which on
+                 * e-ink looks like dirt on the screen. */
+                readonly property real inset: Global.dp(1.5)
+
+                x: (cellIdx % 7) * grid.cw + inset
+                y: Math.floor(cellIdx / 7) * grid.ch + inset
+                width: grid.cw - 2 * inset
+                height: grid.ch - 2 * inset
+                radius: GlobalValues.defaultElementBorderRadius
                 color: "transparent"
                 border.width: 1
                 border.color: GlobalValues.defaultBorderColor
@@ -238,6 +245,7 @@ Item {
                     Rectangle {
                         visible: !coverImg.visible
                         anchors.fill: parent
+                        radius: GlobalValues.defaultElementBorderRadius
                         color: "transparent"
                         border.width: 1
                         border.color: GlobalValues.defaultBorderColor
