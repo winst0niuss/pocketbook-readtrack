@@ -42,7 +42,7 @@ Item {
      * margin, because it starts the row. */
     readonly property real statWidth: Math.max(Global.dp(60),
         (width - sideMargin - donutSize - captionWidth
-         - 6 * gap - 2 * hairline) / 2)
+         - 5 * gap - 2 * hairline) / 2)
 
     Column {
         id: head
@@ -200,10 +200,11 @@ Item {
 
         Row {
             width: parent.width
-            /* No spacing: a gap added between cells lands outside them, so the
-             * figure ends up nearer its left divider than its right one — 84 px
-             * against 103 px on a PB629. Each cell pads itself on both sides
-             * instead. */
+            /* No spacing between the cells: a gap added from outside belongs
+             * to neither of them, and the figure ends up nearer its left
+             * divider than its right one — 84 px against 103 px on a PB629.
+             * Each cell pads itself on both sides instead, which brings it to
+             * 94 and 92. The ring keeps its own inner spacing. */
             spacing: 0
 
             // The ring and the sentence that explains it are one cell: the
@@ -287,9 +288,6 @@ Item {
                     text: Tr.t("overview.donutCaption")
                     wrapMode: Text.Wrap
                 }
-
-                // The padding the row no longer adds.
-                Item { width: tab.gap; height: 1 }
             }
 
             Repeater {
