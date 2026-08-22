@@ -15,7 +15,7 @@ APP='/mnt/ext1/applications/PocketBookStatistics.app'
 PIDFILE='/mnt/ext1/system/pocketbook-statistics/statistics.pid'
 LOG='/mnt/ext1/system/pocketbook-statistics/open.log'
 SYS_EXT='/ebrmain/config/extensions.cfg'
-START_DELAY=10
+START_DELAY=45
 
 log() {
     echo "$(date '+%m-%d %H:%M:%S') $*" >>"$LOG" 2>/dev/null
