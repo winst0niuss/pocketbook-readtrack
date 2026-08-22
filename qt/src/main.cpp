@@ -7,6 +7,7 @@ extern "C" {
 
 #include <QByteArray>
 #include <QDateTime>
+#include <QDir>
 #include <QFile>
 #include <QFont>
 #include <QGuiApplication>
@@ -109,6 +110,18 @@ int main(int argc, char *argv[])
     // Register the launcher icon on first run (idempotent, no-op afterwards).
     ensureRegistered();
     mark("registered");
+
+    /* Compiling the QML takes ~3 s of the 3.5 s this app needs to appear, and
+     * it happens on every launch: Qt disk-caches compiled QML, but not when it
+     * comes out of a resource — there it assumes reading is already cheap and
+     * skips the cache. On this hardware that assumption is wrong, so force it
+     * on and point it at our own directory (the default lives under a HOME
+     * this firmware may not give us). A cache that does not match the engine
+     * or the source is discarded and rebuilt, so the worst case is the speed
+     * we have now. */
+    QDir().mkpath(QStringLiteral(STATS_DIR "/qmlcache"));
+    qputenv("QML_DISK_CACHE_PATH", STATS_DIR "/qmlcache");
+    qputenv("QML_FORCE_DISK_CACHE", "1");
 
     QQuickWindow::setGraphicsApi(QSGRendererInterface::Software);
 
