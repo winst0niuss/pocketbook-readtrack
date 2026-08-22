@@ -2,6 +2,7 @@
 
 #include <QDate>
 #include <QDateTime>
+#include <QDir>
 #include <QFile>
 #include <QHash>
 #include <QRegularExpression>
@@ -31,14 +32,10 @@ StatsBridge::~StatsBridge()
 
 namespace {
 
-QString coverUrlFor(const QString &cover)
-{
-    if (cover.isEmpty())
-        return QString();
-    QString path = QStringLiteral(COVER_DIR "/%1.png").arg(cover);
-    return QFile::exists(path) ? QUrl::fromLocalFile(path).toString()
-                               : QString();
-}
+/* Cover for the key stored in our own books table. Rows written before v0.7
+ * hold <storageid><hash>; newer ones hold the bare hash, because the storage
+ * id came from files and vanished with the file. */
+QString coverUrlForKey(sqlite3 *expdb, const QString &key);
 
 sqlite3 *openExplorer()
 {
@@ -53,53 +50,132 @@ sqlite3 *openExplorer()
     return db;
 }
 
-/* Cover for a title: first extract from the EPUB (the firmware cache holds
- * ad pages instead of the cover for some Calibre books), else fall back to
- * the firmware cache. Returns a file:// URL, or empty. */
+/* The firmware names its cover files <storageid><hash>.png, and the same book
+ * can be indexed on several storages (internal, cloud, SD). */
+QList<int> storageIds(sqlite3 *expdb)
+{
+    QList<int> ids;
+    sqlite3_stmt *st = nullptr;
+    if (sqlite3_prepare_v2(expdb, "SELECT id FROM storages ORDER BY id", -1,
+                           &st, nullptr) == SQLITE_OK) {
+        while (sqlite3_step(st) == SQLITE_ROW)
+            ids.append(sqlite3_column_int(st, 0));
+    }
+    sqlite3_finalize(st);
+    if (ids.isEmpty())
+        ids << 1; /* internal storage, the only one that always exists */
+    return ids;
+}
+
+/* Copies a firmware cover into our own cache under "fw_<hash>". Kept apart
+ * from the EPUB extraction's key so a book whose file is still around can
+ * later be upgraded to the better image, and kept at all because the firmware
+ * drops its cache entry when the book is deleted — this copy is what a
+ * finished-and-deleted book has left. */
+QString adoptedCover(const QString &hash, const QList<int> &storages)
+{
+    if (hash.isEmpty())
+        return QString();
+    const QString mine =
+        QStringLiteral(OWN_COVER_DIR "/fw_%1.png").arg(hash);
+    if (QFile::exists(mine))
+        return QUrl::fromLocalFile(mine).toString();
+
+    for (int storage : storages) {
+        const QString source =
+            QStringLiteral(COVER_DIR "/%1%2.png").arg(storage).arg(hash);
+        if (!QFile::exists(source))
+            continue;
+        QDir().mkpath(QLatin1String(OWN_COVER_DIR));
+        if (QFile::copy(source, mine))
+            return QUrl::fromLocalFile(mine).toString();
+        return QUrl::fromLocalFile(source).toString(); /* copy failed, show it anyway */
+    }
+    return QString();
+}
+
+QString coverUrlForKey(sqlite3 *expdb, const QString &key)
+{
+    if (key.isEmpty())
+        return QString();
+    const QString hash = key.size() == 33 ? key.mid(1) : key;
+    const QString cached = epubCover(QString(), hash);
+    if (!cached.isEmpty())
+        return QUrl::fromLocalFile(cached).toString();
+    return expdb ? adoptedCover(hash, storageIds(expdb)) : QString();
+}
+
+/* Cover for a title, in the order that survives the book being deleted:
+ *   1. our own cache, written by any earlier lookup — outlives everything;
+ *   2. the EPUB itself, the best image, but only while the file is there
+ *      (the firmware cache holds ad pages instead of the cover for some
+ *      Calibre books, so it never wins over an extraction);
+ *   3. the firmware's cache, copied into ours on the way out.
+ *
+ * The hash comes from books_fast_hashes, not from files: files only lists what
+ * is physically present, which on a well-used reader is a handful of books out
+ * of hundreds, and every deleted book would fall through to a bare letter. */
 QString resolveCoverUrl(sqlite3 *expdb, const QString &title)
 {
     if (!expdb || title.isEmpty())
         return QString();
     const char *sql =
-        "SELECT IFNULL(fo.name,'') || '/' || f.filename,"
-        " lower(hex(f.fast_hash)), f.storageid || lower(hex(f.fast_hash))"
-        " FROM books_impl b JOIN files f ON f.book_id = b.id"
+        "SELECT lower(hex(h.fast_hash)),"
+        " IFNULL(fo.name,'') || '/' || IFNULL(f.filename,'')"
+        " FROM books_impl b"
+        " JOIN books_fast_hashes h ON h.book_id = b.id"
+        " LEFT JOIN files f ON f.book_id = b.id"
         " LEFT JOIN folders fo ON fo.id = f.folder_id"
         " WHERE lower(trim(b.title)) = lower(trim(?1))"
-        " ORDER BY f.modification_time DESC, f.storageid ASC";
+        " ORDER BY (f.filename IS NOT NULL) DESC, f.modification_time DESC,"
+        "          f.storageid ASC";
     sqlite3_stmt *st = nullptr;
     if (sqlite3_prepare_v2(expdb, sql, -1, &st, nullptr) != SQLITE_OK)
         return QString();
     sqlite3_bind_text(st, 1, title.toUtf8().constData(), -1, SQLITE_TRANSIENT);
 
-    QString result;
-    QStringList cacheCandidates;
-    while (sqlite3_step(st) == SQLITE_ROW && result.isEmpty()) {
-        const QString path = QString::fromUtf8(
+    struct Candidate { QString hash, path; };
+    QList<Candidate> candidates;
+    while (sqlite3_step(st) == SQLITE_ROW) {
+        Candidate c;
+        c.hash = QString::fromUtf8(
             reinterpret_cast<const char *>(sqlite3_column_text(st, 0)));
-        const QString key = QString::fromUtf8(
+        c.path = QString::fromUtf8(
             reinterpret_cast<const char *>(sqlite3_column_text(st, 1)));
-        cacheCandidates.append(QString::fromUtf8(
-            reinterpret_cast<const char *>(sqlite3_column_text(st, 2))));
-        const QString extracted = epubCover(path, key);
-        if (!extracted.isEmpty())
-            result = QUrl::fromLocalFile(extracted).toString();
+        if (c.path.endsWith(QLatin1Char('/')))
+            c.path.clear(); /* no files row: the join left an empty filename */
+        candidates.append(c);
     }
     sqlite3_finalize(st);
 
-    if (result.isEmpty()) {
-        for (const QString &c : cacheCandidates) {
-            const QString url = coverUrlFor(c);
-            if (!url.isEmpty())
-                return url;
-        }
+    /* 1. anything we cached earlier, extraction or adoption */
+    for (const Candidate &c : candidates) {
+        const QString cached = epubCover(QString(), c.hash);
+        if (!cached.isEmpty())
+            return QUrl::fromLocalFile(cached).toString();
     }
-    return result;
+    /* 2. the file itself */
+    for (const Candidate &c : candidates) {
+        if (c.path.isEmpty())
+            continue;
+        const QString extracted = epubCover(c.path, c.hash);
+        if (!extracted.isEmpty())
+            return QUrl::fromLocalFile(extracted).toString();
+    }
+    /* 3. the firmware cache, adopted into ours */
+    const QList<int> storages = storageIds(expdb);
+    for (const Candidate &c : candidates) {
+        const QString adopted = adoptedCover(c.hash, storages);
+        if (!adopted.isEmpty())
+            return adopted;
+    }
+    return QString();
 }
 
 struct FinishedBook {
     QDate day;
     QString title;
+    QString author;
     QString coverUrl;
     QStringList words; /* normalized title, for the dedupe below */
     bool hasFile = false;
@@ -139,7 +215,8 @@ QList<FinishedBook> finishedBooks(bool withCovers)
      * after delete/re-add, so the merge below folds them together. */
     const char *sql =
         "SELECT date(s.completed_ts,'unixepoch','localtime'), IFNULL(b.title,'?'),"
-        " EXISTS(SELECT 1 FROM files f WHERE f.book_id = b.id)"
+        " EXISTS(SELECT 1 FROM files f WHERE f.book_id = b.id),"
+        " IFNULL(b.author,'')"
         " FROM books_settings s JOIN books_impl b ON b.id = s.bookid"
         " WHERE s.completed = 1 AND s.completed_ts > 0"
         " ORDER BY s.completed_ts";
@@ -155,6 +232,8 @@ QList<FinishedBook> finishedBooks(bool withCovers)
             const QString title = QString::fromUtf8(
                 reinterpret_cast<const char *>(sqlite3_column_text(st, 1)));
             const bool hasFile = sqlite3_column_int(st, 2) != 0;
+            const QString author = QString::fromUtf8(
+                reinterpret_cast<const char *>(sqlite3_column_text(st, 3)));
             const QStringList words = titleWords(title);
 
             int at = -1;
@@ -165,6 +244,7 @@ QList<FinishedBook> finishedBooks(bool withCovers)
                 FinishedBook fb;
                 fb.day = day; /* first row of a group = first finish date */
                 fb.title = title;
+                fb.author = author;
                 fb.words = words;
                 fb.hasFile = hasFile;
                 out.append(fb);
@@ -174,6 +254,8 @@ QList<FinishedBook> finishedBooks(bool withCovers)
                 out[at].title = title;
                 out[at].words = words;
                 out[at].hasFile = true;
+                if (!author.isEmpty())
+                    out[at].author = author;
             }
         }
     }
@@ -245,8 +327,12 @@ QVariantMap StatsBridge::currentBook()
         coverUrl = resolveCoverUrl(exp, QString::fromUtf8(s.title));
         sqlite3_close(exp);
     }
-    if (coverUrl.isEmpty())
-        coverUrl = coverUrlFor(QString::fromUtf8(s.cover));
+    if (coverUrl.isEmpty()) {
+        if (sqlite3 *exp = openExplorer()) {
+            coverUrl = coverUrlForKey(exp, QString::fromUtf8(s.cover));
+            sqlite3_close(exp);
+        }
+    }
     m[QStringLiteral("coverUrl")] = coverUrl;
 
     int64_t bsecs = 0;
@@ -368,8 +454,13 @@ QVariantMap StatsBridge::yearBooks(int y)
             continue;
         QVariantMap b;
         b[QStringLiteral("title")] = fb.title;
+        b[QStringLiteral("author")] = fb.author;
         b[QStringLiteral("coverUrl")] = fb.coverUrl;
         b[QStringLiteral("dateStr")] = fb.day.toString(QStringLiteral("dd.MM."));
+        /* The book card can be reached without the month heading that gives
+         * the short date its year, so it carries the full one. */
+        b[QStringLiteral("dateFull")] =
+            fb.day.toString(QStringLiteral("dd.MM.yyyy"));
         perMonth[fb.day.month()].append(b);
         total++;
     }
@@ -397,7 +488,8 @@ QVariantMap StatsBridge::month(int year, int mon)
      * copies and would otherwise appear twice. */
     const char *sql =
         "SELECT CAST(strftime('%d', s.end_time,'unixepoch','localtime') AS INTEGER),"
-        " MIN(IFNULL(b.title,'?')), MAX(IFNULL(b.cover,'')), SUM(s.active_seconds)"
+        " MIN(IFNULL(b.title,'?')), MAX(IFNULL(b.cover,'')), SUM(s.active_seconds),"
+        " MAX(IFNULL(b.author,''))"
         " FROM sessions s LEFT JOIN books b ON b.book_id = s.book_id"
         " WHERE strftime('%Y-%m', s.end_time,'unixepoch','localtime')"
         "   = printf('%04d-%02d',?1,?2)"
@@ -424,10 +516,12 @@ QVariantMap StatsBridge::month(int year, int mon)
             if (!coverCache.contains(title)) {
                 QString url = resolveCoverUrl(exp, title);
                 if (url.isEmpty())
-                    url = coverUrlFor(cover);
+                    url = coverUrlForKey(exp, cover);
                 coverCache.insert(title, url);
             }
             b[QStringLiteral("coverUrl")] = coverCache.value(title);
+            b[QStringLiteral("author")] = QString::fromUtf8(
+                reinterpret_cast<const char *>(sqlite3_column_text(st, 4)));
             qlonglong secs = sqlite3_column_int64(st, 3);
             b[QStringLiteral("secs")] = secs;
             perDay[d].append(b);
@@ -437,6 +531,57 @@ QVariantMap StatsBridge::month(int year, int mon)
     sqlite3_finalize(st);
     if (exp)
         sqlite3_close(exp);
+
+    /* Finish dates come from the firmware, so they belong on the calendar even
+     * for days before tracking started — the same exception the year heatmap
+     * makes. They carry no reading time: the firmware dates the finish, it
+     * does not say how long the day's reading was. */
+    const QList<FinishedBook> finished = finishedBooks(true);
+    for (const FinishedBook &fb : finished) {
+        if (fb.day.year() != year || fb.day.month() != mon)
+            continue;
+        const int d = fb.day.day();
+        if (d < 1 || d > ndays)
+            continue;
+
+        bool merged = false;
+        for (QVariant &entry : perDay[d]) {
+            QVariantMap b = entry.toMap();
+            if (!sameBook(titleWords(b.value(QStringLiteral("title")).toString()),
+                          fb.words))
+                continue;
+            b[QStringLiteral("finished")] = true;
+            entry = b;
+            merged = true;
+            break;
+        }
+        if (merged)
+            continue;
+
+        QVariantMap b;
+        b[QStringLiteral("title")] = fb.title;
+        b[QStringLiteral("author")] = fb.author;
+        b[QStringLiteral("coverUrl")] = fb.coverUrl;
+        b[QStringLiteral("secs")] = 0;
+        b[QStringLiteral("finished")] = true;
+        perDay[d].append(b);
+    }
+
+    /* Days before the app was installed hold no measurement. The tab draws
+     * them as unknown rather than as days without reading. */
+    const qint64 since = stats_tracking_since(db_);
+    const QDate sinceDate = since > 0
+        ? QDateTime::fromSecsSinceEpoch(since).date() : QDate();
+    int trackedFromDay = 0;
+    if (sinceDate.isValid()) {
+        if (sinceDate > first.addDays(ndays - 1))
+            trackedFromDay = ndays + 1; /* the whole month predates tracking */
+        else if (sinceDate > first)
+            trackedFromDay = sinceDate.day();
+    }
+    m[QStringLiteral("trackedFromDay")] = trackedFromDay;
+    m[QStringLiteral("trackingSince")] = sinceDate.isValid()
+        ? sinceDate.toString(QStringLiteral("dd.MM.yyyy")) : QString();
 
     QVariantList days;
     for (int d = 1; d <= ndays; d++) {

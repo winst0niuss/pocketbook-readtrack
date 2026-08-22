@@ -54,9 +54,15 @@ Item {
         Item { width: 1; height: Global.dp(24) }
 
         StyledText {
-            styledFont: FontStyles.Heading2
+            width: parent.width
+            // Heading3, not Heading2: the repository name is long enough that
+            // the larger size runs off a 758 px screen.
+            styledFont: FontStyles.Heading3
             color: GlobalValues.defaultTextColor
-            text: "ReadTrack"
+            // The repository name: this is where an update comes from, so it
+            // is the name worth showing next to the version.
+            text: "pocketbook-readtrack"
+            elide: Text.ElideRight
         }
 
         StyledText {

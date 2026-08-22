@@ -42,9 +42,11 @@ var strings = {
     "streak.legendFinished": "книга дочитана",
 
     "calendar.dayTitle": "{date}  ·  {time}",
+    "calendar.finished": "Дочитано",
 
     "year.title": "Книг прочитано за {year}",
     "year.monthTitle": "{month} {year}  ·  {n} {books}",
+    "book.finishedOn": "Дочитано {date}",
 
     "about.version": "Версия {version}",
     "about.check": "Проверить обновление",

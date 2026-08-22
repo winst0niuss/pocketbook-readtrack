@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Generates the PocketBook launcher icons (8-bit BMP) for ReadTrack.
-Minimal: an open book + rising bars. Black on white; the _f variant is
-inverted (the firmware's focused style).
+Three rising bars, outlined. Black on white; the _f variant is inverted
+(the firmware's focused style).
 
 Two independent things have to be right here:
 
@@ -31,22 +31,16 @@ SS = 8  # supersampling for smooth edges
 
 GRID = 48       # unit grid the glyph below is described in
 GLYPH = 56      # how many canvas pixels that grid spans, ~ the stock glyph size
-STROKE = 3      # outline weight in canvas pixels, deliberately not scaled
-BAR_STROKE = 2
+BAR_STROKE = 2  # outline weight in canvas pixels, deliberately not scaled
 
 # Bars: outlined like everything else the launcher shows. The stock icons are
 # pure line art, so a filled block reads as far heavier than its neighbours
-# even at the right size.
-BAR_W = 8
-BAR_GAP = 3
-BAR_HEIGHTS = [10, 17, 25]
-BAR_BASE = 26
-
-# Open book below the bars.
-BOOK_TOP = 30
-BOOK_BOT = 46
-BOOK_SIDE = 2   # margin left and right
-BOOK_LIFT = 4   # how far the outer corners drop below the spine
+# even at the right size. Sized to sit centred on the 48 unit grid: 38 wide,
+# and 6..42 vertically, so the glyph's midpoint is the grid's.
+BAR_W = 10
+BAR_GAP = 4
+BAR_HEIGHTS = [16, 26, 36]
+BAR_BASE = 42
 
 def draw_icon(fg, bg):
     k = GLYPH / GRID            # grid unit -> canvas pixel
@@ -59,28 +53,15 @@ def draw_icon(fg, bg):
         """Grid coordinate -> supersampled canvas coordinate."""
         return ((ox + x * k) * SS, (oy + y * k) * SS)
 
-    def line(p0, p1, weight=STROKE):
-        d.line([px(*p0), px(*p1)], fill=fg, width=weight * SS)
-
     def box(x0, y0, x1, y1, weight):
         d.rectangle([px(x0, y0), px(x1, y1)], outline=fg, width=weight * SS)
 
-    # --- rising bars (stats) ---
+    # --- rising bars ---
     total = len(BAR_HEIGHTS) * BAR_W + (len(BAR_HEIGHTS) - 1) * BAR_GAP
     x = (GRID - total) / 2.0
     for bh in BAR_HEIGHTS:
         box(x, BAR_BASE - bh, x + BAR_W, BAR_BASE, BAR_STROKE)
         x += BAR_W + BAR_GAP
-
-    # --- open book: two pages rising toward the spine ---
-    cx = GRID / 2.0
-    left, right = BOOK_SIDE, GRID - BOOK_SIDE
-    top, bot = BOOK_TOP, BOOK_BOT
-    for outer in (left, right):
-        line((outer, top + BOOK_LIFT), (cx, top))
-        line((outer, top + BOOK_LIFT), (outer, bot))
-        line((outer, bot), (cx, bot - BOOK_LIFT))
-    line((cx, top), (cx, bot - BOOK_LIFT))
 
     im = im.resize((W, H), Image.LANCZOS)
     return im.convert("P", palette=Image.ADAPTIVE, colors=16)

@@ -56,7 +56,8 @@ The one request that goes out is to `api.github.com`, and only when you press
 2. Copy `ReadTrack.app` to `applications/` on the reader over USB.
 3. Eject, open ReadTrack once, then reboot so the custom icon appears.
 
-First launch installs the launcher icon by adding one entry to
+The tile is labelled in the reader's language ("Statistics", "Статистика",
+"Statistik"). First launch installs the launcher icon by adding one entry to
 `system/config/desktop/view.json`, backed up next to it as
 `view.json.readtrack-backup`. If that file can't be touched, the app still runs
 with the default icon.
@@ -67,6 +68,13 @@ old one via USB works too. Your stats database is left alone either way.
 
 **Uninstall:** delete `applications/ReadTrack.app`, and restore `view.json` from
 the backup if you want the launcher entry gone.
+
+## Data
+
+[docs/DEVICE-DATA.md](docs/DEVICE-DATA.md) surveys everything the firmware
+stores that reading stats can be built from — the two databases, the cover
+cache, how they join — and what it does not store, which is why ReadTrack
+derives sessions itself.
 
 ## Building
 

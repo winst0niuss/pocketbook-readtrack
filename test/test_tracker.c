@@ -28,11 +28,13 @@ static sqlite3 *make_explorer(void)
     assert(sqlite3_open(EXP_DB, &db) == SQLITE_OK);
     ex(db, "CREATE TABLE books_impl (id INTEGER PRIMARY KEY, title TEXT, author TEXT);"
            "CREATE TABLE files (book_id INTEGER, storageid INTEGER, fast_hash BLOB);"
+           "CREATE TABLE books_fast_hashes (fast_hash BLOB PRIMARY KEY, book_id INTEGER);"
            "CREATE TABLE books_settings (bookid INTEGER, profileid INTEGER,"
            " position TEXT, position_ts INTEGER, cpage INTEGER, npage INTEGER,"
            " opentime INTEGER, completed INTEGER);");
     ex(db, "INSERT INTO books_impl VALUES (7,'Testbuch','Autorin');"
            "INSERT INTO files VALUES (7,1,x'aabb');"
+           "INSERT INTO books_fast_hashes VALUES (x'aabb',7);"
            "INSERT INTO books_settings VALUES (7,1,'p',1000,10,300,1000,0);");
     return db;
 }
@@ -97,7 +99,15 @@ int main(void)
     assert(tracker_read_state(EXP_DB, &s) == 0);
     assert(s.bookid == 7 && s.opentime == 1000 && s.cpage == 10);
     assert(strcmp(s.title, "Testbuch") == 0);
-    assert(strcmp(s.cover, "1aabb") == 0);
+    assert(strcmp(s.cover, "aabb") == 0);
+
+    /* The cover key must outlive the file: a finished book is usually deleted,
+     * and the key is all that can still find a thumbnail for it. */
+    ex(exp, "DELETE FROM files WHERE book_id = 7");
+    pb_state deleted;
+    assert(tracker_read_state(EXP_DB, &deleted) == 0);
+    assert(strcmp(deleted.cover, "aabb") == 0);
+    ex(exp, "INSERT INTO files VALUES (7,1,x'aabb')");
 
     /* New session observed: active = pos-open (0 here), pages_start = cpage */
     assert(tracker_observe(&t, &s) == 1);

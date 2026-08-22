@@ -207,6 +207,15 @@ Item {
                         width: Global.dp(100)
                         height: Global.dp(150)
 
+                        MouseArea {
+                            anchors.fill: parent
+                            z: 1
+                            onClicked: bookDialog.show(
+                                modelData,
+                                Tr.t("book.finishedOn",
+                                     { date: modelData.dateFull || "" }))
+                        }
+
                         Image {
                             id: dlgCover
                             anchors.fill: parent
@@ -241,4 +250,7 @@ Item {
             }
         }
     }
+
+    // Opened from a cover in the month dialog, so it must sit above it.
+    BookDialog { id: bookDialog }
 }

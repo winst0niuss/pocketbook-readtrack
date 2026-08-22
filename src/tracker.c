@@ -1,9 +1,12 @@
 #include "tracker.h"
+#include "daemon.h"
 #define STR_(x) #x
 #define STR(x) STR_(x)
 #include <stdio.h>
 #include <string.h>
+#include <sys/stat.h>
 #include <time.h>
+#include <unistd.h>
 
 static const char *SCHEMA =
     "CREATE TABLE IF NOT EXISTS sessions ("
@@ -81,15 +84,42 @@ static sqlite3 *open_explorer(const char *path)
     return db;
 }
 
-static const char *STATE_SQL =
-    "SELECT s.bookid, s.opentime, s.position_ts,"
-    "  IFNULL(s.cpage,0), IFNULL(s.npage,0), IFNULL(s.completed,0),"
+#define STATE_COLUMNS \
+    "SELECT s.bookid, s.opentime, s.position_ts," \
+    "  IFNULL(s.cpage,0), IFNULL(s.npage,0), IFNULL(s.completed,0)," \
     "  IFNULL(b.title,''), IFNULL(b.author,''),"
-    "  IFNULL((SELECT f.storageid || lower(hex(f.fast_hash)) FROM files f"
-    "          WHERE f.book_id = s.bookid ORDER BY f.storageid LIMIT 1), '')"
-    " FROM books_settings s JOIN books_impl b ON b.id = s.bookid"
+#define STATE_SOURCE \
+    " FROM books_settings s JOIN books_impl b ON b.id = s.bookid" \
     " WHERE s.opentime > 0 AND s.position_ts > 0"
-    " ORDER BY s.opentime DESC LIMIT 1";
+
+/* The cover key is the bare file hash. It comes from books_fast_hashes, which
+ * has a row for every book the library ever indexed — files only lists what is
+ * still on disk, so a deleted book would lose its key and with it any chance
+ * of ever showing a thumbnail again. */
+#define COVER_FROM_HASHES \
+    "  IFNULL((SELECT lower(hex(h.fast_hash)) FROM books_fast_hashes h" \
+    "          WHERE h.book_id = s.bookid LIMIT 1), '')"
+/* Older explorer-3 schemas have no such table; losing tracking over a cover
+ * key would be a poor trade, so those fall back to the file's own hash. */
+#define COVER_FROM_FILES \
+    "  IFNULL((SELECT lower(hex(f.fast_hash)) FROM files f" \
+    "          WHERE f.book_id = s.bookid ORDER BY f.storageid LIMIT 1), '')"
+
+static const char *STATE_SQL =
+    STATE_COLUMNS COVER_FROM_HASHES STATE_SOURCE " ORDER BY s.opentime DESC LIMIT 1";
+static const char *STATE_SQL_LEGACY =
+    STATE_COLUMNS COVER_FROM_FILES STATE_SOURCE " ORDER BY s.opentime DESC LIMIT 1";
+static const char *RECOVER_SQL = STATE_COLUMNS COVER_FROM_HASHES STATE_SOURCE;
+static const char *RECOVER_SQL_LEGACY = STATE_COLUMNS COVER_FROM_FILES STATE_SOURCE;
+
+/* Prepares the first statement the schema accepts. */
+static int prepare_supported(sqlite3 *db, const char *sql, const char *legacy,
+                             sqlite3_stmt **st)
+{
+    if (sqlite3_prepare_v2(db, sql, -1, st, NULL) == SQLITE_OK)
+        return 0;
+    return sqlite3_prepare_v2(db, legacy, -1, st, NULL) == SQLITE_OK ? 0 : -1;
+}
 
 static void fill_state(sqlite3_stmt *st, pb_state *out)
 {
@@ -112,7 +142,7 @@ int tracker_read_state(const char *explorer_path, pb_state *out)
         return -1;
     sqlite3_stmt *st = NULL;
     int rc = 1;
-    if (sqlite3_prepare_v2(db, STATE_SQL, -1, &st, NULL) == SQLITE_OK) {
+    if (prepare_supported(db, STATE_SQL, STATE_SQL_LEGACY, &st) == 0) {
         if (sqlite3_step(st) == SQLITE_ROW) {
             fill_state(st, out);
             rc = 0;
@@ -123,6 +153,66 @@ int tracker_read_state(const char *explorer_path, pb_state *out)
     sqlite3_finalize(st);
     sqlite3_close(db);
     return rc;
+}
+
+static int file_exists(const char *path)
+{
+    struct stat sb;
+    return stat(path, &sb) == 0;
+}
+
+/* Copies the firmware's cover into our own cache the first time a book is
+ * seen. Both halves of that matter: the firmware drops its cache entry when
+ * the book is deleted, and a finished book is usually deleted soon after — so
+ * this copy, taken while the book is still here, is the only thumbnail a
+ * finished book will still have next year.
+ *
+ * Runs in the poll path, so it allocates nothing and does nothing at all once
+ * the copy exists. */
+static void adopt_cover(const char *hash)
+{
+    if (!hash || !*hash)
+        return;
+
+    char dest[256];
+    snprintf(dest, sizeof(dest), OWN_COVER_DIR "/fw_%s.png", hash);
+    if (file_exists(dest))
+        return;
+
+    /* The firmware prefixes the file with the storage the book sits on. */
+    char src[256];
+    int found = 0;
+    for (int storage = 1; storage <= 4 && !found; storage++) {
+        snprintf(src, sizeof(src), COVER_DIR "/%d%s.png", storage, hash);
+        found = file_exists(src);
+    }
+    if (!found)
+        return;
+
+    mkdir(OWN_COVER_DIR, 0755);
+    FILE *in = fopen(src, "rb");
+    if (!in)
+        return;
+    FILE *out = fopen(dest, "wb");
+    if (!out) {
+        fclose(in);
+        return;
+    }
+
+    char buf[8192];
+    size_t n;
+    int ok = 1;
+    while ((n = fread(buf, 1, sizeof(buf), in)) > 0) {
+        if (fwrite(buf, 1, n, out) != n) {
+            ok = 0;
+            break;
+        }
+    }
+    fclose(in);
+    if (fclose(out) != 0)
+        ok = 0;
+    if (!ok)
+        unlink(dest); /* half a PNG is worse than none */
 }
 
 static void upsert_book(tracker *t, const pb_state *s)
@@ -145,6 +235,7 @@ static void upsert_book(tracker *t, const pb_state *s)
     sqlite3_bind_int64(st, 8, s->position_ts);
     sqlite3_step(st);
     sqlite3_finalize(st);
+    adopt_cover(s->cover);
 }
 
 /* pages_end of this book's last earlier session, -1 if none. */
@@ -231,16 +322,8 @@ int tracker_recover(tracker *t)
     sqlite3 *db = open_explorer(t->explorer_path);
     if (!db)
         return -1;
-    const char *sql =
-        "SELECT s.bookid, s.opentime, s.position_ts,"
-        "  IFNULL(s.cpage,0), IFNULL(s.npage,0), IFNULL(s.completed,0),"
-        "  IFNULL(b.title,''), IFNULL(b.author,''),"
-        "  IFNULL((SELECT f.storageid || lower(hex(f.fast_hash)) FROM files f"
-        "          WHERE f.book_id = s.bookid ORDER BY f.storageid LIMIT 1), '')"
-        " FROM books_settings s JOIN books_impl b ON b.id = s.bookid"
-        " WHERE s.opentime > 0 AND s.position_ts > 0";
     sqlite3_stmt *st = NULL;
-    if (sqlite3_prepare_v2(db, sql, -1, &st, NULL) != SQLITE_OK) {
+    if (prepare_supported(db, RECOVER_SQL, RECOVER_SQL_LEGACY, &st) != 0) {
         sqlite3_close(db);
         return -1;
     }

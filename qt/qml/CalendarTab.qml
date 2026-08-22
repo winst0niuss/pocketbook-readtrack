@@ -115,10 +115,34 @@ Item {
 
     function openDay(day, entry) {
         var d = new Date(year, month - 1, day);
-        dayDialog.title = Tr.t("calendar.dayTitle",
-                               { date: Tr.fmtDayMonth(d), time: fmtHM(entry.secs) });
+        // A day whose only entry is a finished book has no measured time.
+        dayDialog.title = (entry.secs || 0) > 0
+            ? Tr.t("calendar.dayTitle",
+                   { date: Tr.fmtDayMonth(d), time: fmtHM(entry.secs) })
+            : Tr.fmtDayMonth(d);
+        dayDialog.dateFull = Qt.formatDate(d, "dd.MM.yyyy");
         dayDialog.entry = entry;
         dayDialog.visible = true;
+    }
+
+    /* Says why days can be blank: before the install date there is no
+     * measurement, and a blank cell there means unknown, not "did not read".
+     * Finished books still show — the firmware dates those. */
+    StyledText {
+        id: trackingNote
+
+        visible: (tab.m.trackedFromDay || 0) > 0
+                 && (tab.m.trackingSince || "") !== ""
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: Global.dp(10)
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.leftMargin: tab.sideMargin
+        anchors.rightMargin: tab.sideMargin
+        wrapMode: Text.Wrap
+        styledFont: FontStyles.BodyS
+        color: GlobalValues.defaultDisabledTextColor
+        text: Tr.t("streak.trackingSince", { date: tab.m.trackingSince || "" })
     }
 
     // Grid: the cover of the most-read book per reading day
@@ -127,7 +151,7 @@ Item {
 
         anchors.top: weekdayRow.bottom
         anchors.topMargin: Global.dp(6)
-        anchors.bottom: parent.bottom
+        anchors.bottom: trackingNote.visible ? trackingNote.top : parent.bottom
         anchors.bottomMargin: Global.dp(16)
         anchors.left: parent.left
         anchors.right: parent.right
@@ -150,6 +174,10 @@ Item {
                 readonly property var entry: (tab.m.days || [])[index]
                                              || ({ secs: 0, books: [] })
                 readonly property var topBook: (entry.books || [])[0] || null
+                /* Before tracking started nothing was measured, so an empty
+                 * day here means "unknown", not "did not read". */
+                readonly property bool untracked:
+                    cell.day < (tab.m.trackedFromDay || 0)
 
                 x: (cellIdx % 7) * grid.cw
                 y: Math.floor(cellIdx / 7) * grid.ch
@@ -164,7 +192,8 @@ Item {
                     anchors.left: parent.left
                     anchors.margins: Global.dp(5)
                     styledFont: FontStyles.BodyS
-                    color: GlobalValues.defaultTextColor
+                    color: cell.untracked ? GlobalValues.defaultDisabledTextColor
+                                          : GlobalValues.defaultTextColor
                     text: cell.day
                 }
 
@@ -228,7 +257,8 @@ Item {
 
                 MouseArea {
                     anchors.fill: parent
-                    enabled: (cell.entry.secs || 0) > 0
+                    // A finished book has no reading time, but still opens.
+                    enabled: (cell.entry.books || []).length > 0
                     onClicked: tab.openDay(cell.day, cell.entry)
                 }
             }
@@ -241,6 +271,9 @@ Item {
         id: dayDialog
 
         property var entry: ({ secs: 0, books: [] })
+        /* The book card covers this dialog's heading, so it has to repeat
+         * which day it is talking about. */
+        property string dateFull: ""
 
         Flow {
             width: parent.width
@@ -256,6 +289,18 @@ Item {
                     Item {
                         width: Global.dp(100)
                         height: Global.dp(150)
+
+                        MouseArea {
+                            anchors.fill: parent
+                            z: 1
+                            onClicked: bookDialog.show(
+                                modelData,
+                                (modelData.secs || 0) > 0
+                                ? dayDialog.dateFull + "  ·  "
+                                  + tab.fmtHM(modelData.secs)
+                                : Tr.t("book.finishedOn",
+                                       { date: dayDialog.dateFull }))
+                        }
 
                         Image {
                             id: dlgCover
@@ -285,10 +330,15 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                         styledFont: FontStyles.BodyS
                         color: GlobalValues.defaultTextColor
-                        text: tab.fmtHM(modelData.secs)
+                        text: (modelData.secs || 0) > 0
+                              ? tab.fmtHM(modelData.secs)
+                              : Tr.t("calendar.finished")
                     }
                 }
             }
         }
     }
+
+    // Opened from a cover in the day dialog, so it must sit above it.
+    BookDialog { id: bookDialog }
 }

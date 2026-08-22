@@ -6,6 +6,9 @@
 #define STATS_DB STATS_DIR "/readtrack.db"
 #define PIDFILE STATS_DIR "/readtrack.pid"
 #define COVER_DIR "/mnt/ext1/system/cover_chache/hashed"
+/* Our own cover cache: EPUB extractions plus copies of firmware covers, which
+ * is what keeps a thumbnail after the book file is gone. */
+#define OWN_COVER_DIR STATS_DIR "/covers"
 
 #ifdef __cplusplus
 extern "C" {

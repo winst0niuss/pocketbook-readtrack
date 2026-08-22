@@ -37,9 +37,11 @@ var strings = {
     "streak.legendFinished": "book finished",
 
     "calendar.dayTitle": "{date}  ·  {time}",
+    "calendar.finished": "Finished",
 
     "year.title": "Books finished in {year}",
     "year.monthTitle": "{month} {year}  ·  {n} {books}",
+    "book.finishedOn": "Finished {date}",
 
     "about.version": "Version {version}",
     "about.check": "Check for update",

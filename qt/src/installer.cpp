@@ -7,6 +7,8 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
+#include "inkview_bridge.h"
+
 namespace {
 
 // The launcher resolves the app "path" as an absolute path, but the icon
@@ -25,6 +27,21 @@ constexpr const char *kViewJson =
 constexpr const char *kBackup =
     "/mnt/ext1/system/config/desktop/view.json.readtrack-backup";
 constexpr const char *kAppId = "U_readtrack";
+
+/* The launcher label. Every other user-facing string comes from the QML
+ * catalogs in qt/qml/i18n/, but this one is written into the firmware's config
+ * before any QML engine exists, so it carries its own small table — keep the
+ * two in step. The device language is read on every launch, so switching the
+ * reader's language relabels the tile on the next start. */
+QString launcherTitle()
+{
+    const QString lang = inkViewLang().left(2).toLower();
+    if (lang == QLatin1String("ru"))
+        return QStringLiteral("Статистика");
+    if (lang == QLatin1String("de"))
+        return QStringLiteral("Statistik");
+    return QStringLiteral("Statistics");
+}
 
 // Copies an embedded resource to a path on the device, but only when the file
 // there differs — an app update ships new icons, and rewriting identical ones
@@ -71,37 +88,47 @@ void patchViewJson()
 
     QJsonObject root = doc.object();
     QJsonObject apps = root.value(QStringLiteral("applications")).toObject();
-    if (apps.contains(QLatin1String(kAppId)))
-        return; // already registered
+    const QString title = launcherTitle();
 
-    // Back up the original once, before the first modification.
-    if (!QFile::exists(QLatin1String(kBackup)))
-        QFile::copy(QLatin1String(kViewJson), QLatin1String(kBackup));
+    if (apps.contains(QLatin1String(kAppId))) {
+        // Registered already: the only thing that can still change is the
+        // label, when the reader's language does.
+        QJsonObject entry = apps.value(QLatin1String(kAppId)).toObject();
+        if (entry.value(QStringLiteral("title")).toString() == title)
+            return;
+        entry[QStringLiteral("title")] = title;
+        apps[QLatin1String(kAppId)] = entry;
+        root[QStringLiteral("applications")] = apps;
+    } else {
+        // Back up the original once, before the first modification.
+        if (!QFile::exists(QLatin1String(kBackup)))
+            QFile::copy(QLatin1String(kViewJson), QLatin1String(kBackup));
 
-    QJsonObject icon;
-    icon[QStringLiteral("path")] = QLatin1String(kIconRel);
-    QJsonObject iconFocused;
-    iconFocused[QStringLiteral("path")] = QLatin1String(kIconFocusedRel);
+        QJsonObject icon;
+        icon[QStringLiteral("path")] = QLatin1String(kIconRel);
+        QJsonObject iconFocused;
+        iconFocused[QStringLiteral("path")] = QLatin1String(kIconFocusedRel);
 
-    QJsonObject entry;
-    entry[QStringLiteral("path")] = QLatin1String(kAppPath);
-    entry[QStringLiteral("title")] = QStringLiteral("ReadTrack");
-    entry[QStringLiteral("icon")] = icon;
-    entry[QStringLiteral("focused_icon")] = iconFocused;
-    apps[QLatin1String(kAppId)] = entry;
-    root[QStringLiteral("applications")] = apps;
+        QJsonObject entry;
+        entry[QStringLiteral("path")] = QLatin1String(kAppPath);
+        entry[QStringLiteral("title")] = title;
+        entry[QStringLiteral("icon")] = icon;
+        entry[QStringLiteral("focused_icon")] = iconFocused;
+        apps[QLatin1String(kAppId)] = entry;
+        root[QStringLiteral("applications")] = apps;
 
-    // Put the app id into the first launcher group so it shows up.
-    QJsonObject view = root.value(QStringLiteral("view")).toObject();
-    QJsonArray groups = view.value(QStringLiteral("groups")).toArray();
-    if (!groups.isEmpty()) {
-        QJsonObject g0 = groups.at(0).toObject();
-        QJsonArray appList = g0.value(QStringLiteral("apps")).toArray();
-        appList.append(QLatin1String(kAppId));
-        g0[QStringLiteral("apps")] = appList;
-        groups.replace(0, g0);
-        view[QStringLiteral("groups")] = groups;
-        root[QStringLiteral("view")] = view;
+        // Put the app id into the first launcher group so it shows up.
+        QJsonObject view = root.value(QStringLiteral("view")).toObject();
+        QJsonArray groups = view.value(QStringLiteral("groups")).toArray();
+        if (!groups.isEmpty()) {
+            QJsonObject g0 = groups.at(0).toObject();
+            QJsonArray appList = g0.value(QStringLiteral("apps")).toArray();
+            appList.append(QLatin1String(kAppId));
+            g0[QStringLiteral("apps")] = appList;
+            groups.replace(0, g0);
+            view[QStringLiteral("groups")] = groups;
+            root[QStringLiteral("view")] = view;
+        }
     }
 
     if (!f.open(QIODevice::WriteOnly | QIODevice::Truncate))
