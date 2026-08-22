@@ -11,38 +11,27 @@ var strings = {
     "app.title": "Statistics",
 
     "nav.overview": "Overview",
-    "nav.streak": "Streak",
     "nav.calendar": "Calendar",
-    "nav.year": "Year",
+    "nav.about": "About",
 
-    "overview.progress": "Progress: {percent} %",
-    "overview.read": "Read: {time}",
     "overview.left": "About {time}",
     "overview.noBook": "No book opened yet",
-    "overview.today": "Read today",
+    "overview.bookProgress": "Book progress: {percent} %",
+    "overview.hoursOfReading": "hours of reading",
     "overview.minPerSession": "Min per session",
-    "overview.pagesPerMinute": "Pages per minute",
     "overview.allBooks": "ALL BOOKS",
     "overview.donutCaption": "of the books on your device",
     "overview.booksFinished": "Books finished",
     "overview.totalHours": "Total hours",
+    "overview.pagesPerHour": "pages per hour",
 
-    "streak.current": "Days current streak",
-    "streak.best": "Days best streak {year}",
-    "streak.readingDays": "{n} READING DAYS IN {year}",
-    "streak.none": "No reading streak yet — today is a good day to start one.",
-    "streak.longest": "Your longest streak began on {when} and lasted {n} {days}.",
-    "streak.trackingSince": "Reading data has been recorded since {date}.",
-    "streak.legendNotRead": "not read",
-    "streak.legendRead": "read",
-    "streak.legendFinished": "book finished",
 
     "calendar.dayTitle": "{date}  ·  {time}",
     "calendar.finished": "Finished",
-
-    "year.title": "Books finished in {year}",
-    "year.monthTitle": "{month} {year}  ·  {n} {books}",
+    "calendar.trackingSince": "Reading data has been recorded since {date}.",
     "book.finishedOn": "Finished {date}",
+    "calendar.monthSummary": "{n} {days} · {time}",
+
 
     "about.version": "Version {version}",
     "about.check": "Check for update",
@@ -51,8 +40,8 @@ var strings = {
     "about.uptodate": "This is the latest release.",
     "about.available": "Version {version} is available.",
     "about.downloading": "Downloading the update\u2026",
-    "about.ready": "Update downloaded. ReadTrack closes now and starts again on its own \u2014 if it doesn't, open it from the launcher.",
-    "about.privacy": "The update is fetched from GitHub over Wi-Fi, and only when you press the button. ReadTrack goes online at no other time.",
+    "about.ready": "Update downloaded. {app} closes now and starts again on its own \u2014 if it doesn't, open it from the launcher.",
+    "about.privacy": "The update is fetched from GitHub over Wi-Fi, and only when you press the button. {app} goes online at no other time.",
 
     "about.log": "Last attempt:",
 
@@ -77,5 +66,6 @@ var strings = {
     "time.m": "{m} min",
 
     "plural.days": ["day", "days"],
-    "plural.books": ["book", "books"]
+    "plural.books": ["book", "books"],
+    "plural.pages": ["page", "pages"]
 };

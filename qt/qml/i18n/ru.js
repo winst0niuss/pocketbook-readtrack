@@ -16,38 +16,27 @@ var strings = {
     "app.title": "Статистика",
 
     "nav.overview": "Обзор",
-    "nav.streak": "Серия",
     "nav.calendar": "Календарь",
-    "nav.year": "Год",
+    "nav.about": "Инфо",
 
-    "overview.progress": "Прогресс: {percent} %",
-    "overview.read": "Прочитано: {time}",
     "overview.left": "Осталось ок. {time}",
     "overview.noBook": "Книга ещё не открыта",
-    "overview.today": "Прочитано сегодня",
+    "overview.bookProgress": "Прогресс книги: {percent} %",
+    "overview.hoursOfReading": "часов чтения",
     "overview.minPerSession": "мин за сессию",
-    "overview.pagesPerMinute": "страниц в минуту",
     "overview.allBooks": "ВСЕ КНИГИ",
     "overview.donutCaption": "книг на устройстве прочитано",
     "overview.booksFinished": "Книг прочитано",
     "overview.totalHours": "Часов всего",
+    "overview.pagesPerHour": "страниц в час",
 
-    "streak.current": "{days} текущей серии",
-    "streak.best": "{days} лучшей серии {year}",
-    "streak.readingDays": "{n} {daysCaps} ЧТЕНИЯ В {year}",
-    "streak.none": "Серии чтения пока нет — сегодня хороший день, чтобы её начать.",
-    "streak.longest": "Ваша самая длинная серия началась {when} и длилась {n} {days}.",
-    "streak.trackingSince": "Данные о чтении собираются с {date}.",
-    "streak.legendNotRead": "нет чтения",
-    "streak.legendRead": "есть чтение",
-    "streak.legendFinished": "книга дочитана",
 
     "calendar.dayTitle": "{date}  ·  {time}",
     "calendar.finished": "Дочитано",
-
-    "year.title": "Книг прочитано за {year}",
-    "year.monthTitle": "{month} {year}  ·  {n} {books}",
+    "calendar.trackingSince": "Данные о чтении собираются с {date}.",
     "book.finishedOn": "Дочитано {date}",
+    "calendar.monthSummary": "{n} {days} · {time}",
+
 
     "about.version": "Версия {version}",
     "about.check": "Проверить обновление",
@@ -56,8 +45,8 @@ var strings = {
     "about.uptodate": "Установлена последняя версия.",
     "about.available": "Доступна версия {version}.",
     "about.downloading": "Загружаю обновление\u2026",
-    "about.ready": "Обновление загружено. ReadTrack закроется и запустится сам — если этого не произошло, откройте его из меню приложений.",
-    "about.privacy": "Обновление скачивается с GitHub по Wi-Fi и только по нажатию кнопки. В остальное время ReadTrack в сеть не выходит.",
+    "about.ready": "Обновление загружено. {app} закроется и запустится сам — если этого не произошло, откройте его из меню приложений.",
+    "about.privacy": "Обновление скачивается с GitHub по Wi-Fi и только по нажатию кнопки. В остальное время {app} в сеть не выходит.",
 
     "about.log": "Последняя попытка:",
 
@@ -82,5 +71,6 @@ var strings = {
     "time.m": "{m} мин",
 
     "plural.days": ["день", "дня", "дней"],
-    "plural.books": ["книга", "книги", "книг"]
+    "plural.books": ["книга", "книги", "книг"],
+    "plural.pages": ["страница", "страницы", "страниц"]
 };

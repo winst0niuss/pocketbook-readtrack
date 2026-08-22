@@ -15,38 +15,27 @@ var strings = {
     "app.title": "Statistika",
 
     "nav.overview": "Apžvalga",
-    "nav.streak": "Serija",
     "nav.calendar": "Kalendorius",
-    "nav.year": "Metai",
+    "nav.about": "Apie",
 
-    "overview.progress": "Progresas: {percent} %",
-    "overview.read": "Perskaityta: {time}",
     "overview.left": "Liko apie {time}",
     "overview.noBook": "Dar neatverstos jokios knygos",
-    "overview.today": "Perskaityta šiandien",
+    "overview.bookProgress": "Knygos progresas: {percent} %",
+    "overview.hoursOfReading": "valandų skaitymo",
     "overview.minPerSession": "min per seansą",
-    "overview.pagesPerMinute": "puslapių per minutę",
     "overview.allBooks": "VISOS KNYGOS",
     "overview.donutCaption": "iš knygų įrenginyje",
     "overview.booksFinished": "Perskaitytos knygos",
     "overview.totalHours": "Iš viso valandų",
+    "overview.pagesPerHour": "puslapių per valandą",
 
-    "streak.current": "{days} dabartinė serija",
-    "streak.best": "{days} geriausia serija {year}",
-    "streak.readingDays": "{n} SKAITYMO {daysCaps} {year} METAIS",
-    "streak.none": "Skaitymo serijos dar nėra — šiandien gera diena ją pradėti.",
-    "streak.longest": "Ilgiausia jūsų serija prasidėjo {when} ir truko {n} {days}.",
-    "streak.trackingSince": "Skaitymo duomenys renkami nuo {date}.",
-    "streak.legendNotRead": "neskaityta",
-    "streak.legendRead": "skaityta",
-    "streak.legendFinished": "knyga perskaityta",
 
     "calendar.dayTitle": "{date}  ·  {time}",
     "calendar.finished": "Perskaityta",
-
-    "year.title": "{year} m. perskaitytos knygos",
-    "year.monthTitle": "{month} {year}  ·  {n} {books}",
+    "calendar.trackingSince": "Skaitymo duomenys renkami nuo {date}.",
     "book.finishedOn": "Perskaityta {date}",
+    "calendar.monthSummary": "{n} {days} · {time}",
+
 
     "about.version": "Versija {version}",
     "about.check": "Tikrinti atnaujinimą",
@@ -55,8 +44,8 @@ var strings = {
     "about.uptodate": "Tai naujausia versija.",
     "about.available": "Galima versija {version}.",
     "about.downloading": "Atsiunčiu atnaujinimą…",
-    "about.ready": "Atnaujinimas atsiųstas. ReadTrack užsidarys ir pats pasileis iš naujo — jei ne, atverkite jį iš programų meniu.",
-    "about.privacy": "Atnaujinimas parsiunčiamas iš GitHub per Wi-Fi ir tik paspaudus mygtuką. Kitu metu ReadTrack į tinklą neina.",
+    "about.ready": "Atnaujinimas atsiųstas. {app} užsidarys ir pats pasileis iš naujo — jei ne, atverkite jį iš programų meniu.",
+    "about.privacy": "Atnaujinimas parsiunčiamas iš GitHub per Wi-Fi ir tik paspaudus mygtuką. Kitu metu {app} į tinklą neina.",
     "about.log": "Paskutinis bandymas:",
 
     "update.errNoNetwork": "Nėra ryšio. Įjunkite Wi-Fi ir bandykite dar kartą.",
@@ -77,5 +66,6 @@ var strings = {
     "time.m": "{m} min",
 
     "plural.days": ["diena", "dienos", "dienų"],
-    "plural.books": ["knyga", "knygos", "knygų"]
+    "plural.books": ["knyga", "knygos", "knygų"],
+    "plural.pages": ["puslapis", "puslapiai", "puslapių"]
 };

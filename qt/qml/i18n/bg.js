@@ -10,38 +10,27 @@ var strings = {
     "app.title": "Статистика",
 
     "nav.overview": "Преглед",
-    "nav.streak": "Серия",
     "nav.calendar": "Календар",
-    "nav.year": "Година",
+    "nav.about": "Инфо",
 
-    "overview.progress": "Напредък: {percent} %",
-    "overview.read": "Прочетено: {time}",
     "overview.left": "Остават ок. {time}",
     "overview.noBook": "Още няма отворена книга",
-    "overview.today": "Прочетено днес",
+    "overview.bookProgress": "Напредък: {percent} %",
+    "overview.hoursOfReading": "часа четене",
     "overview.minPerSession": "мин на сесия",
-    "overview.pagesPerMinute": "страници в минута",
     "overview.allBooks": "ВСИЧКИ КНИГИ",
     "overview.donutCaption": "от книгите на устройството",
     "overview.booksFinished": "Дочетени книги",
     "overview.totalHours": "Часа общо",
+    "overview.pagesPerHour": "страници на час",
 
-    "streak.current": "{days} текуща серия",
-    "streak.best": "{days} най-добра серия {year}",
-    "streak.readingDays": "{n} {daysCaps} С ЧЕТЕНЕ ПРЕЗ {year}",
-    "streak.none": "Още няма серия на четене — днес е добър ден да я започнете.",
-    "streak.longest": "Най-дългата ви серия започна на {when} и продължи {n} {days}.",
-    "streak.trackingSince": "Данните за четене се записват от {date}.",
-    "streak.legendNotRead": "без четене",
-    "streak.legendRead": "четене",
-    "streak.legendFinished": "дочетена книга",
 
     "calendar.dayTitle": "{date}  ·  {time}",
     "calendar.finished": "Дочетена",
-
-    "year.title": "Книги, дочетени през {year}",
-    "year.monthTitle": "{month} {year}  ·  {n} {books}",
+    "calendar.trackingSince": "Данните за четене се записват от {date}.",
     "book.finishedOn": "Дочетена на {date}",
+    "calendar.monthSummary": "{n} {days} · {time}",
+
 
     "about.version": "Версия {version}",
     "about.check": "Проверка за обновление",
@@ -50,8 +39,8 @@ var strings = {
     "about.uptodate": "Това е последната версия.",
     "about.available": "Налична е версия {version}.",
     "about.downloading": "Изтеглям обновлението…",
-    "about.ready": "Обновлението е изтеглено. ReadTrack ще се затвори и ще се стартира сам — ако не стане, отворете го от менюто с приложения.",
-    "about.privacy": "Обновлението се изтегля от GitHub през Wi-Fi и само когато натиснете бутона. Иначе ReadTrack не излиза в мрежата.",
+    "about.ready": "Обновлението е изтеглено. {app} ще се затвори и ще се стартира сам — ако не стане, отворете го от менюто с приложения.",
+    "about.privacy": "Обновлението се изтегля от GitHub през Wi-Fi и само когато натиснете бутона. Иначе {app} не излиза в мрежата.",
     "about.log": "Последен опит:",
 
     "update.errNoNetwork": "Няма връзка. Включете Wi-Fi и опитайте отново.",
@@ -72,5 +61,6 @@ var strings = {
     "time.m": "{m} мин",
 
     "plural.days": ["ден", "дни"],
-    "plural.books": ["книга", "книги"]
+    "plural.books": ["книга", "книги"],
+    "plural.pages": ["страница", "страници"]
 };

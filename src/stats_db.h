@@ -28,4 +28,7 @@ int64_t stats_tracking_since(sqlite3 *db);
 /* Total time + speed for a book (speed <= 0 if unknown). */
 void stats_book(sqlite3 *db, int64_t bookid, int64_t *secs, double *pages_per_min);
 
+/* Epoch second of the first measured session for a book, 0 if none. */
+int64_t stats_book_started(sqlite3 *db, int64_t bookid);
+
 #endif

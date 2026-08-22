@@ -14,38 +14,27 @@ var strings = {
     "app.title": "Statistika",
 
     "nav.overview": "Přehled",
-    "nav.streak": "Série",
     "nav.calendar": "Kalendář",
-    "nav.year": "Rok",
+    "nav.about": "Info",
 
-    "overview.progress": "Postup: {percent} %",
-    "overview.read": "Přečteno: {time}",
     "overview.left": "Zbývá asi {time}",
     "overview.noBook": "Zatím nebyla otevřena kniha",
-    "overview.today": "Přečteno dnes",
+    "overview.bookProgress": "Postup knihy: {percent} %",
+    "overview.hoursOfReading": "hodin čtení",
     "overview.minPerSession": "min na čtení",
-    "overview.pagesPerMinute": "stran za minutu",
     "overview.allBooks": "VŠECHNY KNIHY",
     "overview.donutCaption": "knih v zařízení",
     "overview.booksFinished": "Dočtené knihy",
     "overview.totalHours": "Hodin celkem",
+    "overview.pagesPerHour": "stran za hodinu",
 
-    "streak.current": "{days} současné série",
-    "streak.best": "{days} nejlepší série {year}",
-    "streak.readingDays": "{n} {daysCaps} ČTENÍ V ROCE {year}",
-    "streak.none": "Zatím žádná série čtení — dnešek je dobrý den ji začít.",
-    "streak.longest": "Vaše nejdelší série začala {when} a trvala {n} {days}.",
-    "streak.trackingSince": "Údaje o čtení se zaznamenávají od {date}.",
-    "streak.legendNotRead": "bez čtení",
-    "streak.legendRead": "čtení",
-    "streak.legendFinished": "kniha dočtena",
 
     "calendar.dayTitle": "{date}  ·  {time}",
     "calendar.finished": "Dočteno",
-
-    "year.title": "Knihy dočtené v roce {year}",
-    "year.monthTitle": "{month} {year}  ·  {n} {books}",
+    "calendar.trackingSince": "Údaje o čtení se zaznamenávají od {date}.",
     "book.finishedOn": "Dočteno {date}",
+    "calendar.monthSummary": "{n} {days} · {time}",
+
 
     "about.version": "Verze {version}",
     "about.check": "Zkontrolovat aktualizaci",
@@ -54,8 +43,8 @@ var strings = {
     "about.uptodate": "Toto je nejnovější verze.",
     "about.available": "K dispozici je verze {version}.",
     "about.downloading": "Stahuji aktualizaci…",
-    "about.ready": "Aktualizace stažena. ReadTrack se zavře a sám spustí znovu — pokud ne, otevřete jej z nabídky aplikací.",
-    "about.privacy": "Aktualizace se stahuje z GitHubu přes Wi-Fi, a to jen po stisku tlačítka. Jindy se ReadTrack k síti nepřipojuje.",
+    "about.ready": "Aktualizace stažena. {app} se zavře a sám spustí znovu — pokud ne, otevřete jej z nabídky aplikací.",
+    "about.privacy": "Aktualizace se stahuje z GitHubu přes Wi-Fi, a to jen po stisku tlačítka. Jindy se {app} k síti nepřipojuje.",
     "about.log": "Poslední pokus:",
 
     "update.errNoNetwork": "Bez připojení. Zapněte Wi-Fi a zkuste to znovu.",
@@ -76,5 +65,6 @@ var strings = {
     "time.m": "{m} min",
 
     "plural.days": ["den", "dny", "dní"],
-    "plural.books": ["kniha", "knihy", "knih"]
+    "plural.books": ["kniha", "knihy", "knih"],
+    "plural.pages": ["strana", "strany", "stran"]
 };

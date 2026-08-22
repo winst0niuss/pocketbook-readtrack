@@ -32,12 +32,12 @@
         <file>i18n/tr.js</file>
         <file>i18n/uk.js</file>
         <file>main.qml</file>
+        <file>MetricRow.qml</file>
+        <file>NavIcon.qml</file>
         <file>PanelDialog.qml</file>
         <file>BookDialog.qml</file>
         <file>OverviewTab.qml</file>
-        <file>StreakTab.qml</file>
         <file>CalendarTab.qml</file>
-        <file>YearTab.qml</file>
         <file>AboutTab.qml</file>
         <file>readtrack.bmp</file>
         <file>readtrack_f.bmp</file>

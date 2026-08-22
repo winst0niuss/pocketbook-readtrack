@@ -10,38 +10,27 @@ var strings = {
     "app.title": "Statistieken",
 
     "nav.overview": "Overzicht",
-    "nav.streak": "Reeks",
     "nav.calendar": "Kalender",
-    "nav.year": "Jaar",
+    "nav.about": "Info",
 
-    "overview.progress": "Voortgang: {percent} %",
-    "overview.read": "Gelezen: {time}",
     "overview.left": "Nog ong. {time}",
     "overview.noBook": "Nog geen boek geopend",
-    "overview.today": "Vandaag gelezen",
+    "overview.bookProgress": "Voortgang: {percent} %",
+    "overview.hoursOfReading": "uur gelezen",
     "overview.minPerSession": "min per sessie",
-    "overview.pagesPerMinute": "pagina's per minuut",
     "overview.allBooks": "ALLE BOEKEN",
     "overview.donutCaption": "van de boeken op je toestel",
     "overview.booksFinished": "Boeken uitgelezen",
     "overview.totalHours": "Uren totaal",
+    "overview.pagesPerHour": "pagina's per uur",
 
-    "streak.current": "{days} huidige reeks",
-    "streak.best": "{days} beste reeks {year}",
-    "streak.readingDays": "{n} {daysCaps} GELEZEN IN {year}",
-    "streak.none": "Nog geen leesreeks — vandaag is een goede dag om er een te beginnen.",
-    "streak.longest": "Je langste reeks begon op {when} en duurde {n} {days}.",
-    "streak.trackingSince": "Leesgegevens worden vastgelegd sinds {date}.",
-    "streak.legendNotRead": "niet gelezen",
-    "streak.legendRead": "gelezen",
-    "streak.legendFinished": "boek uit",
 
     "calendar.dayTitle": "{date}  ·  {time}",
     "calendar.finished": "Uitgelezen",
-
-    "year.title": "Boeken uitgelezen in {year}",
-    "year.monthTitle": "{month} {year}  ·  {n} {books}",
+    "calendar.trackingSince": "Leesgegevens worden vastgelegd sinds {date}.",
     "book.finishedOn": "Uitgelezen op {date}",
+    "calendar.monthSummary": "{n} {days} · {time}",
+
 
     "about.version": "Versie {version}",
     "about.check": "Controleren op update",
@@ -50,8 +39,8 @@ var strings = {
     "about.uptodate": "Dit is de nieuwste versie.",
     "about.available": "Versie {version} is beschikbaar.",
     "about.downloading": "Update downloaden…",
-    "about.ready": "Update gedownload. ReadTrack sluit en start vanzelf opnieuw — zo niet, open het dan via het menu.",
-    "about.privacy": "De update komt via wifi van GitHub, en alleen als je op de knop drukt. Verder gaat ReadTrack nooit online.",
+    "about.ready": "Update gedownload. {app} sluit en start vanzelf opnieuw — zo niet, open het dan via het menu.",
+    "about.privacy": "De update komt via wifi van GitHub, en alleen als je op de knop drukt. Verder gaat {app} nooit online.",
     "about.log": "Laatste poging:",
 
     "update.errNoNetwork": "Geen verbinding. Zet wifi aan en probeer opnieuw.",
@@ -72,5 +61,6 @@ var strings = {
     "time.m": "{m} min",
 
     "plural.days": ["dag", "dagen"],
-    "plural.books": ["boek", "boeken"]
+    "plural.books": ["boek", "boeken"],
+    "plural.pages": ["pagina", "pagina's"]
 };

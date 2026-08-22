@@ -10,38 +10,27 @@ var strings = {
     "app.title": "Tilastot",
 
     "nav.overview": "Yleiskuva",
-    "nav.streak": "Putki",
     "nav.calendar": "Kalenteri",
-    "nav.year": "Vuosi",
+    "nav.about": "Tiedot",
 
-    "overview.progress": "Edistyminen: {percent} %",
-    "overview.read": "Luettu: {time}",
     "overview.left": "Jäljellä n. {time}",
     "overview.noBook": "Yhtään kirjaa ei ole vielä avattu",
-    "overview.today": "Luettu tänään",
+    "overview.bookProgress": "Kirjan edistyminen: {percent} %",
+    "overview.hoursOfReading": "tuntia luettu",
     "overview.minPerSession": "min per lukukerta",
-    "overview.pagesPerMinute": "sivua minuutissa",
     "overview.allBooks": "KAIKKI KIRJAT",
     "overview.donutCaption": "laitteen kirjoista",
     "overview.booksFinished": "Loppuun luetut kirjat",
     "overview.totalHours": "Tunteja yhteensä",
+    "overview.pagesPerHour": "sivua tunnissa",
 
-    "streak.current": "{days} nykyistä putkea",
-    "streak.best": "{days} paras putki {year}",
-    "streak.readingDays": "{n} {daysCaps} LUKEMISTA VUONNA {year}",
-    "streak.none": "Ei vielä lukuputkea — tänään on hyvä päivä aloittaa.",
-    "streak.longest": "Pisin putkesi alkoi {when} ja kesti {n} {days}.",
-    "streak.trackingSince": "Lukutietoja on kerätty {date} alkaen.",
-    "streak.legendNotRead": "ei lukemista",
-    "streak.legendRead": "lukemista",
-    "streak.legendFinished": "kirja luettu",
 
     "calendar.dayTitle": "{date}  ·  {time}",
     "calendar.finished": "Luettu loppuun",
-
-    "year.title": "Vuonna {year} loppuun luetut kirjat",
-    "year.monthTitle": "{month} {year}  ·  {n} {books}",
+    "calendar.trackingSince": "Lukutietoja on kerätty {date} alkaen.",
     "book.finishedOn": "Luettu loppuun {date}",
+    "calendar.monthSummary": "{n} {days} · {time}",
+
 
     "about.version": "Versio {version}",
     "about.check": "Tarkista päivitys",
@@ -50,8 +39,8 @@ var strings = {
     "about.uptodate": "Tämä on uusin versio.",
     "about.available": "Versio {version} on saatavilla.",
     "about.downloading": "Ladataan päivitystä…",
-    "about.ready": "Päivitys ladattu. ReadTrack sulkeutuu ja käynnistyy itsestään uudelleen — jos ei, avaa se sovellusvalikosta.",
-    "about.privacy": "Päivitys haetaan GitHubista wifin kautta, vain kun painat painiketta. Muulloin ReadTrack ei ota yhteyttä verkkoon.",
+    "about.ready": "Päivitys ladattu. {app} sulkeutuu ja käynnistyy itsestään uudelleen — jos ei, avaa se sovellusvalikosta.",
+    "about.privacy": "Päivitys haetaan GitHubista wifin kautta, vain kun painat painiketta. Muulloin {app} ei ota yhteyttä verkkoon.",
     "about.log": "Viimeisin yritys:",
 
     "update.errNoNetwork": "Ei yhteyttä. Kytke wifi päälle ja yritä uudelleen.",
@@ -72,5 +61,6 @@ var strings = {
     "time.m": "{m} min",
 
     "plural.days": ["päivä", "päivää"],
-    "plural.books": ["kirja", "kirjaa"]
+    "plural.books": ["kirja", "kirjaa"],
+    "plural.pages": ["sivu", "sivua"]
 };

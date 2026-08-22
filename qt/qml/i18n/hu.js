@@ -10,38 +10,27 @@ var strings = {
     "app.title": "Statisztika",
 
     "nav.overview": "Áttekintés",
-    "nav.streak": "Sorozat",
     "nav.calendar": "Naptár",
-    "nav.year": "Év",
+    "nav.about": "Névjegy",
 
-    "overview.progress": "Haladás: {percent} %",
-    "overview.read": "Olvasva: {time}",
     "overview.left": "Kb. {time} van hátra",
     "overview.noBook": "Még nincs megnyitott könyv",
-    "overview.today": "Ma olvasva",
+    "overview.bookProgress": "Könyv haladás: {percent} %",
+    "overview.hoursOfReading": "óra olvasás",
     "overview.minPerSession": "perc alkalmanként",
-    "overview.pagesPerMinute": "oldal percenként",
     "overview.allBooks": "MINDEN KÖNYV",
     "overview.donutCaption": "a készüléken lévő könyvekből",
     "overview.booksFinished": "Kiolvasott könyvek",
     "overview.totalHours": "Óra összesen",
+    "overview.pagesPerHour": "oldal óránként",
 
-    "streak.current": "{days} jelenlegi sorozat",
-    "streak.best": "{days} legjobb sorozat {year}",
-    "streak.readingDays": "{n} OLVASÁSSAL TÖLTÖTT {daysCaps} {year}-BEN",
-    "streak.none": "Még nincs olvasási sorozat — a mai jó nap arra, hogy elkezdd.",
-    "streak.longest": "A leghosszabb sorozatod {when} kezdődött, és {n} {days} tartott.",
-    "streak.trackingSince": "Az olvasási adatok {date} óta készülnek.",
-    "streak.legendNotRead": "nincs olvasás",
-    "streak.legendRead": "olvasás",
-    "streak.legendFinished": "könyv kiolvasva",
 
     "calendar.dayTitle": "{date}  ·  {time}",
     "calendar.finished": "Kiolvasva",
-
-    "year.title": "{year}-ben kiolvasott könyvek",
-    "year.monthTitle": "{month} {year}  ·  {n} {books}",
+    "calendar.trackingSince": "Az olvasási adatok {date} óta készülnek.",
     "book.finishedOn": "Kiolvasva: {date}",
+    "calendar.monthSummary": "{n} {days} · {time}",
+
 
     "about.version": "{version} verzió",
     "about.check": "Frissítés keresése",
@@ -50,8 +39,8 @@ var strings = {
     "about.uptodate": "Ez a legfrissebb verzió.",
     "about.available": "Elérhető a(z) {version} verzió.",
     "about.downloading": "Frissítés letöltése…",
-    "about.ready": "A frissítés letöltve. A ReadTrack bezárul, és magától újraindul — ha mégsem, nyisd meg az alkalmazások közül.",
-    "about.privacy": "A frissítés Wi-Fin keresztül a GitHubról jön, és csak akkor, ha megnyomod a gombot. Máskor a ReadTrack nem megy fel a hálózatra.",
+    "about.ready": "A frissítés letöltve. A {app} bezárul, és magától újraindul — ha mégsem, nyisd meg az alkalmazások közül.",
+    "about.privacy": "A frissítés Wi-Fin keresztül a GitHubról jön, és csak akkor, ha megnyomod a gombot. Máskor a {app} nem megy fel a hálózatra.",
     "about.log": "Utolsó próbálkozás:",
 
     "update.errNoNetwork": "Nincs kapcsolat. Kapcsold be a Wi-Fit, és próbáld újra.",
@@ -72,5 +61,6 @@ var strings = {
     "time.m": "{m} perc",
 
     "plural.days": ["nap", "nap"],
-    "plural.books": ["könyv", "könyv"]
+    "plural.books": ["könyv", "könyv"],
+    "plural.pages": ["oldal", "oldal"]
 };

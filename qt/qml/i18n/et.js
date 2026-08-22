@@ -10,38 +10,27 @@ var strings = {
     "app.title": "Statistika",
 
     "nav.overview": "Ülevaade",
-    "nav.streak": "Seeria",
     "nav.calendar": "Kalender",
-    "nav.year": "Aasta",
+    "nav.about": "Teave",
 
-    "overview.progress": "Edenemine: {percent} %",
-    "overview.read": "Loetud: {time}",
     "overview.left": "Jäänud u {time}",
     "overview.noBook": "Ühtegi raamatut pole veel avatud",
-    "overview.today": "Täna loetud",
+    "overview.bookProgress": "Raamatu edenemine: {percent} %",
+    "overview.hoursOfReading": "tundi lugemist",
     "overview.minPerSession": "min lugemiskorra kohta",
-    "overview.pagesPerMinute": "lehekülge minutis",
     "overview.allBooks": "KÕIK RAAMATUD",
     "overview.donutCaption": "seadmes olevatest raamatutest",
     "overview.booksFinished": "Läbi loetud raamatud",
     "overview.totalHours": "Tunde kokku",
+    "overview.pagesPerHour": "lehekülge tunnis",
 
-    "streak.current": "{days} praegust seeriat",
-    "streak.best": "{days} parim seeria {year}",
-    "streak.readingDays": "{n} {daysCaps} LUGEMIST AASTAL {year}",
-    "streak.none": "Lugemisseeriat veel pole — täna on hea päev see alustada.",
-    "streak.longest": "Sinu pikim seeria algas {when} ja kestis {n} {days}.",
-    "streak.trackingSince": "Lugemisandmeid on salvestatud alates {date}.",
-    "streak.legendNotRead": "lugemata",
-    "streak.legendRead": "loetud",
-    "streak.legendFinished": "raamat läbi",
 
     "calendar.dayTitle": "{date}  ·  {time}",
     "calendar.finished": "Läbi loetud",
-
-    "year.title": "Aastal {year} läbi loetud raamatud",
-    "year.monthTitle": "{month} {year}  ·  {n} {books}",
+    "calendar.trackingSince": "Lugemisandmeid on salvestatud alates {date}.",
     "book.finishedOn": "Läbi loetud {date}",
+    "calendar.monthSummary": "{n} {days} · {time}",
+
 
     "about.version": "Versioon {version}",
     "about.check": "Otsi uuendust",
@@ -50,8 +39,8 @@ var strings = {
     "about.uptodate": "See on kõige uuem versioon.",
     "about.available": "Saadaval on versioon {version}.",
     "about.downloading": "Laadin uuendust…",
-    "about.ready": "Uuendus alla laaditud. ReadTrack sulgub ja käivitub ise uuesti — kui mitte, ava see rakenduste menüüst.",
-    "about.privacy": "Uuendus tuuakse GitHubist üle WiFi ja ainult siis, kui vajutad nuppu. Muul ajal ReadTrack võrku ei lähe.",
+    "about.ready": "Uuendus alla laaditud. {app} sulgub ja käivitub ise uuesti — kui mitte, ava see rakenduste menüüst.",
+    "about.privacy": "Uuendus tuuakse GitHubist üle WiFi ja ainult siis, kui vajutad nuppu. Muul ajal {app} võrku ei lähe.",
     "about.log": "Viimane katse:",
 
     "update.errNoNetwork": "Ühendus puudub. Lülita WiFi sisse ja proovi uuesti.",
@@ -72,5 +61,6 @@ var strings = {
     "time.m": "{m} min",
 
     "plural.days": ["päev", "päeva"],
-    "plural.books": ["raamat", "raamatut"]
+    "plural.books": ["raamat", "raamatut"],
+    "plural.pages": ["lehekülg", "lehekülge"]
 };

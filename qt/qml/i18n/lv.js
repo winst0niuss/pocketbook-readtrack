@@ -14,38 +14,27 @@ var strings = {
     "app.title": "Statistika",
 
     "nav.overview": "Pārskats",
-    "nav.streak": "Sērija",
     "nav.calendar": "Kalendārs",
-    "nav.year": "Gads",
+    "nav.about": "Par",
 
-    "overview.progress": "Progress: {percent} %",
-    "overview.read": "Izlasīts: {time}",
     "overview.left": "Atlicis apm. {time}",
     "overview.noBook": "Neviena grāmata vēl nav atvērta",
-    "overview.today": "Šodien izlasīts",
+    "overview.bookProgress": "Grāmatas progress: {percent} %",
+    "overview.hoursOfReading": "stundas lasīšanas",
     "overview.minPerSession": "min uz sesiju",
-    "overview.pagesPerMinute": "lappuses minūtē",
     "overview.allBooks": "VISAS GRĀMATAS",
     "overview.donutCaption": "no grāmatām ierīcē",
     "overview.booksFinished": "Izlasītās grāmatas",
     "overview.totalHours": "Stundas kopā",
+    "overview.pagesPerHour": "lappuses stundā",
 
-    "streak.current": "{days} pašreizējā sērijā",
-    "streak.best": "{days} labākajā sērijā {year}",
-    "streak.readingDays": "{n} LASĪŠANAS {daysCaps} {year}. GADĀ",
-    "streak.none": "Lasīšanas sērijas vēl nav — šodien ir laba diena to sākt.",
-    "streak.longest": "Jūsu garākā sērija sākās {when} un ilga {n} {days}.",
-    "streak.trackingSince": "Lasīšanas dati tiek uzkrāti kopš {date}.",
-    "streak.legendNotRead": "nav lasīts",
-    "streak.legendRead": "lasīts",
-    "streak.legendFinished": "grāmata izlasīta",
 
     "calendar.dayTitle": "{date}  ·  {time}",
     "calendar.finished": "Izlasīta",
-
-    "year.title": "{year}. gadā izlasītās grāmatas",
-    "year.monthTitle": "{month} {year}  ·  {n} {books}",
+    "calendar.trackingSince": "Lasīšanas dati tiek uzkrāti kopš {date}.",
     "book.finishedOn": "Izlasīta {date}",
+    "calendar.monthSummary": "{n} {days} · {time}",
+
 
     "about.version": "Versija {version}",
     "about.check": "Meklēt atjauninājumu",
@@ -54,8 +43,8 @@ var strings = {
     "about.uptodate": "Šī ir jaunākā versija.",
     "about.available": "Pieejama versija {version}.",
     "about.downloading": "Lejupielādēju atjauninājumu…",
-    "about.ready": "Atjauninājums lejupielādēts. ReadTrack aizvērsies un pats startēs no jauna — ja nē, atveriet to no lietotņu izvēlnes.",
-    "about.privacy": "Atjauninājums tiek ielādēts no GitHub caur Wi-Fi un tikai tad, kad nospiežat pogu. Citkārt ReadTrack tīklā neiziet.",
+    "about.ready": "Atjauninājums lejupielādēts. {app} aizvērsies un pats startēs no jauna — ja nē, atveriet to no lietotņu izvēlnes.",
+    "about.privacy": "Atjauninājums tiek ielādēts no GitHub caur Wi-Fi un tikai tad, kad nospiežat pogu. Citkārt {app} tīklā neiziet.",
     "about.log": "Pēdējais mēģinājums:",
 
     "update.errNoNetwork": "Nav savienojuma. Ieslēdziet Wi-Fi un mēģiniet vēlreiz.",
@@ -76,5 +65,6 @@ var strings = {
     "time.m": "{m} min",
 
     "plural.days": ["diena", "dienas", "dienu"],
-    "plural.books": ["grāmata", "grāmatas", "grāmatu"]
+    "plural.books": ["grāmata", "grāmatas", "grāmatu"],
+    "plural.pages": ["lappuse", "lappuses", "lappušu"]
 };

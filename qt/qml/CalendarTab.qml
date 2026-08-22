@@ -49,11 +49,27 @@ Item {
             text: "‹"
         }
 
-        StyledText {
+        Column {
             anchors.centerIn: parent
-            styledFont: FontStyles.Heading4
-            color: GlobalValues.defaultTextColor
-            text: tab.monthNames[tab.month - 1] + " " + tab.year
+            spacing: Global.dp(1)
+
+            StyledText {
+                anchors.horizontalCenter: parent.horizontalCenter
+                styledFont: FontStyles.Heading4
+                color: GlobalValues.defaultTextColor
+                text: tab.monthNames[tab.month - 1] + " " + tab.year
+            }
+
+            StyledText {
+                anchors.horizontalCenter: parent.horizontalCenter
+                visible: (tab.m.readDays || 0) > 0
+                styledFont: FontStyles.BodyXS
+                color: GlobalValues.defaultDisabledTextColor
+                text: Tr.t("calendar.monthSummary", {
+                          n: tab.m.readDays || 0,
+                          days: Tr.plural("plural.days", tab.m.readDays || 0),
+                          time: Tr.fmtHM(tab.m.totalSecs || 0) })
+            }
         }
 
         StyledText {
@@ -142,7 +158,7 @@ Item {
         wrapMode: Text.Wrap
         styledFont: FontStyles.BodyS
         color: GlobalValues.defaultDisabledTextColor
-        text: Tr.t("streak.trackingSince", { date: tab.m.trackingSince || "" })
+        text: Tr.t("calendar.trackingSince", { date: tab.m.trackingSince || "" })
     }
 
     // Grid: the cover of the most-read book per reading day
@@ -152,7 +168,7 @@ Item {
         anchors.top: weekdayRow.bottom
         anchors.topMargin: Global.dp(6)
         anchors.bottom: trackingNote.visible ? trackingNote.top : parent.bottom
-        anchors.bottomMargin: Global.dp(16)
+        anchors.bottomMargin: Global.dp(12)
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.leftMargin: tab.sideMargin

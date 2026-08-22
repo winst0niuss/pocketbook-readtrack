@@ -15,38 +15,27 @@ var strings = {
     "app.title": "Статистика",
 
     "nav.overview": "Огляд",
-    "nav.streak": "Серія",
     "nav.calendar": "Календар",
-    "nav.year": "Рік",
+    "nav.about": "Інфо",
 
-    "overview.progress": "Прогрес: {percent} %",
-    "overview.read": "Прочитано: {time}",
     "overview.left": "Залишилось бл. {time}",
     "overview.noBook": "Книгу ще не відкрито",
-    "overview.today": "Прочитано сьогодні",
+    "overview.bookProgress": "Прогрес книги: {percent} %",
+    "overview.hoursOfReading": "годин читання",
     "overview.minPerSession": "хв за сеанс",
-    "overview.pagesPerMinute": "сторінок за хвилину",
     "overview.allBooks": "УСІ КНИГИ",
     "overview.donutCaption": "книг на пристрої дочитано",
     "overview.booksFinished": "Книг прочитано",
     "overview.totalHours": "Годин усього",
+    "overview.pagesPerHour": "сторінок за годину",
 
-    "streak.current": "{days} поточної серії",
-    "streak.best": "{days} найкращої серії {year}",
-    "streak.readingDays": "{n} {daysCaps} ЧИТАННЯ У {year}",
-    "streak.none": "Серії читання ще немає — сьогодні гарний день, щоб її почати.",
-    "streak.longest": "Ваша найдовша серія почалася {when} і тривала {n} {days}.",
-    "streak.trackingSince": "Дані про читання збираються з {date}.",
-    "streak.legendNotRead": "немає читання",
-    "streak.legendRead": "є читання",
-    "streak.legendFinished": "книга дочитана",
 
     "calendar.dayTitle": "{date}  ·  {time}",
     "calendar.finished": "Дочитано",
-
-    "year.title": "Книг прочитано за {year}",
-    "year.monthTitle": "{month} {year}  ·  {n} {books}",
+    "calendar.trackingSince": "Дані про читання збираються з {date}.",
     "book.finishedOn": "Дочитано {date}",
+    "calendar.monthSummary": "{n} {days} · {time}",
+
 
     "about.version": "Версія {version}",
     "about.check": "Перевірити оновлення",
@@ -55,8 +44,8 @@ var strings = {
     "about.uptodate": "Встановлено останню версію.",
     "about.available": "Доступна версія {version}.",
     "about.downloading": "Завантажую оновлення…",
-    "about.ready": "Оновлення завантажено. ReadTrack закриється і запуститься сам — якщо цього не сталося, відкрийте його з меню програм.",
-    "about.privacy": "Оновлення завантажується з GitHub через Wi-Fi і лише після натискання кнопки. В інший час ReadTrack не виходить у мережу.",
+    "about.ready": "Оновлення завантажено. {app} закриється і запуститься сам — якщо цього не сталося, відкрийте його з меню програм.",
+    "about.privacy": "Оновлення завантажується з GitHub через Wi-Fi і лише після натискання кнопки. В інший час {app} не виходить у мережу.",
     "about.log": "Остання спроба:",
 
     "update.errNoNetwork": "Немає з'єднання. Увімкніть Wi-Fi і повторіть.",
@@ -77,5 +66,6 @@ var strings = {
     "time.m": "{m} хв",
 
     "plural.days": ["день", "дні", "днів"],
-    "plural.books": ["книга", "книги", "книг"]
+    "plural.books": ["книга", "книги", "книг"],
+    "plural.pages": ["сторінка", "сторінки", "сторінок"]
 };

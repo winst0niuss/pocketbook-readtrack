@@ -31,6 +31,13 @@ listed too, so nobody re-proposes them.
 
 ## Screens
 
+**Superseded, 2026-08-21.** The five-tab version below was built and then cut
+back to two screens plus info, modelled on Kobo's reading-stats page: everything
+that matters at a glance, and nothing that needs explaining. What shipped is
+*Overview* (current book, pace, library donut) and *Calendar* (a month of
+covers). The tabs described here — Habit, Books, Year — were removed; their code
+is in the history if any of it is wanted back.
+
 Five tabs plus the info glyph. Current tabs in brackets.
 
 ### 1 · Now  [Overview]

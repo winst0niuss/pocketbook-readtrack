@@ -15,38 +15,27 @@ var strings = {
     "app.title": "Statistici",
 
     "nav.overview": "Prezentare",
-    "nav.streak": "Serie",
     "nav.calendar": "Calendar",
-    "nav.year": "An",
+    "nav.about": "Info",
 
-    "overview.progress": "Progres: {percent} %",
-    "overview.read": "Citit: {time}",
     "overview.left": "Au rămas cca {time}",
     "overview.noBook": "Nicio carte deschisă încă",
-    "overview.today": "Citit astăzi",
+    "overview.bookProgress": "Progres carte: {percent} %",
+    "overview.hoursOfReading": "ore de citit",
     "overview.minPerSession": "min pe sesiune",
-    "overview.pagesPerMinute": "pagini pe minut",
     "overview.allBooks": "TOATE CĂRȚILE",
     "overview.donutCaption": "din cărțile de pe dispozitiv",
     "overview.booksFinished": "Cărți terminate",
     "overview.totalHours": "Ore în total",
+    "overview.pagesPerHour": "pagini pe oră",
 
-    "streak.current": "{days} în seria curentă",
-    "streak.best": "{days} în cea mai bună serie {year}",
-    "streak.readingDays": "{n} {daysCaps} DE CITIT ÎN {year}",
-    "streak.none": "Încă nicio serie de lectură — azi e o zi bună să începi una.",
-    "streak.longest": "Cea mai lungă serie a început pe {when} și a durat {n} {days}.",
-    "streak.trackingSince": "Datele de lectură sunt înregistrate din {date}.",
-    "streak.legendNotRead": "fără lectură",
-    "streak.legendRead": "lectură",
-    "streak.legendFinished": "carte terminată",
 
     "calendar.dayTitle": "{date}  ·  {time}",
     "calendar.finished": "Terminată",
-
-    "year.title": "Cărți terminate în {year}",
-    "year.monthTitle": "{month} {year}  ·  {n} {books}",
+    "calendar.trackingSince": "Datele de lectură sunt înregistrate din {date}.",
     "book.finishedOn": "Terminată pe {date}",
+    "calendar.monthSummary": "{n} {days} · {time}",
+
 
     "about.version": "Versiunea {version}",
     "about.check": "Caută actualizare",
@@ -55,8 +44,8 @@ var strings = {
     "about.uptodate": "Aceasta este cea mai nouă versiune.",
     "about.available": "Versiunea {version} este disponibilă.",
     "about.downloading": "Descarc actualizarea…",
-    "about.ready": "Actualizare descărcată. ReadTrack se închide și pornește singur din nou — dacă nu, deschide-l din meniul de aplicații.",
-    "about.privacy": "Actualizarea este adusă de pe GitHub prin Wi-Fi, doar când apeși butonul. În rest, ReadTrack nu se conectează la rețea.",
+    "about.ready": "Actualizare descărcată. {app} se închide și pornește singur din nou — dacă nu, deschide-l din meniul de aplicații.",
+    "about.privacy": "Actualizarea este adusă de pe GitHub prin Wi-Fi, doar când apeși butonul. În rest, {app} nu se conectează la rețea.",
     "about.log": "Ultima încercare:",
 
     "update.errNoNetwork": "Fără conexiune. Pornește Wi-Fi și încearcă din nou.",
@@ -77,5 +66,6 @@ var strings = {
     "time.m": "{m} min",
 
     "plural.days": ["zi", "zile", "de zile"],
-    "plural.books": ["carte", "cărți", "de cărți"]
+    "plural.books": ["carte", "cărți", "de cărți"],
+    "plural.pages": ["pagină", "pagini", "de pagini"]
 };

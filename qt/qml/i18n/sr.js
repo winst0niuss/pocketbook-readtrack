@@ -15,38 +15,27 @@ var strings = {
     "app.title": "Статистика",
 
     "nav.overview": "Преглед",
-    "nav.streak": "Низ",
     "nav.calendar": "Календар",
-    "nav.year": "Година",
+    "nav.about": "Инфо",
 
-    "overview.progress": "Напредак: {percent} %",
-    "overview.read": "Прочитано: {time}",
     "overview.left": "Остало око {time}",
     "overview.noBook": "Још ниједна књига није отворена",
-    "overview.today": "Прочитано данас",
+    "overview.bookProgress": "Напредак књиге: {percent} %",
+    "overview.hoursOfReading": "сати читања",
     "overview.minPerSession": "мин по сесији",
-    "overview.pagesPerMinute": "страна у минути",
     "overview.allBooks": "СВЕ КЊИГЕ",
     "overview.donutCaption": "књига на уређају",
     "overview.booksFinished": "Прочитане књиге",
     "overview.totalHours": "Сати укупно",
+    "overview.pagesPerHour": "страна на сат",
 
-    "streak.current": "{days} тренутног низа",
-    "streak.best": "{days} најбољег низа {year}",
-    "streak.readingDays": "{n} {daysCaps} ЧИТАЊА {year}",
-    "streak.none": "Још нема низа читања — данас је добар дан да га започнете.",
-    "streak.longest": "Ваш најдужи низ почео је {when} и трајао {n} {days}.",
-    "streak.trackingSince": "Подаци о читању бележе се од {date}.",
-    "streak.legendNotRead": "без читања",
-    "streak.legendRead": "читање",
-    "streak.legendFinished": "књига прочитана",
 
     "calendar.dayTitle": "{date}  ·  {time}",
     "calendar.finished": "Прочитана",
-
-    "year.title": "Књиге прочитане {year}",
-    "year.monthTitle": "{month} {year}  ·  {n} {books}",
+    "calendar.trackingSince": "Подаци о читању бележе се од {date}.",
     "book.finishedOn": "Прочитана {date}",
+    "calendar.monthSummary": "{n} {days} · {time}",
+
 
     "about.version": "Верзија {version}",
     "about.check": "Провери ажурирање",
@@ -55,8 +44,8 @@ var strings = {
     "about.uptodate": "Ово је најновија верзија.",
     "about.available": "Доступна је верзија {version}.",
     "about.downloading": "Преузимам ажурирање…",
-    "about.ready": "Ажурирање је преузето. ReadTrack ће се затворити и сам поново покренути — ако не, отворите га из менија апликација.",
-    "about.privacy": "Ажурирање се преузима са GitHub-а преко Wi-Fi мреже, и само када притиснете дугме. Иначе ReadTrack не излази на мрежу.",
+    "about.ready": "Ажурирање је преузето. {app} ће се затворити и сам поново покренути — ако не, отворите га из менија апликација.",
+    "about.privacy": "Ажурирање се преузима са GitHub-а преко Wi-Fi мреже, и само када притиснете дугме. Иначе {app} не излази на мрежу.",
     "about.log": "Последњи покушај:",
 
     "update.errNoNetwork": "Нема везе. Укључите Wi-Fi и покушајте поново.",
@@ -77,5 +66,6 @@ var strings = {
     "time.m": "{m} мин",
 
     "plural.days": ["дан", "дана", "дана"],
-    "plural.books": ["књига", "књиге", "књига"]
+    "plural.books": ["књига", "књиге", "књига"],
+    "plural.pages": ["страна", "стране", "страна"]
 };

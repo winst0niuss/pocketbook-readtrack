@@ -55,14 +55,19 @@ Item {
 
         StyledText {
             width: parent.width
-            // Heading3, not Heading2: the repository name is long enough that
-            // the larger size runs off a 758 px screen.
             styledFont: FontStyles.Heading3
             color: GlobalValues.defaultTextColor
-            // The repository name: this is where an update comes from, so it
-            // is the name worth showing next to the version.
             text: "pocketbook-statistics"
             elide: Text.ElideRight
+        }
+
+        StyledText {
+            width: parent.width
+            styledFont: FontStyles.BodyS
+            color: GlobalValues.defaultTextColor
+            opacity: 0.7
+            text: "github.com/winst0niuss/pocketbook-statistics"
+            elide: Text.ElideMiddle
         }
 
         StyledText {
@@ -99,7 +104,7 @@ Item {
                 case "available":   return Tr.t("about.available",
                                                 { version: updater.latestVersion });
                 case "downloading": return Tr.t("about.downloading");
-                case "ready":       return Tr.t("about.ready");
+                case "ready":       return Tr.t("about.ready", { app: Tr.t("app.title") });
                 case "error":       return Tr.t(updater.errorKey);
                 default:            return "";
                 }
@@ -122,7 +127,7 @@ Item {
             wrapMode: Text.Wrap
             styledFont: FontStyles.BodyS
             color: GlobalValues.defaultDisabledTextColor
-            text: Tr.t("about.privacy")
+            text: Tr.t("about.privacy", { app: Tr.t("app.title") })
         }
 
         // What the last attempt managed to do. Worth the screen space while

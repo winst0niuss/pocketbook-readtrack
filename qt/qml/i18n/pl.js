@@ -15,38 +15,27 @@ var strings = {
     "app.title": "Statystyki",
 
     "nav.overview": "Przegląd",
-    "nav.streak": "Seria",
     "nav.calendar": "Kalendarz",
-    "nav.year": "Rok",
+    "nav.about": "Info",
 
-    "overview.progress": "Postęp: {percent} %",
-    "overview.read": "Przeczytano: {time}",
     "overview.left": "Zostało ok. {time}",
     "overview.noBook": "Nie otwarto jeszcze książki",
-    "overview.today": "Przeczytane dziś",
+    "overview.bookProgress": "Postęp książki: {percent} %",
+    "overview.hoursOfReading": "godzin czytania",
     "overview.minPerSession": "min na sesję",
-    "overview.pagesPerMinute": "stron na minutę",
     "overview.allBooks": "WSZYSTKIE KSIĄŻKI",
     "overview.donutCaption": "książek na urządzeniu",
     "overview.booksFinished": "Przeczytane książki",
     "overview.totalHours": "Godzin łącznie",
+    "overview.pagesPerHour": "stron na godzinę",
 
-    "streak.current": "{days} obecnej serii",
-    "streak.best": "{days} najlepszej serii {year}",
-    "streak.readingDays": "{n} {daysCaps} CZYTANIA W {year}",
-    "streak.none": "Nie ma jeszcze serii czytania — dziś jest dobry dzień, aby ją zacząć.",
-    "streak.longest": "Twoja najdłuższa seria zaczęła się {when} i trwała {n} {days}.",
-    "streak.trackingSince": "Dane o czytaniu są zapisywane od {date}.",
-    "streak.legendNotRead": "brak czytania",
-    "streak.legendRead": "czytanie",
-    "streak.legendFinished": "książka przeczytana",
 
     "calendar.dayTitle": "{date}  ·  {time}",
     "calendar.finished": "Przeczytana",
-
-    "year.title": "Książki przeczytane w {year}",
-    "year.monthTitle": "{month} {year}  ·  {n} {books}",
+    "calendar.trackingSince": "Dane o czytaniu są zapisywane od {date}.",
     "book.finishedOn": "Przeczytana {date}",
+    "calendar.monthSummary": "{n} {days} · {time}",
+
 
     "about.version": "Wersja {version}",
     "about.check": "Sprawdź aktualizację",
@@ -55,8 +44,8 @@ var strings = {
     "about.uptodate": "To jest najnowsza wersja.",
     "about.available": "Dostępna jest wersja {version}.",
     "about.downloading": "Pobieram aktualizację…",
-    "about.ready": "Aktualizacja pobrana. ReadTrack zamknie się i uruchomi ponownie sam — jeśli nie, otwórz go z menu aplikacji.",
-    "about.privacy": "Aktualizacja jest pobierana z GitHub przez Wi-Fi, wyłącznie po naciśnięciu przycisku. Poza tym ReadTrack nie łączy się z siecią.",
+    "about.ready": "Aktualizacja pobrana. {app} zamknie się i uruchomi ponownie sam — jeśli nie, otwórz go z menu aplikacji.",
+    "about.privacy": "Aktualizacja jest pobierana z GitHub przez Wi-Fi, wyłącznie po naciśnięciu przycisku. Poza tym {app} nie łączy się z siecią.",
     "about.log": "Ostatnia próba:",
 
     "update.errNoNetwork": "Brak połączenia. Włącz Wi-Fi i spróbuj ponownie.",
@@ -77,5 +66,6 @@ var strings = {
     "time.m": "{m} min",
 
     "plural.days": ["dzień", "dni", "dni"],
-    "plural.books": ["książka", "książki", "książek"]
+    "plural.books": ["książka", "książki", "książek"],
+    "plural.pages": ["strona", "strony", "stron"]
 };

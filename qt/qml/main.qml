@@ -25,173 +25,86 @@ Window {
         onClose: Qt.quit()
     }
 
-    /* Tab bar. Each tab is only as wide as its own label, and the leftover
-     * width is split into equal gaps — including before the first tab and
-     * after the last — so the spacing between "Обзор" and "Календарь" is the
-     * same as between "Календарь" and "Год". Equal-width cells put equal boxes
-     * around unequal words, which is what made the gaps look wrong.
-     *
-     * Every label is measured in its bold form, the one the active tab uses,
-     * so switching tabs cannot shift its neighbours sideways. */
+    /* Navigation along the bottom edge, icon over label. Six equal zones: the
+     * icons are the same width, so equal cells here are honest, unlike the
+     * word-sized tabs this replaces. */
     Item {
-        id: tabBar
+        id: nav
 
-        anchors.top: appHeader.bottom
+        anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-        height: GlobalValues.defaultListItemHeight
+        height: Global.dp(70)
 
         property int current: 0
 
-        readonly property var labels: [Tr.t("nav.overview"), Tr.t("nav.streak"),
-                                       Tr.t("nav.calendar"), Tr.t("nav.year")]
-        // The last tab is the info glyph rather than a word.
+        readonly property var labels: [Tr.t("nav.overview"), Tr.t("nav.calendar")]
+        readonly property var icons: ["home", "calendar"]
         readonly property int infoIndex: labels.length
-        readonly property real infoSize: Global.dp(34)
-        readonly property real gap:
-            Math.max(Global.dp(16),
-                     (width - metrics.implicitWidth - infoSize)
-                     / (labels.length + 2))
 
-        // Off-screen twin of the row, used only for its width. Bold throughout:
-        // see the note above.
-        Row {
-            id: metrics
-
-            visible: false
-            spacing: 0
-
-            Repeater {
-                model: tabBar.labels
-
-                StyledText {
-                    required property string modelData
-                    styledFont: FontStyles.BodyLBold
-                    text: modelData
-                }
-            }
+        Rectangle {
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height: Math.max(1, Math.round(GlobalValues.defaultSolidSeparatorThickness))
+            color: GlobalValues.defaultBorderColor
         }
 
         Row {
-            anchors.left: parent.left
-            anchors.leftMargin: tabBar.gap
-            height: parent.height
-            spacing: tabBar.gap
+            anchors.fill: parent
+            anchors.topMargin: Global.dp(6)
 
             Repeater {
-                model: tabBar.labels
+                model: nav.labels.length + 1
 
                 Item {
-                    required property string modelData
+                    id: navCell
+
                     required property int index
 
-                    readonly property bool active: index === tabBar.current
+                    readonly property bool active: index === nav.current
+                    readonly property bool isInfo: index === nav.infoIndex
 
-                    width: boldLabel.implicitWidth
-                    height: tabBar.height
+                    width: nav.width / (nav.labels.length + 1)
+                    height: nav.height
 
-                    // Present but hidden when inactive: it owns the width.
-                    StyledText {
-                        id: boldLabel
-
-                        anchors.centerIn: parent
-                        visible: parent.active
-                        styledFont: FontStyles.BodyLBold
-                        color: GlobalValues.defaultTextColor
-                        text: modelData
-                    }
-
-                    StyledText {
-                        anchors.centerIn: parent
-                        visible: !parent.active
-                        styledFont: FontStyles.BodyL
-                        color: GlobalValues.defaultDisabledTextColor
-                        text: modelData
-                    }
-
-                    Rectangle {
-                        visible: parent.active
-                        anchors.bottom: parent.bottom
+                    Column {
                         anchors.horizontalCenter: parent.horizontalCenter
-                        width: parent.width + Global.dp(8)
-                        height: Global.dp(4)
-                        color: GlobalValues.defaultTextColor
+                        anchors.top: parent.top
+                        spacing: Global.dp(2)
+
+                        NavIcon {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            width: Global.dp(32)
+                            height: Global.dp(32)
+                            kind: navCell.isInfo ? "info" : nav.icons[navCell.index]
+                            active: navCell.active
+                        }
+
+                        StyledText {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            // One size only: a bold variant would change the
+                            // label's width and shuffle the row on every tap.
+                            styledFont: FontStyles.BodyXS
+                            color: GlobalValues.defaultTextColor
+                            opacity: navCell.active ? 1.0 : 0.6
+                            text: navCell.isInfo ? Tr.t("nav.about")
+                                                 : nav.labels[navCell.index]
+                        }
                     }
 
                     MouseArea {
-                        // Reaches past the label into half the gap on each
-                        // side, so a tab stays easy to hit on e-ink.
                         anchors.fill: parent
-                        anchors.margins: -tabBar.gap / 2
-                        onClicked: tabBar.current = index
+                        onClicked: nav.current = index
                     }
                 }
-
             }
-        }
-
-        // Info tab: an "i" in a circle, drawn rather than typed — the glyph
-        // U+24D8 is not in every firmware font.
-        Item {
-            id: infoTab
-
-            readonly property bool active: tabBar.current === tabBar.infoIndex
-
-            anchors.right: parent.right
-            anchors.rightMargin: tabBar.gap
-            width: tabBar.infoSize
-            height: tabBar.height
-
-            Rectangle {
-                anchors.centerIn: parent
-                width: tabBar.infoSize
-                height: width
-                radius: width / 2
-                color: "transparent"
-                border.width: Math.max(1, Global.dp(2))
-                border.color: infoTab.active
-                              ? GlobalValues.defaultTextColor
-                              : GlobalValues.defaultDisabledTextColor
-
-                StyledText {
-                    anchors.centerIn: parent
-                    styledFont: infoTab.active ? FontStyles.BodyLBold
-                                               : FontStyles.BodyL
-                    color: infoTab.active
-                           ? GlobalValues.defaultTextColor
-                           : GlobalValues.defaultDisabledTextColor
-                    text: "i"
-                }
-            }
-
-            Rectangle {
-                visible: infoTab.active
-                anchors.bottom: parent.bottom
-                anchors.horizontalCenter: parent.horizontalCenter
-                width: parent.width + Global.dp(8)
-                height: Global.dp(4)
-                color: GlobalValues.defaultTextColor
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                anchors.margins: -tabBar.gap / 2
-                onClicked: tabBar.current = tabBar.infoIndex
-            }
-        }
-
-        Rectangle {
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            height: GlobalValues.defaultSolidSeparatorThickness
-            color: GlobalValues.defaultBorderColor
         }
     }
 
     FocusScope {
-        anchors.top: tabBar.bottom
-        anchors.bottom: parent.bottom
+        anchors.top: appHeader.bottom
+        anchors.bottom: nav.top
         anchors.left: parent.left
         anchors.right: parent.right
         focus: true
@@ -206,27 +119,17 @@ Window {
 
         OverviewTab {
             anchors.fill: parent
-            visible: tabBar.current === 0
-        }
-
-        StreakTab {
-            anchors.fill: parent
-            visible: tabBar.current === 1
+            visible: nav.current === 0
         }
 
         CalendarTab {
             anchors.fill: parent
-            visible: tabBar.current === 2
-        }
-
-        YearTab {
-            anchors.fill: parent
-            visible: tabBar.current === 3
+            visible: nav.current === 1
         }
 
         AboutTab {
             anchors.fill: parent
-            visible: tabBar.current === tabBar.infoIndex
+            visible: nav.current === nav.infoIndex
         }
     }
 }

@@ -23,6 +23,7 @@ test:
 	cc $(CFLAGS) -o build/test_tracker test/test_tracker.c \
 	  src/tracker.c src/stats_db.c src/version.c -lsqlite3
 	./build/test_tracker
+	@python3 tools/check_qml.py
 
 # ---- Build the app (single ELF, links the device's Qt at runtime) ----
 qt:
@@ -44,4 +45,10 @@ icons:
 clean:
 	rm -rf build build-qt
 
-.PHONY: sdk test qt deploy icons clean
+.PHONY: sdk test qmlcheck qt deploy icons clean
+
+# ---- QML sanity: things qmllint lets through but the engine refuses ----
+# A duplicated function or id stops the component being created, and the app
+# just doesn't open — with no message anywhere, since there is no console.
+qmlcheck:
+	@python3 tools/check_qml.py

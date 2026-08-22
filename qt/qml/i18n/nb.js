@@ -10,38 +10,27 @@ var strings = {
     "app.title": "Statistikk",
 
     "nav.overview": "Oversikt",
-    "nav.streak": "Rekke",
     "nav.calendar": "Kalender",
-    "nav.year": "År",
+    "nav.about": "Om",
 
-    "overview.progress": "Framdrift: {percent} %",
-    "overview.read": "Lest: {time}",
     "overview.left": "Ca. {time} igjen",
     "overview.noBook": "Ingen bok åpnet ennå",
-    "overview.today": "Lest i dag",
+    "overview.bookProgress": "Bokens framdrift: {percent} %",
+    "overview.hoursOfReading": "timers lesing",
     "overview.minPerSession": "min per økt",
-    "overview.pagesPerMinute": "sider per minutt",
     "overview.allBooks": "ALLE BØKER",
     "overview.donutCaption": "av bøkene på enheten",
     "overview.booksFinished": "Ferdigleste bøker",
     "overview.totalHours": "Timer totalt",
+    "overview.pagesPerHour": "sider i timen",
 
-    "streak.current": "{days} nåværende rekke",
-    "streak.best": "{days} beste rekke {year}",
-    "streak.readingDays": "{n} {daysCaps} MED LESING I {year}",
-    "streak.none": "Ingen leserekke ennå — i dag er en god dag å starte en.",
-    "streak.longest": "Den lengste rekken din begynte {when} og varte {n} {days}.",
-    "streak.trackingSince": "Lesedata er registrert siden {date}.",
-    "streak.legendNotRead": "ingen lesing",
-    "streak.legendRead": "lesing",
-    "streak.legendFinished": "bok ferdiglest",
 
     "calendar.dayTitle": "{date}  ·  {time}",
     "calendar.finished": "Ferdiglest",
-
-    "year.title": "Bøker ferdiglest i {year}",
-    "year.monthTitle": "{month} {year}  ·  {n} {books}",
+    "calendar.trackingSince": "Lesedata er registrert siden {date}.",
     "book.finishedOn": "Ferdiglest {date}",
+    "calendar.monthSummary": "{n} {days} · {time}",
+
 
     "about.version": "Versjon {version}",
     "about.check": "Se etter oppdatering",
@@ -50,8 +39,8 @@ var strings = {
     "about.uptodate": "Dette er den nyeste versjonen.",
     "about.available": "Versjon {version} er tilgjengelig.",
     "about.downloading": "Laster ned oppdateringen…",
-    "about.ready": "Oppdateringen er lastet ned. ReadTrack lukkes og starter av seg selv — hvis ikke, åpne den fra menyen.",
-    "about.privacy": "Oppdateringen hentes fra GitHub over wifi, og bare når du trykker på knappen. Ellers går ReadTrack aldri på nett.",
+    "about.ready": "Oppdateringen er lastet ned. {app} lukkes og starter av seg selv — hvis ikke, åpne den fra menyen.",
+    "about.privacy": "Oppdateringen hentes fra GitHub over wifi, og bare når du trykker på knappen. Ellers går {app} aldri på nett.",
     "about.log": "Siste forsøk:",
 
     "update.errNoNetwork": "Ingen tilkobling. Slå på wifi og prøv igjen.",
@@ -72,5 +61,6 @@ var strings = {
     "time.m": "{m} min",
 
     "plural.days": ["dag", "dager"],
-    "plural.books": ["bok", "bøker"]
+    "plural.books": ["bok", "bøker"],
+    "plural.pages": ["side", "sider"]
 };

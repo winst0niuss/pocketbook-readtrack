@@ -122,6 +122,13 @@ QtObject {
                                     monthGen: entry("date.monthsGen")[d.getMonth()] });
     }
 
+    /* 5 240 rather than 5240: at four digits a number starts reading as an
+     * identifier. Narrow no-break space, so it never wraps mid-number. */
+    function fmtNumber(n) {
+        return String(Math.round(n || 0))
+               .replace(/\B(?=(\d{3})+(?!\d))/g, "\u202f");
+    }
+
     /* Reading time: "1h 05m" / "1 ч 05 мин" / "12 min" */
     function fmtHM(secs) {
         var s = secs || 0;

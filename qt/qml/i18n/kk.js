@@ -10,38 +10,27 @@ var strings = {
     "app.title": "Статистика",
 
     "nav.overview": "Шолу",
-    "nav.streak": "Серия",
     "nav.calendar": "Күнтізбе",
-    "nav.year": "Жыл",
+    "nav.about": "Ақпарат",
 
-    "overview.progress": "Барысы: {percent} %",
-    "overview.read": "Оқылды: {time}",
     "overview.left": "Шамамен {time} қалды",
     "overview.noBook": "Әзірге кітап ашылмаған",
-    "overview.today": "Бүгін оқылды",
+    "overview.bookProgress": "Кітап барысы: {percent} %",
+    "overview.hoursOfReading": "сағат оқу",
     "overview.minPerSession": "бір сеансқа мин",
-    "overview.pagesPerMinute": "минутына бет",
     "overview.allBooks": "БАРЛЫҚ КІТАПТАР",
     "overview.donutCaption": "құрылғыдағы кітаптардың",
     "overview.booksFinished": "Оқып бітірген кітаптар",
     "overview.totalHours": "Барлығы сағат",
+    "overview.pagesPerHour": "сағатына бет",
 
-    "streak.current": "{days} ағымдағы серия",
-    "streak.best": "{days} үздік серия {year}",
-    "streak.readingDays": "{year} ЖЫЛЫ {n} ОҚУ {daysCaps}",
-    "streak.none": "Оқу сериясы әзірге жоқ — бүгін оны бастауға жақсы күн.",
-    "streak.longest": "Ең ұзақ сериямыз {when} басталып, {n} {days} созылды.",
-    "streak.trackingSince": "Оқу деректері {date} бастап жиналуда.",
-    "streak.legendNotRead": "оқу жоқ",
-    "streak.legendRead": "оқу",
-    "streak.legendFinished": "кітап оқылды",
 
     "calendar.dayTitle": "{date}  ·  {time}",
     "calendar.finished": "Оқып бітті",
-
-    "year.title": "{year} жылы оқып бітірген кітаптар",
-    "year.monthTitle": "{month} {year}  ·  {n} {books}",
+    "calendar.trackingSince": "Оқу деректері {date} бастап жиналуда.",
     "book.finishedOn": "{date} оқып бітті",
+    "calendar.monthSummary": "{n} {days} · {time}",
+
 
     "about.version": "Нұсқа {version}",
     "about.check": "Жаңартуды тексеру",
@@ -50,8 +39,8 @@ var strings = {
     "about.uptodate": "Бұл ең соңғы нұсқа.",
     "about.available": "{version} нұсқасы қолжетімді.",
     "about.downloading": "Жаңарту жүктелуде…",
-    "about.ready": "Жаңарту жүктелді. ReadTrack жабылып, өзі қайта іске қосылады — қосылмаса, оны қолданбалар мәзірінен ашыңыз.",
-    "about.privacy": "Жаңарту Wi-Fi арқылы GitHub-тан және тек түймені басқанда жүктеледі. Басқа уақытта ReadTrack желіге шықпайды.",
+    "about.ready": "Жаңарту жүктелді. {app} жабылып, өзі қайта іске қосылады — қосылмаса, оны қолданбалар мәзірінен ашыңыз.",
+    "about.privacy": "Жаңарту Wi-Fi арқылы GitHub-тан және тек түймені басқанда жүктеледі. Басқа уақытта {app} желіге шықпайды.",
     "about.log": "Соңғы әрекет:",
 
     "update.errNoNetwork": "Байланыс жоқ. Wi-Fi қосып, қайталап көріңіз.",
@@ -72,5 +61,6 @@ var strings = {
     "time.m": "{m} мин",
 
     "plural.days": ["күн", "күн"],
-    "plural.books": ["кітап", "кітап"]
+    "plural.books": ["кітап", "кітап"],
+    "plural.pages": ["бет", "бет"]
 };

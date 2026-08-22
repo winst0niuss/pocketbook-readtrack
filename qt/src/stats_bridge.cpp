@@ -177,6 +177,10 @@ struct FinishedBook {
     QString title;
     QString author;
     QString coverUrl;
+    /* The firmware's page count, as the Library shows it: repaginated for the
+     * current font, and for some reflowable books a percentage (100) rather
+     * than pages. Callers that add these up must drop the 100s. */
+    int pages = 0;
     QStringList words; /* normalized title, for the dedupe below */
     bool hasFile = false;
 };
@@ -216,7 +220,7 @@ QList<FinishedBook> finishedBooks(bool withCovers)
     const char *sql =
         "SELECT date(s.completed_ts,'unixepoch','localtime'), IFNULL(b.title,'?'),"
         " EXISTS(SELECT 1 FROM files f WHERE f.book_id = b.id),"
-        " IFNULL(b.author,'')"
+        " IFNULL(b.author,''), IFNULL(s.npage,0)"
         " FROM books_settings s JOIN books_impl b ON b.id = s.bookid"
         " WHERE s.completed = 1 AND s.completed_ts > 0"
         " ORDER BY s.completed_ts";
@@ -234,6 +238,7 @@ QList<FinishedBook> finishedBooks(bool withCovers)
             const bool hasFile = sqlite3_column_int(st, 2) != 0;
             const QString author = QString::fromUtf8(
                 reinterpret_cast<const char *>(sqlite3_column_text(st, 3)));
+            const int pages = sqlite3_column_int(st, 4);
             const QStringList words = titleWords(title);
 
             int at = -1;
@@ -245,6 +250,7 @@ QList<FinishedBook> finishedBooks(bool withCovers)
                 fb.day = day; /* first row of a group = first finish date */
                 fb.title = title;
                 fb.author = author;
+                fb.pages = pages;
                 fb.words = words;
                 fb.hasFile = hasFile;
                 out.append(fb);
@@ -256,6 +262,8 @@ QList<FinishedBook> finishedBooks(bool withCovers)
                 out[at].hasFile = true;
                 if (!author.isEmpty())
                     out[at].author = author;
+                if (pages > out[at].pages)
+                    out[at].pages = pages;
             }
         }
     }
@@ -279,7 +287,10 @@ QVariantMap StatsBridge::overall()
     m[QStringLiteral("todayPages")] = o.today_pages;
     m[QStringLiteral("weekSecs")] = o.week_secs;
     m[QStringLiteral("avgSessionMin")] = o.avg_session_min;
-    m[QStringLiteral("pagesPerMin")] = o.pages_per_min;
+    /* Per hour, not per minute: a real reading speed is 0.1 pages a minute,
+     * which reads as a broken counter. The same number as 6 pages an hour
+     * reads as a fact. */
+    m[QStringLiteral("pagesPerHour")] = o.pages_per_min * 60.0;
     m[QStringLiteral("totalHours")] = o.total_hours;
     /* The donut answers "how much of what I have have I read", so both halves
      * count the books currently on the device — download twenty more and it
@@ -313,6 +324,7 @@ QVariantMap StatsBridge::overall()
     m[QStringLiteral("finishedFrac")] =
         libraryTotal > 0 ? double(libraryFinished) / libraryTotal : 0.0;
     m[QStringLiteral("streakDays")] = o.streak_days;
+
     return m;
 }
 
@@ -345,6 +357,11 @@ QVariantMap StatsBridge::currentBook()
     }
     m[QStringLiteral("coverUrl")] = coverUrl;
 
+    const int64_t started = stats_book_started(db_, s.bookid);
+    m[QStringLiteral("startedDaysAgo")] = started > 0
+        ? QDateTime::fromSecsSinceEpoch(started).date().daysTo(QDate::currentDate())
+        : -1;
+
     int64_t bsecs = 0;
     double bppm = 0;
     stats_book(db_, s.bookid, &bsecs, &bppm);
@@ -361,127 +378,6 @@ QVariantMap StatsBridge::currentBook()
     return m;
 }
 
-
-QVariantMap StatsBridge::year(int y)
-{
-    QVariantMap m;
-    const QDate jan1(y, 1, 1);
-    const int ndays = jan1.daysInYear();
-
-    QVector<int> heat(ndays, 0);
-
-    /* Nothing was measured before the app was installed, and the firmware keeps
-     * no session history, so those days are unknown rather than "not read".
-     * Finish markers still stand: the firmware does date those. */
-    const qint64 since = stats_tracking_since(db_);
-    const QDate sinceDate = since > 0
-        ? QDateTime::fromSecsSinceEpoch(since).date() : QDate();
-    int trackedFrom = 0;
-    if (sinceDate.isValid()) {
-        if (sinceDate.year() > y)
-            trackedFrom = ndays;
-        else if (sinceDate.year() == y)
-            trackedFrom = sinceDate.dayOfYear() - 1;
-    }
-
-    /* Lesetage */
-    sqlite3_stmt *st = nullptr;
-    const char *readSql =
-        "SELECT date(end_time,'unixepoch','localtime') d FROM sessions"
-        " WHERE strftime('%Y', end_time,'unixepoch','localtime') = printf('%04d',?1)"
-        AND_TRACKED
-        " GROUP BY d HAVING SUM(active_seconds) >= 60";
-    if (sqlite3_prepare_v2(db_, readSql, -1, &st, nullptr) == SQLITE_OK) {
-        sqlite3_bind_int(st, 1, y);
-        while (sqlite3_step(st) == SQLITE_ROW) {
-            QDate d = QDate::fromString(
-                QString::fromUtf8(reinterpret_cast<const char *>(
-                    sqlite3_column_text(st, 0))),
-                Qt::ISODate);
-            if (d.isValid() && d.year() == y)
-                heat[d.dayOfYear() - 1] = 1;
-        }
-    }
-    sqlite3_finalize(st);
-
-    /* Mark finish days (native marking from the firmware DB) */
-    const QList<FinishedBook> finished = finishedBooks(false);
-    for (const FinishedBook &fb : finished) {
-        if (fb.day.year() == y)
-            heat[fb.day.dayOfYear() - 1] = 2;
-    }
-
-    /* Streaks */
-    int daysRead = 0, best = 0, run = 0;
-    QDate bestStart;
-    for (int i = trackedFrom; i < ndays; i++) {
-        if (heat[i] > 0) {
-            daysRead++;
-            run++;
-            if (run > best) {
-                best = run;
-                bestStart = jan1.addDays(i - run + 1);
-            }
-        } else {
-            run = 0;
-        }
-    }
-    /* Current streak comes from stats_overall(): reading days only, and not
-     * cut off at the year boundary like the per-year heat array would be. */
-    int current = 0;
-    if (QDate::currentDate().year() == y) {
-        overall_stats o;
-        stats_overall(db_, &o);
-        current = o.streak_days;
-    }
-
-    QVariantList heatList;
-    for (int i = 0; i < ndays; i++)
-        heatList.append(heat[i]);
-    m[QStringLiteral("heat")] = heatList;
-    m[QStringLiteral("startWeekday")] = jan1.dayOfWeek() - 1; /* 0 = Montag */
-    m[QStringLiteral("ndays")] = ndays;
-    m[QStringLiteral("daysRead")] = daysRead;
-    m[QStringLiteral("currentStreak")] = current;
-    m[QStringLiteral("bestStreak")] = best;
-    m[QStringLiteral("bestStreakStart")] =
-        bestStart.isValid() ? bestStart.toString(Qt::ISODate) : QString();
-    m[QStringLiteral("trackedFrom")] = trackedFrom;
-    m[QStringLiteral("trackingSince")] =
-        sinceDate.isValid() ? sinceDate.toString(Qt::ISODate) : QString();
-    return m;
-}
-
-QVariantMap StatsBridge::yearBooks(int y)
-{
-    QVariantMap m;
-    QVector<QVariantList> perMonth(13);
-    int total = 0;
-
-    const QList<FinishedBook> finished = finishedBooks(true);
-    for (const FinishedBook &fb : finished) {
-        if (fb.day.year() != y)
-            continue;
-        QVariantMap b;
-        b[QStringLiteral("title")] = fb.title;
-        b[QStringLiteral("author")] = fb.author;
-        b[QStringLiteral("coverUrl")] = fb.coverUrl;
-        b[QStringLiteral("dateStr")] = fb.day.toString(QStringLiteral("dd.MM."));
-        /* The book card can be reached without the month heading that gives
-         * the short date its year, so it carries the full one. */
-        b[QStringLiteral("dateFull")] =
-            fb.day.toString(QStringLiteral("dd.MM.yyyy"));
-        perMonth[fb.day.month()].append(b);
-        total++;
-    }
-
-    QVariantList months;
-    for (int i = 1; i <= 12; i++)
-        months.append(QVariant(perMonth[i]));
-    m[QStringLiteral("months")] = months;
-    m[QStringLiteral("total")] = total;
-    return m;
-}
 
 QVariantMap StatsBridge::month(int year, int mon)
 {
@@ -594,12 +490,19 @@ QVariantMap StatsBridge::month(int year, int mon)
         ? sinceDate.toString(QStringLiteral("dd.MM.yyyy")) : QString();
 
     QVariantList days;
+    qlonglong totalSecs = 0;
+    int readDays = 0;
     for (int d = 1; d <= ndays; d++) {
         QVariantMap e;
         e[QStringLiteral("secs")] = daySecs[d];
         e[QStringLiteral("books")] = perDay[d];
         days.append(e);
+        totalSecs += daySecs[d];
+        if (daySecs[d] > 0)
+            readDays++;
     }
+    m[QStringLiteral("totalSecs")] = totalSecs;
+    m[QStringLiteral("readDays")] = readDays;
     m[QStringLiteral("days")] = days;
     return m;
 }

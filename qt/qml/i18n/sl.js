@@ -17,38 +17,27 @@ var strings = {
     "app.title": "Statistika",
 
     "nav.overview": "Pregled",
-    "nav.streak": "Niz",
     "nav.calendar": "Koledar",
-    "nav.year": "Leto",
+    "nav.about": "Info",
 
-    "overview.progress": "Napredek: {percent} %",
-    "overview.read": "Prebrano: {time}",
     "overview.left": "Ostalo pribl. {time}",
     "overview.noBook": "Nobena knjiga še ni odprta",
-    "overview.today": "Prebrano danes",
+    "overview.bookProgress": "Napredek knjige: {percent} %",
+    "overview.hoursOfReading": "ur branja",
     "overview.minPerSession": "min na branje",
-    "overview.pagesPerMinute": "strani na minuto",
     "overview.allBooks": "VSE KNJIGE",
     "overview.donutCaption": "knjig v napravi",
     "overview.booksFinished": "Prebrane knjige",
     "overview.totalHours": "Ur skupaj",
+    "overview.pagesPerHour": "strani na uro",
 
-    "streak.current": "{days} trenutnega niza",
-    "streak.best": "{days} najboljšega niza {year}",
-    "streak.readingDays": "{n} {daysCaps} BRANJA V LETU {year}",
-    "streak.none": "Niza branja še ni — danes je dober dan, da ga začnete.",
-    "streak.longest": "Vaš najdaljši niz se je začel {when} in trajal {n} {days}.",
-    "streak.trackingSince": "Podatki o branju se beležijo od {date}.",
-    "streak.legendNotRead": "brez branja",
-    "streak.legendRead": "branje",
-    "streak.legendFinished": "knjiga prebrana",
 
     "calendar.dayTitle": "{date}  ·  {time}",
     "calendar.finished": "Prebrana",
-
-    "year.title": "Knjige, prebrane v letu {year}",
-    "year.monthTitle": "{month} {year}  ·  {n} {books}",
+    "calendar.trackingSince": "Podatki o branju se beležijo od {date}.",
     "book.finishedOn": "Prebrana {date}",
+    "calendar.monthSummary": "{n} {days} · {time}",
+
 
     "about.version": "Različica {version}",
     "about.check": "Preveri posodobitev",
@@ -57,8 +46,8 @@ var strings = {
     "about.uptodate": "To je najnovejša različica.",
     "about.available": "Na voljo je različica {version}.",
     "about.downloading": "Prenašam posodobitev…",
-    "about.ready": "Posodobitev je prenesena. ReadTrack se bo zaprl in sam znova zagnal — če se ne, ga odprite iz menija aplikacij.",
-    "about.privacy": "Posodobitev se prenese z GitHuba prek Wi-Fi, in le ko pritisnete gumb. Sicer ReadTrack ne gre v omrežje.",
+    "about.ready": "Posodobitev je prenesena. {app} se bo zaprl in sam znova zagnal — če se ne, ga odprite iz menija aplikacij.",
+    "about.privacy": "Posodobitev se prenese z GitHuba prek Wi-Fi, in le ko pritisnete gumb. Sicer {app} ne gre v omrežje.",
     "about.log": "Zadnji poskus:",
 
     "update.errNoNetwork": "Ni povezave. Vklopite Wi-Fi in poskusite znova.",
@@ -79,5 +68,6 @@ var strings = {
     "time.m": "{m} min",
 
     "plural.days": ["dan", "dneva", "dnevi", "dni"],
-    "plural.books": ["knjiga", "knjigi", "knjige", "knjig"]
+    "plural.books": ["knjiga", "knjigi", "knjige", "knjig"],
+    "plural.pages": ["stran", "strani", "strani", "strani"]
 };

@@ -10,38 +10,27 @@ var strings = {
     "app.title": "Statistika",
 
     "nav.overview": "İcmal",
-    "nav.streak": "Seriya",
     "nav.calendar": "Təqvim",
-    "nav.year": "İl",
+    "nav.about": "Haqqında",
 
-    "overview.progress": "İrəliləyiş: {percent} %",
-    "overview.read": "Oxunub: {time}",
     "overview.left": "Təxminən {time} qalıb",
     "overview.noBook": "Hələ heç bir kitab açılmayıb",
-    "overview.today": "Bu gün oxunub",
+    "overview.bookProgress": "Kitab irəliləyişi: {percent} %",
+    "overview.hoursOfReading": "saat oxu",
     "overview.minPerSession": "seans başına dəq",
-    "overview.pagesPerMinute": "dəqiqədə səhifə",
     "overview.allBooks": "BÜTÜN KİTABLAR",
     "overview.donutCaption": "cihazdakı kitabların",
     "overview.booksFinished": "Bitirilmiş kitablar",
     "overview.totalHours": "Ümumi saat",
+    "overview.pagesPerHour": "saatda səhifə",
 
-    "streak.current": "{days} cari seriya",
-    "streak.best": "{days} ən yaxşı seriya {year}",
-    "streak.readingDays": "{year} İLİNDƏ {n} OXU {daysCaps}",
-    "streak.none": "Hələ oxu seriyası yoxdur — bu gün ona başlamaq üçün yaxşı gündür.",
-    "streak.longest": "Ən uzun seriyanız {when} başladı və {n} {days} davam etdi.",
-    "streak.trackingSince": "Oxu məlumatları {date} tarixindən yazılır.",
-    "streak.legendNotRead": "oxu yoxdur",
-    "streak.legendRead": "oxu",
-    "streak.legendFinished": "kitab bitirilib",
 
     "calendar.dayTitle": "{date}  ·  {time}",
     "calendar.finished": "Bitirilib",
-
-    "year.title": "{year} ilində bitirilən kitablar",
-    "year.monthTitle": "{month} {year}  ·  {n} {books}",
+    "calendar.trackingSince": "Oxu məlumatları {date} tarixindən yazılır.",
     "book.finishedOn": "{date} tarixində bitirilib",
+    "calendar.monthSummary": "{n} {days} · {time}",
+
 
     "about.version": "Versiya {version}",
     "about.check": "Yeniləməni yoxla",
@@ -50,8 +39,8 @@ var strings = {
     "about.uptodate": "Bu ən son versiyadır.",
     "about.available": "{version} versiyası mövcuddur.",
     "about.downloading": "Yeniləmə endirilir…",
-    "about.ready": "Yeniləmə endirildi. ReadTrack bağlanıb özü yenidən açılacaq — açılmasa, onu proqramlar menyusundan başladın.",
-    "about.privacy": "Yeniləmə yalnız düyməyə basdıqda Wi-Fi vasitəsilə GitHub-dan endirilir. Başqa vaxt ReadTrack şəbəkəyə çıxmır.",
+    "about.ready": "Yeniləmə endirildi. {app} bağlanıb özü yenidən açılacaq — açılmasa, onu proqramlar menyusundan başladın.",
+    "about.privacy": "Yeniləmə yalnız düyməyə basdıqda Wi-Fi vasitəsilə GitHub-dan endirilir. Başqa vaxt {app} şəbəkəyə çıxmır.",
     "about.log": "Son cəhd:",
 
     "update.errNoNetwork": "Bağlantı yoxdur. Wi-Fi-ı açıb yenidən cəhd edin.",
@@ -72,5 +61,6 @@ var strings = {
     "time.m": "{m} dəq",
 
     "plural.days": ["gün", "gün"],
-    "plural.books": ["kitab", "kitab"]
+    "plural.books": ["kitab", "kitab"],
+    "plural.pages": ["səhifə", "səhifə"]
 };

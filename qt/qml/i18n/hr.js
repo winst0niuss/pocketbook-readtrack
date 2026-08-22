@@ -15,38 +15,27 @@ var strings = {
     "app.title": "Statistika",
 
     "nav.overview": "Pregled",
-    "nav.streak": "Niz",
     "nav.calendar": "Kalendar",
-    "nav.year": "Godina",
+    "nav.about": "Info",
 
-    "overview.progress": "Napredak: {percent} %",
-    "overview.read": "Pročitano: {time}",
     "overview.left": "Preostalo oko {time}",
     "overview.noBook": "Nijedna knjiga još nije otvorena",
-    "overview.today": "Pročitano danas",
+    "overview.bookProgress": "Napredak knjige: {percent} %",
+    "overview.hoursOfReading": "sati čitanja",
     "overview.minPerSession": "min po sesiji",
-    "overview.pagesPerMinute": "stranica u minuti",
     "overview.allBooks": "SVE KNJIGE",
     "overview.donutCaption": "knjiga na uređaju",
     "overview.booksFinished": "Pročitane knjige",
     "overview.totalHours": "Sati ukupno",
+    "overview.pagesPerHour": "stranica na sat",
 
-    "streak.current": "{days} trenutnog niza",
-    "streak.best": "{days} najboljeg niza {year}",
-    "streak.readingDays": "{n} {daysCaps} ČITANJA {year}",
-    "streak.none": "Još nema niza čitanja — danas je dobar dan da ga započnete.",
-    "streak.longest": "Vaš najdulji niz počeo je {when} i trajao {n} {days}.",
-    "streak.trackingSince": "Podaci o čitanju bilježe se od {date}.",
-    "streak.legendNotRead": "bez čitanja",
-    "streak.legendRead": "čitanje",
-    "streak.legendFinished": "knjiga pročitana",
 
     "calendar.dayTitle": "{date}  ·  {time}",
     "calendar.finished": "Pročitana",
-
-    "year.title": "Knjige pročitane {year}",
-    "year.monthTitle": "{month} {year}  ·  {n} {books}",
+    "calendar.trackingSince": "Podaci o čitanju bilježe se od {date}.",
     "book.finishedOn": "Pročitana {date}",
+    "calendar.monthSummary": "{n} {days} · {time}",
+
 
     "about.version": "Verzija {version}",
     "about.check": "Provjeri ažuriranje",
@@ -55,8 +44,8 @@ var strings = {
     "about.uptodate": "Ovo je najnovija verzija.",
     "about.available": "Dostupna je verzija {version}.",
     "about.downloading": "Preuzimam ažuriranje…",
-    "about.ready": "Ažuriranje je preuzeto. ReadTrack će se zatvoriti i sam ponovno pokrenuti — ako ne, otvorite ga iz izbornika aplikacija.",
-    "about.privacy": "Ažuriranje se preuzima s GitHuba preko Wi-Fija, i samo kad pritisnete gumb. Inače ReadTrack ne izlazi na mrežu.",
+    "about.ready": "Ažuriranje je preuzeto. {app} će se zatvoriti i sam ponovno pokrenuti — ako ne, otvorite ga iz izbornika aplikacija.",
+    "about.privacy": "Ažuriranje se preuzima s GitHuba preko Wi-Fija, i samo kad pritisnete gumb. Inače {app} ne izlazi na mrežu.",
     "about.log": "Posljednji pokušaj:",
 
     "update.errNoNetwork": "Nema veze. Uključite Wi-Fi i pokušajte ponovno.",
@@ -77,5 +66,6 @@ var strings = {
     "time.m": "{m} min",
 
     "plural.days": ["dan", "dana", "dana"],
-    "plural.books": ["knjiga", "knjige", "knjiga"]
+    "plural.books": ["knjiga", "knjige", "knjiga"],
+    "plural.pages": ["stranica", "stranice", "stranica"]
 };

@@ -103,6 +103,22 @@ int64_t stats_tracking_since(sqlite3 *db)
         "SELECT COALESCE((SELECT value FROM meta WHERE key='tracking_since'), 0)");
 }
 
+int64_t stats_book_started(sqlite3 *db, int64_t bookid)
+{
+    sqlite3_stmt *st = NULL;
+    int64_t first = 0;
+    if (sqlite3_prepare_v2(db,
+            "SELECT MIN(start_time) FROM sessions"
+            " WHERE book_id = ?1 AND recovered = 0",
+            -1, &st, NULL) == SQLITE_OK) {
+        sqlite3_bind_int64(st, 1, bookid);
+        if (sqlite3_step(st) == SQLITE_ROW)
+            first = sqlite3_column_int64(st, 0);
+    }
+    sqlite3_finalize(st);
+    return first;
+}
+
 void stats_book(sqlite3 *db, int64_t bookid, int64_t *secs, double *pages_per_min)
 {
     *secs = 0;
